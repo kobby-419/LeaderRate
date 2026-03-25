@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeaderRate - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        
+/* ========== SPLASH SCREEN ========== */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f2b3d 0%, #1e5a7a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+         /* Container for the animated text */
+        .splash-text {
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        .splash-logo-lr {
+            font-size: 5rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 8px;
+            animation: pulseGlow 1.2s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
+            transition: all 0.5s ease;
+        }
+         /* The full name appears after the animation */
+        .splash-logo-full {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+         .splash-slogan {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-top: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards 0.6s;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                transform: scale(1);
+                text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            }
+              50% {
+                transform: scale(1.05);
+                text-shadow: 0 0 25px rgba(255,255,255,0.6);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Splash Screen with LR transformation -->
+    <div class="splash-screen" id="splash">
+        <div class="splash-text" id="splashText">
+            <div class="splash-logo-lr" id="lrLogo">LR</div>
+            <!-- The full name will be inserted by JavaScript after the animation -->
+        </div>
+        <div class="splash-slogan" id="slogan">Anonymous Feedback. Real Impact.</div>
+    </div>
+<!-- Main Content (Landing Page) -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo" id="siteLogo">LeaderRate</a>
+                <div class="nav-links">
+                    <a href="index.html" class="active">Home</a>
+                    <a href="leaders.html">Browse Leaders</a>
+                    <a href="leaderboard.html">Leaderboard</a>
+                    <a href="feedback.html">Feedback</a>
+                    <a href="settings.html">Settings</a>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button id="themeToggle" class="theme-toggle-btn">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                    <button class="mobile-menu-btn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Rate & Review Leaders</h1>
+        <p class="subtitle">Help improve our institution by sharing your honest feedback about leaders and concerns.</p>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number">62</div>
+                <div class="stat-label">Total Leaders</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">5.3K</div>
+                <div class="stat-label">Reviews</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">248</div>
+                <div class="stat-label">Feedback Posts</div>
+            </div>
+        </div>
+        
+        <div class="quick-actions">
+            <h2>Quick Actions</h2>
+            <a href="leaders.html" class="action-card">
+                <h3>Browse Leaders</h3>
+                <p>View and review institutional leaders</p>
+            </a>
+        </div>
+        
+        <div class="leaderboard-preview">
+            <h2>Leaderboard</h2>
+            <div class="card">
+                <p>See the top performing leaders based on ratings and reviews.</p>
+                <a href="leaderboard.html" class="btn">View Leaderboard</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">LeaderRate</div>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="leaders.html">Leaders</a>
+                    <a href="leaderboard.html">Leaderboard</a>
+                    <a href="feedback.html">Feedback</a>
+                    <a href="settings.html">Settings</a>
+                </div>
+                <div class="copyright">© 2026 LeaderRate. All rights reserved.</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+            mobileMenuBtn?.addEventListener('click', () => navLinks.classList.toggle('active'));
+
+ // Splash screen animation: transform "LR" into "LeaderRate"
+        const splash = document.getElementById('splash');
+        const lrElem = document.getElementById('lrLogo');
+        const splashTextDiv = document.getElementById('splashText');
+
+        // After a short delay, replace the "LR" element with a new div that shows "LeaderRate"
+        setTimeout(() => {
+            // Remove the old LR element
+            lrElem.remove();
+            // Create the new full name element
+            const fullNameDiv = document.createElement('div');
+            fullNameDiv.className = 'splash-logo-full';
+            fullNameDiv.textContent = 'LeaderRate';
+            splashTextDiv.appendChild(fullNameDiv);
+        }, 1000); 
+        setTimeout(() => {
+            if (splash) {
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                }, 600);
+            }
+        }, 2200);
+
+            // Theme management
+            const themeToggle = document.getElementById('themeToggle');
+            const applyTheme = (theme) => {
+                if (theme === 'dark') {
+                    document.body.classList.add('dark');
+                    if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    document.body.classList.remove('dark');
+                    if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+                localStorage.setItem('theme', theme);
+            };
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            applyTheme(savedTheme);
+            themeToggle?.addEventListener('click', () => {
+                const newTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
+                applyTheme(newTheme);
+            });
+
+            // Anonymous account badge
+            const savedAccount = localStorage.getItem('anonymousAccount');
+            if (savedAccount) {
+                const account = JSON.parse(savedAccount);
+                if (account.username && !document.querySelector('.account-badge')) {
+                    const badge = document.createElement('span');
+                    badge.className = 'account-badge';
+                    badge.textContent = `👤 ${account.username}`;
+                    navLinks?.appendChild(badge);
+                }
+            }
+        });
+
+        
+    </script>
+</body>
+</html>

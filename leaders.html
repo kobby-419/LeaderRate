@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Browse Leaders - LeaderRate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        /* additional styles */
+        .leaders-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .leader-department {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            background: #eef2ff;
+            color: #3730a3;
+        }
+        /* Admin mode – delete buttons */
+        .admin-mode .delete-review-btn,
+        .admin-mode .delete-feedback-btn {
+            display: inline-block;
+        }
+        .delete-review-btn,
+        .delete-feedback-btn {
+            display: none;
+            margin-left: 8px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .delete-review-btn:hover,
+        .delete-feedback-btn:hover {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo" id="siteLogo">LeaderRate</a>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="leaders.html" class="active">Browse Leaders</a>
+                    <a href="leaderboard.html">Leaderboard</a>
+                    <a href="feedback.html">Feedback</a>
+                    <a href="settings.html">Settings</a>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button id="themeToggle" class="theme-toggle-btn"><i class="fas fa-sun"></i></button>
+                    <button class="mobile-menu-btn" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Browse and review institutional leaders</h1>
+
+        <div class="search-container">
+            <input id="searchBox" type="text" class="search-box" placeholder="Search leaders by name, department, or title...">
+        </div>
+
+        <div class="filters-container">
+            <div class="filter-group">
+                <label for="departmentFilter">Filter by Department:</label>
+                <select id="departmentFilter" class="form-control">
+                    <option value="all">All Departments</option>
+                    <option value="administration">Administration</option>
+                    <option value="management">Management</option>
+                    <option value="lecturers">Lecturers</option>
+                    <option value="seven-core">The Seven Core</option>
+                    <option value="coordinators">Coordinators</option>
+                    <option value="officer">Officers</option>
+                    <option value="other-executives">Other Executives</option>
+                    <option value="hall-executives">Hall Executives</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="ratingFilter">Minimum Rating:</label>
+                <select id="ratingFilter" class="form-control">
+                    <option value="0">Any Rating</option>
+                    <option value="4.5">4.5+ Stars</option>
+                    <option value="4.0">4.0+ Stars</option>
+                    <option value="3.5">3.5+ Stars</option>
+                    <option value="3.0">3.0+ Stars</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="leadersList" class="leaders-list" aria-live="polite"></div>
+    </main>
+
+    <!-- Review Modal -->
+    <div id="reviewModal" class="modal" aria-hidden="true">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalLeaderName">
+            <button class="close" title="Close" aria-label="Close">&times;</button>
+            <h2 id="modalLeaderName">Leader Name</h2>
+            <p id="modalLeaderTitle" style="margin:4px 0;color:var(--muted)"></p>
+            <span id="modalLeaderDept" class="leader-department">Department</span>
+
+            <div class="star-rating" aria-label="Rating">
+                <span class="star" data-rating="1" aria-label="1 star"><i class="far fa-star"></i></span>
+                <span class="star" data-rating="2" aria-label="2 stars"><i class="far fa-star"></i></span>
+                <span class="star" data-rating="3" aria-label="3 stars"><i class="far fa-star"></i></span>
+                <span class="star" data-rating="4" aria-label="4 stars"><i class="far fa-star"></i></span>
+                <span class="star" data-rating="5" aria-label="5 stars"><i class="far fa-star"></i></span>
+                <span id="ratingValue" style="margin-left:10px;color:var(--muted)">0</span>
+            </div>
+
+            <textarea id="reviewText" placeholder="Write your review..." rows="4" style="width:100%; margin-top:12px;border-radius:8px;border:1px solid #e5e7eb;padding:10px;"></textarea>
+
+            <div style="margin-top:12px; text-align:right;">
+                <button id="submitReview" class="btn btn-primary">Submit Review</button>
+            </div>
+        </div>
+    </div>
+
+    <footer style="margin-top:28px;">
+        <div class="container">
+           <div class="footer-content">
+                <div class="footer-logo">LeaderRate</div>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="leaders.html">Leaders</a>
+                    <a href="leaderboard.html">Leaderboard</a>
+                    <a href="feedback.html">Feedback</a>
+                    <a href="settings.html">Settings</a>
+                </div>
+                <div class="copyright">© 2026 LeaderRate. All rights reserved.</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ==================== CONFIGURATION ====================
+        
+        const EMAILJS_PUBLIC_KEY = 'tNwupwLjE6FGz9Z5n';
+        const EMAILJS_SERVICE_ID = 'service_ma41b97';
+        const EMAILJS_TEMPLATE_ID = 'template_g2d6dg5';
+        const ADMIN_EMAIL = 'baffoetheophilus42@gmail.com';
+
+        // Bad words list (case‑insensitive)
+        const badWords = ['spam', 'offensive', 'badword', 'hate']; 
+
+        // Admin mode
+        let adminMode = false;
+        // ======================================================
+
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        function sendEmailNotification(action, details) {
+            const templateParams = {
+                action: action,
+                details: details,
+                user: localStorage.getItem('anonymousAccount') ? JSON.parse(localStorage.getItem('anonymousAccount')).username : 'Guest',
+                time: new Date().toLocaleString(),
+                admin_email: ADMIN_EMAIL
+            };
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+                .then(() => console.log('Email sent successfully'))
+                .catch(err => console.error('Email send failed:', err));
+        }
+
+        // Function to check for inappropriate content
+        function containsBadWords(text) {
+            const lowerText = text.toLowerCase();
+            return badWords.some(word => lowerText.includes(word));
+        }
+
+        
+        const leaders = [
+            { id: 1, name: "Dr. Anthony Barberyer", title: "Principal", department: "administration", rating: 4.8, reviews: 124, performance: 96 },
+            { id: 2, name: "Dr. Sally Maison", title: "(Vice Principal) Lecturer-Education Studies Dep.", department: "administration", rating: 4.6, reviews: 98, performance: 92 },
+            { id: 3, name: "Md. Rebecca ", title: "Lecturer-Social Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 4, name: "Isaac Asante", title: "College President", department: "seven-core", rating: 4.9, reviews: 156, performance: 98 },
+            { id: 5, name: "Deborah Yeaboah", title: "College Vice President", department: "seven-core", rating: 4.7, reviews: 112, performance: 94 },
+            { id: 6, name: "Robert Gyamfi", title: "General Secetary", department: "seven-core", rating: 4.5, reviews: 89, performance: 90 },
+            { id: 7, name: "Bervelyn Gorman", title: "Women Commissioner", department: "seven-core", rating: 4.3, reviews: 67, performance: 86 },
+            { id: 8, name: "Nancy Boahemaa", title: "Treasurer", department: "seven-core", rating: 4.6, reviews: 94, performance: 92 },
+            { id: 9, name: "Michael Nyarkoh", title: "Financial Secetary", department: "seven-core", rating: 4.2, reviews: 58, performance: 84 },
+            { id: 10, name: "Emmanuel Foli Sena", title: "Public Relation Officer", department: "seven-core", rating: 4.7, reviews: 103, performance: 94 },
+            { id: 11, name: "Ms. Ruby Jecty", title: "STS coordinator", department: "coordinators", rating: 4.8, reviews: 118, performance: 96 },
+            { id: 12, name: "Mr. Emmanuel Boateng", title: "Academics/Assessment Officer", department: "coordinators", rating: 4.5, reviews: 87, performance: 90 },
+            { id: 13, name: "Mr. Eddie Essel", title: "IT officer", department: "officer", rating: 4.5, reviews: 87, performance: 90 },
+            { id: 14, name: "Mr. Michael B. Mensah", title: "Procurement officer", department: "officer", rating: 4.5, reviews: 87, performance: 90 },
+            { id: 15, name: "Mr. Johnathan Lord-Sam", title: "Stores officer", department: "officer", rating: 4.5, reviews: 87, performance: 90 },
+            { id: 16, name: "Mr. Ebenezer Takyi-Danquah", title: "IT officer", department: "officer", rating: 4.5, reviews: 87, performance: 90 },
+            { id: 17, name: "Mr. Kofi Annan", title: "(Dean of students) Lecturer-Science Dep.", department: "management", rating: 4.9, reviews: 142, performance: 98 },
+            { id: 18, name: "Mr. Kwabena Ampaben", title: "College FO/ Finance officer", department: "management", rating: 4.4, reviews: 73, performance: 88 },
+            { id: 19, name: "Mr. Ampem-Darko", title: "Lecturer-Social Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 20, name: "Md. Ivy Ekuban", title: "Lecturer-Social Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 21, name: "Mr. Inusah Ibrahim", title: "Lecturer-Social Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 22, name: "Mr. John Paul", title: "Lecturer-Social Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 23, name: "Mr. Robert Mensah", title: "Lecturer-Social Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 24, name: "Aryi & Zigah", title: "Cafeteria Prefect", department: "coordinators", rating: 4.6, reviews: 96, performance: 92 },
+            { id: 25, name: "Justice & Elijah", title: "General", department: "coordinators", rating: 4.3, reviews: 64, performance: 86 },
+            { id: 26, name: "Dampson & Priiscilla", title: "Entercom", department: "coordinators", rating: 4.7, reviews: 107, performance: 94 },
+            { id: 27, name: "Sadick & Hannah", title: "Academics", department: "coordinators", rating: 4.1, reviews: 52, performance: 82 },
+            { id: 28, name: "Williams & Bismark", title: "Sports", department: "coordinators", rating: 4.1, reviews: 52, performance: 82 },
+            { id: 29, name: "Sakina & Daniel", title: "Infirmary", department: "coordinators", rating: 4.1, reviews: 52, performance: 82 },
+            { id: 30, name: "Dr. Assafuah-Drokow", title: "Lecturer-Science Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 31, name: "Mr. Francis Quansah", title: "Lecturer-Science Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 32, name: "Ms. Judith Asabil", title: "Lecturer-Science Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 33, name: "Mr. Solomon Essel", title: "Lecturer-Science Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 34, name: "Ms. Victoria Adu", title: "Lecturer-Science Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 35, name: "Mr. Charles Appiah", title: "Lecturer-Science Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 36, name: "Mr. Isaac Asare", title: "Lecturer-Science Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 37, name: "Bismark & Peter", title: "Obri Hall Presidents", department: "hall-executives", rating: 4.8, reviews: 121, performance: 96 },
+            { id: 38, name: "Isaac & Prince", title: "Essah Hall Presidents", department: "hall-executives", rating: 4.5, reviews: 83, performance: 90 },
+            { id: 39, name: "Enock & ", title: "Quayson Hall Presidents", department: "hall-executives", rating: 4.5, reviews: 83, performance: 90 },
+            { id: 40, name: "Unknown", title: "EC", department: "other-executives", rating: 4.1, reviews: 52, performance: 82 },
+            { id: 41, name: "Alfred & Ellen", title: "GA", department: "other-executives", rating: 4.1, reviews: 52, performance: 82 },
+            { id: 42, name: "Francis Obeng", title: "CJ", department: "other-executives", rating: 4.1, reviews: 52, performance: 82 },
+            { id: 43, name: "Mr. John Mensah", title: "Lecturer-Maths/IT Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 44, name: "Mr. Charles Yankson", title: "Lecturer-Maths/IT Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 45, name: "Ms. Doris Baah", title: "Lecturer-Maths/IT Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 46, name: "Mr. George Yeboah Mensah", title: "Lecturer-Maths/IT Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 47, name: "Ms. Mary Acquah", title: "Lecturer-Maths/IT Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 48, name: "Mr. Michael Biney Quansah", title: "Lecturer-Maths/IT Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 49, name: "Mr. Gabriel Ansah", title: "Lecturer-Maths/IT Dep.", department: "lecturers", rating: 4.4, reviews: 76, performance: 88 },
+            { id: 50, name: "Labic & Adomakoh", title: "Aboabo Hall Presidents", department: "hall-executives", rating: 4.5, reviews: 83, performance: 90 },
+            { id: 51, name: "Mr. Kennedy Boe-Doe", title: "Lecturer-Education Studies Dep.", department: "lecturers", rating: 4.7, reviews: 112, performance: 94 },
+            { id: 52, name: "Ms. Mabel Anane", title: "Lecturer-Education Studies Dep.", department: "lecturers", rating: 4.7, reviews: 112, performance: 94 },
+            { id: 53, name: "Mr. Sylvester Tenkorang", title: "Lecturer-Education Studies Dep.", department: "lecturers", rating: 4.7, reviews: 112, performance: 94 },
+            { id: 54, name: "Dr. Jerome Nketsiah", title: "Lecturer-Language Dep.", department: "lecturers", rating: 4.7, reviews: 112, performance: 94 },
+            { id: 55, name: "Mr. Fiifi Kennedy", title: "Lecturer-Language Dep.", department: "lecturers", rating: 4.7, reviews: 112, performance: 94 },
+            { id: 56, name: "Ms. Ruby Jecty", title: "Lecturer-Language Dep.", department: "lecturers", rating: 4.7, reviews: 112, performance: 94 },
+            { id: 57, name: "Ms. Faustina N. Taylor", title: "Lecturer-Language Dep.", department: "lecturers", rating: 4.7, reviews: 112, performance: 94 },
+            { id: 58, name: "Ms. Leticia Asamoah", title: "Lecturer-Language Dep.", department: "lecturers", rating: 4.7, reviews: 112, performance: 94 },
+            { id: 59, name: "Mr. Edger Stephen Boadi", title: "Lecturer-Vocational Skills Dep.", department: "lecturers", rating: 4.7, reviews: 112, performance: 94 },
+            { id: 60, name: "Ms. Comfort Arthur", title: "Lecturer-Vocational Skills Dep.", department: "lecturers", rating: 4.7, reviews: 112, performance: 94 },
+            { id: 61, name: "Mr. Anthony Yawson", title: "Lecturer-Creative Arts Dep.", department: "lecturers", rating: 4.7, reviews: 112, performance: 94 },
+            { id: 62, name: "Mr. Bismark Johns Ntsiful", title: "Lecturer-Creative Art Dep.", department: "lecturers", rating: 4.7, reviews: 112, performance: 94 },
+        ];
+
+        const departmentNames = {
+            'management': 'Management',
+            'coordinators': 'Coordinators',
+            'hall-executives': 'Hall executives',
+            'other-executives': 'Other executives',
+            'seven-core': 'The seven core',
+            'lecturers': 'Lecturers',
+            'officer': 'Officers',
+            'administration': 'Administration'
+        };
+
+        let userReviews = JSON.parse(localStorage.getItem('leaderRateReviews') || '{}');
+        for (let leaderId in userReviews) {
+            userReviews[leaderId] = userReviews[leaderId].map(review => {
+                if (!review.author) review.author = "Anonymous";
+                return review;
+            });
+        }
+        localStorage.setItem('leaderRateReviews', JSON.stringify(userReviews));
+
+       document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    const searchBox = document.getElementById('searchBox');
+    const departmentFilter = document.getElementById('departmentFilter');
+    const ratingFilter = document.getElementById('ratingFilter');
+    const leadersList = document.getElementById('leadersList');
+    const modal = document.getElementById('reviewModal');
+    const closeBtn = modal.querySelector('.close');
+    const submitReviewBtn = modal.querySelector('#submitReview');
+    let currentLeaderId = null;
+    let currentRating = 0;
+    let modalStarsInitialized = false;
+
+   // ==================== ADMIN MODE WITH PASSWORD ====================
+const ADMIN_PASSWORD = 'Astro,2003';
+
+function toggleAdminMode() {
+    const entered = prompt('Enter admin password to toggle admin mode:');
+    if (entered === ADMIN_PASSWORD) {
+        adminMode = !adminMode;
+        document.body.classList.toggle('admin-mode', adminMode);
+        renderLeaders(leaders);
+        showNotification(adminMode ? 'Admin mode ON' : 'Admin mode OFF');
+        console.log('Admin mode:', adminMode);
+    } else if (entered !== null) {
+        alert('Incorrect password');
+    }
+}
+
+// Double-click logo
+const logo = document.getElementById('siteLogo');
+if (logo) {
+    logo.addEventListener('dblclick', toggleAdminMode);
+}
+
+// Keyboard shortcut Ctrl+Shift+A
+document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+        e.preventDefault();
+        toggleAdminMode();
+    }
+});
+
+            mobileMenuBtn?.addEventListener('click', () => navLinks.classList.toggle('active'));
+
+            // Theme management
+            const themeToggle = document.getElementById('themeToggle');
+            const applyTheme = (theme) => {
+                if (theme === 'dark') {
+                    document.body.classList.add('dark');
+                    if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    document.body.classList.remove('dark');
+                    if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+                localStorage.setItem('theme', theme);
+            };
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            applyTheme(savedTheme);
+            themeToggle?.addEventListener('click', () => {
+                const newTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
+                applyTheme(newTheme);
+            });
+
+            // Anonymous badge
+            const savedAccount = localStorage.getItem('anonymousAccount');
+            if (savedAccount) {
+                const account = JSON.parse(savedAccount);
+                if (account.username && !document.querySelector('.account-badge')) {
+                    const badge = document.createElement('span');
+                    badge.className = 'account-badge';
+                    badge.textContent = `👤 ${account.username}`;
+                    navLinks?.appendChild(badge);
+                }
+            }
+
+            renderLeaders(leaders);
+            searchBox?.addEventListener('input', filterLeaders);
+            departmentFilter?.addEventListener('change', filterLeaders);
+            ratingFilter?.addEventListener('change', filterLeaders);
+
+            closeBtn.addEventListener('click', () => closeModal());
+            window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+            submitReviewBtn.addEventListener('click', () => {
+                if (!currentLeaderId) return;
+                if (currentRating === 0) { alert('Please select a rating.'); return; }
+                const text = document.getElementById('reviewText').value.trim();
+                // Check for inappropriate content
+                if (containsBadWords(text)) {
+                    alert('Your review contains inappropriate language and was not submitted.');
+                    return;
+                }
+                submitReview(currentLeaderId, currentRating, text);
+                closeModal();
+                showNotification('Review submitted!');
+            });
+
+            function openModal() {
+                modal.setAttribute('aria-hidden', 'false');
+                modal.style.display = 'flex';
+            }
+            function closeModal() {
+                modal.setAttribute('aria-hidden', 'true');
+                modal.style.display = 'none';
+            }
+
+            function initModalStars() {
+                if (modalStarsInitialized) return;
+                modalStarsInitialized = true;
+                const stars = Array.from(modal.querySelectorAll('.star'));
+                stars.forEach(star => {
+                    star.addEventListener('click', function() {
+                        currentRating = Number(this.getAttribute('data-rating')) || 0;
+                        updateStarRating(currentRating);
+                    });
+                    star.addEventListener('mouseover', function() {
+                        const r = Number(this.getAttribute('data-rating')) || 0;
+                        highlightStars(r);
+                    });
+                });
+                modal.querySelector('.star-rating')?.addEventListener('mouseout', () => updateStarRating(currentRating));
+            }
+
+            function renderLeaders(list) {
+                leadersList.innerHTML = '';
+                list.forEach(l => leadersList.appendChild(createLeaderCard(l)));
+            }
+
+            function createLeaderCard(leader) {
+                const card = document.createElement('div');
+                card.className = 'card leader-card';
+                card.setAttribute('data-id', leader.id);
+                const starsHtml = generateStars(leader.rating);
+                card.innerHTML = `
+                    <div class="leader-header">
+                        <div class="leader-info">
+                            <h3>${escapeHtml(leader.name)}</h3>
+                            <p>${escapeHtml(leader.title)}</p>
+                            <span class="leader-department ${leader.department}">${departmentNames[leader.department] || ''}</span>
+                        </div>
+                        <div class="leader-rating" style="text-align:right">
+                            <div class="stars" aria-hidden="true">${starsHtml}</div>
+                            <div style="font-weight:600">${leader.rating.toFixed(1)}</div>
+                        </div>
+                    </div>
+                    <div class="leader-stats">
+                        <span><i class="fas fa-check" aria-hidden="true"></i> ${leader.reviews}</span>
+                        <span style="margin-left:6px;color:var(--muted);">Reviews</span>
+                    </div>
+                    <div class="leader-actions">
+                        <button class="btn btn-outline write-review" data-id="${leader.id}"><i class="fas fa-edit"></i> Write Review</button>
+                        <button class="btn view-reviews" data-id="${leader.id}"><i class="fas fa-eye"></i> View Reviews</button>
+                    </div>
+                `;
+                card.querySelector('.write-review').addEventListener('click', () => openReviewModal(leader));
+                card.querySelector('.view-reviews').addEventListener('click', () => viewLeaderReviews(leader));
+                return card;
+            }
+
+            function generateStars(rating) {
+                let stars = '';
+                const full = Math.floor(rating);
+                const half = (rating - full) >= 0.5;
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= full) stars += '<i class="fas fa-star" style="color:#f59e0b"></i>';
+                    else if (i === full + 1 && half) stars += '<i class="fas fa-star-half-alt" style="color:#f59e0b"></i>';
+                    else stars += '<i class="far fa-star" style="color:#d1d5db"></i>';
+                }
+                return stars;
+            }
+
+            function filterLeaders() {
+                const term = (searchBox.value || '').toLowerCase();
+                const dept = departmentFilter.value;
+                const minRating = parseFloat(ratingFilter.value) || 0;
+                const filtered = leaders.filter(l => {
+                    const matchesSearch = (l.name + ' ' + l.title + ' ' + (departmentNames[l.department]||'')).toLowerCase().includes(term);
+                    const matchesDept = dept === 'all' || l.department === dept;
+                    const matchesRating = (Number(l.rating) || 0) >= minRating;
+                    return matchesSearch && matchesDept && matchesRating;
+                });
+                renderLeaders(filtered);
+            }
+
+            function openReviewModal(leader) {
+                currentLeaderId = leader.id;
+                currentRating = 0;
+                document.getElementById('modalLeaderName').textContent = leader.name;
+                document.getElementById('modalLeaderTitle').textContent = leader.title;
+                const deptEl = document.getElementById('modalLeaderDept');
+                deptEl.textContent = departmentNames[leader.department] || leader.department;
+                deptEl.className = 'leader-department ' + leader.department;
+                document.getElementById('reviewText').value = '';
+                initModalStars();
+                updateStarRating(0);
+                openModal();
+            }
+
+            function updateStarRating(rating) {
+                const stars = Array.from(modal.querySelectorAll('.star'));
+                stars.forEach(star => {
+                    const r = Number(star.getAttribute('data-rating')) || 0;
+                    const icon = star.querySelector('i');
+                    if (r <= rating) {
+                        star.classList.add('active');
+                        if (icon) icon.classList.remove('far'), icon.classList.add('fas');
+                    } else {
+                        star.classList.remove('active');
+                        if (icon) icon.classList.remove('fas'), icon.classList.add('far');
+                    }
+                });
+                document.getElementById('ratingValue').textContent = String(rating);
+            }
+
+            function highlightStars(rating) {
+                const stars = Array.from(modal.querySelectorAll('.star'));
+                stars.forEach(star => {
+                    const r = Number(star.getAttribute('data-rating')) || 0;
+                    if (r <= rating) star.classList.add('hover');
+                    else star.classList.remove('hover');
+                });
+            }
+
+            function submitReview(leaderId, rating, text) {
+                let author = "Anonymous";
+                const accountStr = localStorage.getItem('anonymousAccount');
+                if (accountStr) {
+                    try {
+                        const account = JSON.parse(accountStr);
+                        if (account.username) author = account.username;
+                    } catch(e) {}
+                }
+
+                if (!userReviews[leaderId]) userReviews[leaderId] = [];
+                const review = { id: Date.now(), rating, text: text || '', date: new Date().toISOString(), helpful: 0, author };
+                userReviews[leaderId].push(review);
+                localStorage.setItem('leaderRateReviews', JSON.stringify(userReviews));
+
+                const leader = leaders.find(x => x.id === leaderId);
+                if (leader) {
+                    const revs = userReviews[leaderId] || [];
+                    const total = revs.reduce((s, r) => s + Number(r.rating), 0);
+                    const avg = total / Math.max(1, revs.length);
+                    leader.rating = Math.min(5, Math.max(0, Number(avg.toFixed(1))));
+                    leader.reviews = revs.length;
+                    const card = document.querySelector(`.leader-card[data-id="${leaderId}"]`);
+                    if (card && card.parentNode) {
+                        card.parentNode.replaceChild(createLeaderCard(leader), card);
+                    } else {
+                        renderLeaders(leaders);
+                    }
+                }
+
+                // Send email notification
+                sendEmailNotification('New Review', `Leader: ${leader.name}, Rating: ${rating}/5, Comment: ${text || 'No comment'}`);
+            }
+
+            function viewLeaderReviews(leader) {
+                const reviews = userReviews[leader.id] || [];
+                if (!reviews.length) {
+                    alert(`No reviews yet for ${leader.name}. Be the first to review!`);
+                    return;
+                }
+                
+                let lines = reviews.map((r, index) => {
+                    let line = `⭐ ${r.rating}/5 — ${r.text || 'No comment'} (by ${r.author || 'Anonymous'}) on ${new Date(r.date).toLocaleDateString()}`;
+                    if (adminMode) {
+                        line += ` [Delete]`;  
+                    }
+                    return line;
+                });
+                
+                if (adminMode) {
+                    let menu = "Select a review to delete (or cancel):\n\n";
+                    reviews.forEach((r, i) => {
+                        menu += `${i+1}. ⭐ ${r.rating}/5 — ${r.text || 'No comment'} (by ${r.author}) on ${new Date(r.date).toLocaleDateString()}\n`;
+                    });
+                    const choice = prompt(menu, "Enter number");
+                    if (choice !== null && !isNaN(choice) && choice >= 1 && choice <= reviews.length) {
+                        const idx = parseInt(choice) - 1;
+                        const confirmDel = confirm(`Delete this review?\n${reviews[idx].text || 'No comment'}`);
+                        if (confirmDel) {
+                            reviews.splice(idx, 1);
+                            if (reviews.length === 0) delete userReviews[leader.id];
+                            else userReviews[leader.id] = reviews;
+                            localStorage.setItem('leaderRateReviews', JSON.stringify(userReviews));
+                            
+                            const newTotal = reviews.reduce((s, r) => s + Number(r.rating), 0);
+                            const newAvg = reviews.length ? newTotal / reviews.length : 0;
+                            leader.rating = Math.min(5, Math.max(0, Number(newAvg.toFixed(1))));
+                            leader.reviews = reviews.length;
+                            // Refresh UI
+                            renderLeaders(leaders);
+                            showNotification('Review deleted.');
+                        }
+                    }
+                } else {
+                    alert(`Reviews for ${leader.name}:\n\n` + lines.join('\n\n'));
+                }
+            }
+
+            function showNotification(message) {
+                const n = document.createElement('div');
+                n.className = 'notification';
+                n.textContent = message;
+                n.style.cssText = 'position:fixed;top:20px;right:20px;background:var(--success);color:#fff;padding:12px 18px;border-radius:8px;box-shadow:var(--card-shadow);z-index:1100';
+                document.body.appendChild(n);
+                setTimeout(() => n.remove(), 3000);
+            }
+
+            function escapeHtml(str) {
+                return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+            }
+        });
+
+        
+    </script>
+</body>
+</html>

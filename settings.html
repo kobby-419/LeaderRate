@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - LeaderRate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        .stat-label {
+            color: var(--secondary);
+            margin-top: 0.5rem;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--secondary);
+        }
+        .btn-outline-small {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+        .btn-outline-small:hover {
+            background: var(--primary);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo" id="siteLogo">LeaderRate</a>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="leaders.html">Browse Leaders</a>
+                    <a href="leaderboard.html">Leaderboard</a>
+                    <a href="feedback.html">Feedback</a>
+                    <a href="settings.html" class="active">Settings</a>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button id="themeToggle" class="theme-toggle-btn">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                    <button class="mobile-menu-btn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Settings & Dashboard</h1>
+        <p class="subtitle">Manage your preferences and see your contributions</p>
+
+        <!-- Anonymous Account Section -->
+        <div class="settings-section">
+            <h2>Anonymous Account</h2>
+            <div class="card">
+                <div class="settings-option">
+                    <div class="option-info">
+                        <h3>Create Anonymous Account</h3>
+                        <p>Generate a random username to post reviews and feedback anonymously</p>
+                    </div>
+                    <button id="createAccountBtn" class="btn btn-primary">Create Account</button>
+                </div>
+                <div id="accountInfo" style="margin-top: 1rem; padding: 0.5rem; background: var(--light); border-radius: 6px;">
+                    <!-- Account info will appear here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Appearance Section -->
+        <div class="settings-section">
+            <h2>Appearance</h2>
+            <div class="card">
+                <div class="settings-option">
+                    <div class="option-info">
+                        <h3>Theme</h3>
+                        <p>Choose between light and dark mode</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button id="lightThemeBtn" class="btn btn-outline">Light</button>
+                        <button id="darkThemeBtn" class="btn btn-outline">Dark</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Contributions (Dashboard) - only stats, no lists -->
+        <div class="settings-section">
+            <h2>My Contributions</h2>
+            <div id="dashboardContent">
+                <!-- Dynamic dashboard content will appear here -->
+            </div>
+        </div>
+
+        <!-- Existing Notification Preferences -->
+        <div class="settings-section">
+            <h2>Notification Preferences</h2>
+            <div class="card">
+                <div class="settings-option">
+                    <div class="option-info">
+                        <h3>Email Notifications</h3>
+                        <p>Receive updates about new leaders and reviews</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-option">
+                    <div class="option-info">
+                        <h3>Push Notifications</h3>
+                        <p>Get alerts on your device</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>Privacy & Security</h2>
+            <div class="card">
+                <div class="settings-option">
+                    <div class="option-info">
+                        <h3>Anonymous Feedback</h3>
+                        <p>Always post feedback anonymously</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>Account</h2>
+            <div class="card">
+                <div class="settings-option">
+                    <div class="option-info">
+                        <h3>Change Password</h3>
+                        <p>Update your account password (demo only)</p>
+                    </div>
+                    <button id="changePasswordBtn" class="btn">Change</button>
+                </div>
+                <div class="settings-option">
+                    <div class="option-info">
+                        <h3>Delete Account</h3>
+                        <p>Permanently delete your account and all data</p>
+                    </div>
+                    <button id="deleteAccountBtn" class="btn" style="background-color: #ef4444;">Delete</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">LeaderRate</div>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="leaders.html">Leaders</a>
+                    <a href="leaderboard.html">Leaderboard</a>
+                    <a href="feedback.html">Feedback</a>
+                    <a href="settings.html">Settings</a>
+                </div>
+                <div class="copyright">© 2026 LeaderRate. All rights reserved.</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ==================== EMAILJS CONFIGURATION ====================
+        const EMAILJS_PUBLIC_KEY = 'tNwupwLjE6FGz9Z5n';
+        const EMAILJS_SERVICE_ID = 'service_ma41b97';
+        const EMAILJS_TEMPLATE_ID ='template_g2d6dg5';
+        const ADMIN_EMAIL = 'baffoetheophilus42@gmail.com';
+
+        if (typeof emailjs !== 'undefined') {
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+        }
+
+        function sendEmailNotification(action, details) {
+            if (typeof emailjs === 'undefined') {
+                console.warn('EmailJS not loaded, skipping email');
+                return;
+            }
+            const templateParams = {
+                action: action,
+                details: details,
+                user: localStorage.getItem('anonymousAccount') ? JSON.parse(localStorage.getItem('anonymousAccount')).username : 'Guest',
+                time: new Date().toLocaleString(),
+                admin_email: ADMIN_EMAIL
+            };
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+                .then(() => console.log('Email sent'))
+                .catch(err => console.error('Email send failed:', err));
+        }
+        // ==============================================================
+
+        // ==================== DOM elements ====================
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        const themeToggle = document.getElementById('themeToggle');
+        const lightBtn = document.getElementById('lightThemeBtn');
+        const darkBtn = document.getElementById('darkThemeBtn');
+        const createAccountBtn = document.getElementById('createAccountBtn');
+        const changePasswordBtn = document.getElementById('changePasswordBtn');
+        const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+        const accountInfoDiv = document.getElementById('accountInfo');
+        const dashboardContainer = document.getElementById('dashboardContent');
+
+        // ==================== Theme functions ====================
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark');
+                if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                document.body.classList.remove('dark');
+                if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            applyTheme(savedTheme);
+        }
+
+        // ==================== Anonymous account functions ====================
+        function displayAccountInfo(account) {
+            if (account) {
+                accountInfoDiv.innerHTML = `
+                    <strong>Current anonymous account:</strong> ${escapeHtml(account.username)}<br>
+                    <small>Created: ${new Date(account.created).toLocaleDateString()}</small>
+                `;
+            } else {
+                accountInfoDiv.innerHTML = '<em>No anonymous account yet. Click the button above to create one.</em>';
+            }
+        }
+
+        function createAnonymousAccount() {
+            const adjectives = ['Swift', 'Brave', 'Silent', 'Wise', 'Mighty', 'Clever', 'Kind', 'Fierce'];
+            const nouns = ['Panda', 'Eagle', 'Wolf', 'Fox', 'Lion', 'Owl', 'Deer', 'Hawk'];
+            const randomName = `${adjectives[Math.floor(Math.random() * adjectives.length)]}${nouns[Math.floor(Math.random() * nouns.length)]}${Math.floor(Math.random() * 1000)}`;
+            const account = {
+                username: randomName,
+                created: new Date().toISOString()
+            };
+            localStorage.setItem('anonymousAccount', JSON.stringify(account));
+            displayAccountInfo(account);
+            showNotification(`Anonymous account created: ${randomName}`);
+            sendEmailNotification('New Anonymous Account', `Username: ${randomName}`);
+
+            if (!document.querySelector('.account-badge')) {
+                const badge = document.createElement('span');
+                badge.className = 'account-badge';
+                badge.textContent = `👤 ${randomName}`;
+                navLinks?.appendChild(badge);
+            }
+
+            loadDashboard(); // reload to show stats
+        }
+
+        function deleteAccount() {
+            if (confirm('Are you sure you want to delete your account and all data? This cannot be undone.')) {
+                localStorage.removeItem('anonymousAccount');
+                localStorage.removeItem('leaderRateReviews');
+                localStorage.removeItem('feedbackList');
+                localStorage.removeItem('likedFeedback');
+                localStorage.removeItem('demoPassword');
+                displayAccountInfo(null);
+                const badge = document.querySelector('.account-badge');
+                if (badge) badge.remove();
+                showNotification('Account deleted. All data removed.');
+                loadDashboard();
+                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+            }
+        }
+
+        // ==================== Dashboard / My Contributions (only counts) ====================
+        function loadDashboard() {
+            if (!dashboardContainer) return;
+            const account = JSON.parse(localStorage.getItem('anonymousAccount') || 'null');
+            if (!account) {
+                dashboardContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-user-circle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>You don't have an anonymous account yet. Create one above to start contributing.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const username = account.username;
+            // Get reviews
+            const reviewsData = JSON.parse(localStorage.getItem('leaderRateReviews') || '{}');
+            let reviewCount = 0;
+            for (const leaderId in reviewsData) {
+                reviewCount += reviewsData[leaderId].filter(r => r.author === username).length;
+            }
+
+            // Get feedback
+            const feedbacks = JSON.parse(localStorage.getItem('feedbackList') || '[]');
+            const feedbackCount = feedbacks.filter(f => f.author === username).length;
+
+            let html = `
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-number">${reviewCount}</div>
+                        <div class="stat-label">Reviews Written</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${feedbackCount}</div>
+                        <div class="stat-label">Feedback Posts</div>
+                    </div>
+                </div>
+            `;
+
+            if (reviewCount === 0 && feedbackCount === 0) {
+                html += `
+                    <div class="empty-state">
+                        <i class="fas fa-pen-fancy" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>You haven't contributed yet. Be the first to leave a review or feedback!</p>
+                        <a href="leaders.html" class="btn-outline-small">Browse Leaders</a>
+                        <a href="feedback.html" class="btn-outline-small" style="margin-left: 1rem;">Share Feedback</a>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="empty-state">
+                        <p>Great job! Keep contributing to help improve our institution.</p>
+                    </div>
+                `;
+            }
+            dashboardContainer.innerHTML = html;
+        }
+
+        // ==================== Helper functions ====================
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        function showNotification(message) {
+            const n = document.createElement('div');
+            n.className = 'notification';
+            n.textContent = message;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3000);
+        }
+
+        // ==================== Event Listeners & Initialization ====================
+        function init() {
+            initTheme();
+            if (themeToggle) themeToggle.addEventListener('click', () => {
+                const newTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
+                applyTheme(newTheme);
+            });
+            if (lightBtn) lightBtn.addEventListener('click', () => applyTheme('light'));
+            if (darkBtn) darkBtn.addEventListener('click', () => applyTheme('dark'));
+
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
+            }
+
+            if (createAccountBtn) createAccountBtn.addEventListener('click', createAnonymousAccount);
+            if (deleteAccountBtn) deleteAccountBtn.addEventListener('click', deleteAccount);
+            if (changePasswordBtn) {
+                changePasswordBtn.addEventListener('click', () => {
+                    const newPwd = prompt('Enter a new password (demo – no actual authentication)');
+                    if (newPwd) {
+                        localStorage.setItem('demoPassword', newPwd);
+                        showNotification('Password changed (demo)');
+                    }
+                });
+            }
+
+            const savedAccount = localStorage.getItem('anonymousAccount');
+            if (savedAccount) {
+                const account = JSON.parse(savedAccount);
+                displayAccountInfo(account);
+                if (!document.querySelector('.account-badge')) {
+                    const badge = document.createElement('span');
+                    badge.className = 'account-badge';
+                    badge.textContent = `👤 ${account.username}`;
+                    navLinks?.appendChild(badge);
+                }
+            } else {
+                displayAccountInfo(null);
+            }
+
+            loadDashboard();
+        }
+
+        init();
+    </script>
+</body>
+</html>

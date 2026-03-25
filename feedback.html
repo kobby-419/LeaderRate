@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - LeaderRate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        .delete-feedback-btn {
+            display: none;
+            margin-left: 8px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .admin-mode .delete-feedback-btn {
+            display: inline-block;
+        }
+        .delete-feedback-btn:hover {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo" id="siteLogo">LeaderRate</a>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="leaders.html">Browse Leaders</a>
+                    <a href="leaderboard.html">Leaderboard</a>
+                    <a href="feedback.html" class="active">Feedback</a>
+                    <a href="settings.html">Settings</a>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button id="themeToggle" class="theme-toggle-btn"><i class="fas fa-sun"></i></button>
+                    <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Feedback</h1>
+        <p class="subtitle">Share concerns anonymously</p>
+        
+        <div class="feedback-form">
+            <h2>Submit Anonymous Feedback</h2>
+            <div class="form-group">
+                <label for="category">Select category</label>
+                <select id="category" class="form-control">
+                    <option value="">Select a category</option>
+                    <option value="administration">Administration</option>
+                    <option value="academics">Academics</option>
+                    <option value="facilities">Facilities</option>
+                    <option value="leadership">Leadership</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="feedback">Share your concerns or suggestions...</label>
+                <textarea id="feedback" class="form-control" placeholder="Type your feedback here..."></textarea>
+            </div>
+            <button class="btn btn-block" id="submit-feedback">Post Anonymously</button>
+        </div>
+        
+        <div class="recent-feedback">
+            <h2>Recent Feedback</h2>
+            <div id="feedback-list"></div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">LeaderRate</div>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="leaders.html">Leaders</a>
+                    <a href="leaderboard.html">Leaderboard</a>
+                    <a href="feedback.html">Feedback</a>
+                    <a href="settings.html">Settings</a>
+                </div>
+                <div class="copyright">© 2026 LeaderRate. All rights reserved.</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ==================== CONFIGURATION ====================
+        const EMAILJS_PUBLIC_KEY = 'tNwupwLjE6FGz9Z5n';
+        const EMAILJS_SERVICE_ID = 'service_ma41b97';
+        const EMAILJS_TEMPLATE_ID = 'template_g2d6dg5';
+        const ADMIN_EMAIL = 'baffoetheophilus42@gmail.com';
+
+        // Bad words list 
+        const badWords = ['spam', 'offensive', 'badword', 'hate'];
+
+        let adminMode = false;
+        // ======================================================
+
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        function sendEmailNotification(action, details) {
+            const templateParams = {
+                action: action,
+                details: details,
+                user: localStorage.getItem('anonymousAccount') ? JSON.parse(localStorage.getItem('anonymousAccount')).username : 'Guest',
+                time: new Date().toLocaleString(),
+                admin_email: ADMIN_EMAIL
+            };
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+                .then(() => console.log('Email sent successfully'))
+                .catch(err => console.error('Email send failed:', err));
+        }
+
+        function containsBadWords(text) {
+            const lowerText = text.toLowerCase();
+            return badWords.some(word => lowerText.includes(word));
+        }
+
+        let feedbacks = [];
+        let likedFeedbackIds = JSON.parse(localStorage.getItem('likedFeedback') || '[]');
+
+        function loadFeedbacks() {
+            const stored = localStorage.getItem('feedbackList');
+            if (stored) {
+                feedbacks = JSON.parse(stored);
+            } else {
+                feedbacks = [
+                    {
+                        id: Date.now() - 100000,
+                        category: 'administration',
+                        content: 'The registration process needs to be streamlined.',
+                        author: 'Anonymous',
+                        timestamp: new Date(Date.now() - 7200000).toISOString(),
+                        likes: 15
+                    },
+                    {
+                        id: Date.now() - 50000,
+                        category: 'facilities',
+                        content: 'The library needs more study spaces during exam periods.',
+                        author: 'Anonymous',
+                        timestamp: new Date(Date.now() - 18000000).toISOString(),
+                        likes: 8
+                    }
+                ];
+                saveFeedbacks();
+            }
+            renderFeedbacks();
+        }
+
+        function saveFeedbacks() {
+            localStorage.setItem('feedbackList', JSON.stringify(feedbacks));
+        }
+
+        function saveLikedIds() {
+            localStorage.setItem('likedFeedback', JSON.stringify(likedFeedbackIds));
+        }
+
+        function renderFeedbacks() {
+            const container = document.getElementById('feedback-list');
+            if (!container) return;
+            container.innerHTML = '';
+            const sorted = [...feedbacks].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            sorted.forEach(fb => container.appendChild(createFeedbackElement(fb)));
+        }
+
+        function createFeedbackElement(fb) {
+            const div = document.createElement('div');
+            div.className = 'feedback-item';
+            div.setAttribute('data-id', fb.id);
+            const categoryDisplay = fb.category.charAt(0).toUpperCase() + fb.category.slice(1);
+            const timeAgo = timeSince(new Date(fb.timestamp));
+            const isLiked = likedFeedbackIds.includes(fb.id);
+            div.innerHTML = `
+                <div class="feedback-header">
+                    <span class="feedback-category">${categoryDisplay}</span>
+                    <span class="feedback-time">${timeAgo}</span>
+                </div>
+                <div class="feedback-content"><p>${escapeHtml(fb.content)}</p></div>
+                <div class="feedback-footer">
+                    <span class="feedback-author">${escapeHtml(fb.author)}</span>
+                    <div class="feedback-actions">
+                        <span class="feedback-action like-btn ${isLiked ? 'liked' : ''}" data-id="${fb.id}">
+                            <i class="${isLiked ? 'fas' : 'far'} fa-thumbs-up"></i> <span class="like-count">${fb.likes || 0}</span>
+                        </span>
+                        <button class="delete-feedback-btn" data-id="${fb.id}">Delete</button>
+                    </div>
+                </div>
+            `;
+            const likeBtn = div.querySelector('.like-btn');
+            likeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleLike(fb.id, likeBtn);
+            });
+            const delBtn = div.querySelector('.delete-feedback-btn');
+            if (delBtn) {
+                delBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (confirm('Delete this feedback permanently?')) {
+                        deleteFeedback(fb.id);
+                    }
+                });
+            }
+            return div;
+        }
+
+        function toggleLike(id, likeElement) {
+            if (likedFeedbackIds.includes(id)) return;
+            const fb = feedbacks.find(f => f.id == id);
+            if (fb) {
+                fb.likes = (fb.likes || 0) + 1;
+                likedFeedbackIds.push(id);
+                saveFeedbacks();
+                saveLikedIds();
+                const countSpan = likeElement.querySelector('.like-count');
+                countSpan.textContent = fb.likes;
+                const icon = likeElement.querySelector('i');
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                likeElement.classList.add('liked');
+            }
+        }
+
+        function deleteFeedback(id) {
+            const index = feedbacks.findIndex(f => f.id == id);
+            if (index !== -1) {
+                feedbacks.splice(index, 1);
+                saveFeedbacks();
+                renderFeedbacks();
+                showNotification('Feedback deleted.');
+            }
+        }
+
+        function timeSince(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            let interval = Math.floor(seconds / 31536000);
+            if (interval > 1) return interval + ' years ago';
+            interval = Math.floor(seconds / 2592000);
+            if (interval > 1) return interval + ' months ago';
+            interval = Math.floor(seconds / 86400);
+            if (interval > 1) return interval + ' days ago';
+            interval = Math.floor(seconds / 3600);
+            if (interval > 1) return interval + ' hours ago';
+            interval = Math.floor(seconds / 60);
+            if (interval > 1) return interval + ' minutes ago';
+            return 'just now';
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+        }
+
+        document.getElementById('submit-feedback')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            const category = document.getElementById('category').value;
+            const content = document.getElementById('feedback').value.trim();
+            if (!category) { alert('Select a category'); return; }
+            if (!content) { alert('Enter your feedback'); return; }
+            if (containsBadWords(content)) {
+                alert('Your feedback contains inappropriate language and was not submitted.');
+                return;
+            }
+
+            let author = 'Anonymous';
+            const accountStr = localStorage.getItem('anonymousAccount');
+            if (accountStr) {
+                const account = JSON.parse(accountStr);
+                if (account.username) author = account.username;
+            }
+
+            const newFeedback = {
+                id: Date.now(),
+                category,
+                content,
+                author,
+                timestamp: new Date().toISOString(),
+                likes: 0
+            };
+            feedbacks.unshift(newFeedback);
+            saveFeedbacks();
+            renderFeedbacks();
+
+            document.getElementById('category').value = '';
+            document.getElementById('feedback').value = '';
+
+            showNotification('Feedback submitted!');
+
+            sendEmailNotification('New Feedback', `Category: ${category}, Content: ${content.substring(0, 100)}`);
+        });
+
+        function showNotification(message) {
+            const n = document.createElement('div');
+            n.className = 'notification';
+            n.textContent = message;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3000);
+        }
+
+       document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    const themeToggle = document.getElementById('themeToggle');
+
+   // ==================== ADMIN MODE WITH PASSWORD ====================
+const ADMIN_PASSWORD = 'Astro,2003';
+
+function toggleAdminMode() {
+    const entered = prompt('Enter admin password to toggle admin mode:');
+    if (entered === ADMIN_PASSWORD) {
+        adminMode = !adminMode;
+        document.body.classList.toggle('admin-mode', adminMode);
+        renderFeedbacks();
+        showNotification(adminMode ? 'Admin mode ON' : 'Admin mode OFF');
+        console.log('Admin mode:', adminMode);
+    } else if (entered !== null) {
+        alert('Incorrect password');
+    }
+}
+
+// Double-click logo
+const logo = document.getElementById('siteLogo');
+if (logo) {
+    logo.addEventListener('dblclick', toggleAdminMode);
+}
+
+// Keyboard shortcut Ctrl+Shift+A
+document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+        e.preventDefault();
+        toggleAdminMode();
+    }
+});
+
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+            e.preventDefault();
+            adminMode = !adminMode;
+            document.body.classList.toggle('admin-mode', adminMode);
+            renderFeedbacks();
+            showNotification(adminMode ? 'Admin mode ON (keyboard)' : 'Admin mode OFF (keyboard)');
+            console.log('Admin mode toggled via keyboard:', adminMode);
+        }
+    });
+});
+
+        loadFeedbacks();
+         document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+            mobileMenuBtn?.addEventListener('click', () => navLinks.classList.toggle('active'));
+
+            // Theme management
+            const themeToggle = document.getElementById('themeToggle');
+            const applyTheme = (theme) => {
+                if (theme === 'dark') {
+                    document.body.classList.add('dark');
+                    if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    document.body.classList.remove('dark');
+                    if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+                localStorage.setItem('theme', theme);
+            };
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            applyTheme(savedTheme);
+            themeToggle?.addEventListener('click', () => {
+                const newTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
+                applyTheme(newTheme);
+            });
+
+            // Anonymous account badge
+            const savedAccount = localStorage.getItem('anonymousAccount');
+            if (savedAccount) {
+                const account = JSON.parse(savedAccount);
+                if (account.username && !document.querySelector('.account-badge')) {
+                    const badge = document.createElement('span');
+                    badge.className = 'account-badge';
+                    badge.textContent = `👤 ${account.username}`;
+                    navLinks?.appendChild(badge);
+                }
+            }
+        });
+
+        
+    </script>
+</body>
+</html>
