@@ -1,0 +1,99 @@
+/*
+ * Auth pages use the same split layout and form shell, but this file keeps
+ * login/register-specific spacing together instead of hiding it in shared.css.
+ */
+
+.auth-layout {
+  align-items: stretch;
+}
+
+.auth-layout .hero h1 {
+  max-width: 11ch;
+}
+
+.auth-layout .hero,
+.auth-layout .form-shell {
+  align-self: stretch;
+}
+
+.codename-picker {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.8rem;
+  align-items: stretch;
+  margin-top: 0.65rem;
+}
+
+.codename-stage {
+  min-width: 0;
+  display: flex;
+}
+
+.codename-option {
+  width: 100%;
+  min-height: 100%;
+  text-align: left;
+  padding: 1.2rem 1.1rem;
+  border-radius: 18px;
+  border: 1px solid var(--primary);
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--text);
+  cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(42, 109, 152, 0.12);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.codename-option:hover {
+  transform: translateY(-1px);
+  border-color: rgba(42, 109, 152, 0.55);
+  box-shadow: var(--card-shadow);
+}
+
+.codename-option strong,
+.codename-option span {
+  display: block;
+}
+
+.codename-option strong {
+  font-size: 1.15rem;
+}
+
+.codename-option span {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.codename-arrow {
+  width: 3rem;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.codename-arrow:hover {
+  transform: translateY(-1px);
+  border-color: rgba(42, 109, 152, 0.4);
+  background: var(--light);
+}
+
+.codename-actions,
+.admin-mode-actions {
+  margin-top: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .codename-picker {
+    grid-template-columns: 1fr;
+  }
+
+  .codename-arrow {
+    width: 100%;
+    min-height: 2.8rem;
+  }
+}

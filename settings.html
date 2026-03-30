@@ -1,437 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings - LeaderRate</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        .dashboard-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        .stat-card {
-            background: var(--card-bg);
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: var(--card-shadow);
-        }
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary);
-        }
-        .stat-label {
-            color: var(--secondary);
-            margin-top: 0.5rem;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 2rem;
-            color: var(--secondary);
-        }
-        .btn-outline-small {
-            background: transparent;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 1rem;
-        }
-        .btn-outline-small:hover {
-            background: var(--primary);
-            color: white;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | LeaderRate v1.0</title>
+  <link rel="stylesheet" href="assets/css/shared.css">
+  <link rel="stylesheet" href="assets/css/settings.css">
 </head>
-<body>
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <a href="index.html" class="logo" id="siteLogo">LeaderRate</a>
-                <div class="nav-links">
-                    <a href="index.html">Home</a>
-                    <a href="leaders.html">Browse Leaders</a>
-                    <a href="leaderboard.html">Leaderboard</a>
-                    <a href="feedback.html">Feedback</a>
-                    <a href="settings.html" class="active">Settings</a>
-                </div>
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <button id="themeToggle" class="theme-toggle-btn">
-                        <i class="fas fa-sun"></i>
-                    </button>
-                    <button class="mobile-menu-btn">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
-            </nav>
-        </div>
-    </header>
+<body class="settings-page">
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">LR</span>
+        <span class="brand-copy">
+          <span data-app-name>LeaderRate v1.0</span>
+          <small>Account settings</small>
+        </span>
+      </a>
+      <nav class="nav-links" data-nav-links>
+        <a href="index.html" data-nav="home">Home</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
+        <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
+        <div data-auth-slot></div>
+      </div>
+    </div>
+  </header>
 
-    <main class="container">
-        <h1 class="page-title">Settings & Dashboard</h1>
-        <p class="subtitle">Manage your preferences and see your contributions</p>
+  <main class="shell-main">
+    <div class="container">
+      <div data-config-banner></div>
 
-        <!-- Anonymous Account Section -->
-        <div class="settings-section">
-            <h2>Anonymous Account</h2>
-            <div class="card">
-                <div class="settings-option">
-                    <div class="option-info">
-                        <h3>Create Anonymous Account</h3>
-                        <p>Generate a random username to post reviews and feedback anonymously</p>
-                    </div>
-                    <button id="createAccountBtn" class="btn btn-primary">Create Account</button>
-                </div>
-                <div id="accountInfo" style="margin-top: 1rem; padding: 0.5rem; background: var(--light); border-radius: 6px;">
-                    <!-- Account info will appear here -->
-                </div>
+      <section class="hero">
+        <div class="eyebrow">Settings</div>
+        <h1>Account settings</h1>
+        <p>Manage your anonymous profile, preferences, and dashboard shortcuts.</p>
+      </section>
+
+      <section class="section grid two">
+        <article class="card settings-card">
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">Anonymous account</div>
+              <h2>Your account</h2>
             </div>
-        </div>
-
-        <!-- Appearance Section -->
-        <div class="settings-section">
-            <h2>Appearance</h2>
-            <div class="card">
-                <div class="settings-option">
-                    <div class="option-info">
-                        <h3>Theme</h3>
-                        <p>Choose between light and dark mode</p>
-                    </div>
-                    <div style="display: flex; gap: 10px;">
-                        <button id="lightThemeBtn" class="btn btn-outline">Light</button>
-                        <button id="darkThemeBtn" class="btn btn-outline">Dark</button>
-                    </div>
-                </div>
+          </div>
+          <dl class="settings-list">
+            <div>
+              <dt>Codename</dt>
+              <dd data-settings-codename>Loading...</dd>
             </div>
-        </div>
-
-        <!-- My Contributions (Dashboard) - only stats, no lists -->
-        <div class="settings-section">
-            <h2>My Contributions</h2>
-            <div id="dashboardContent">
-                <!-- Dynamic dashboard content will appear here -->
+            <div>
+              <dt>Role</dt>
+              <dd data-settings-role>Loading...</dd>
             </div>
-        </div>
-
-        <!-- Existing Notification Preferences -->
-        <div class="settings-section">
-            <h2>Notification Preferences</h2>
-            <div class="card">
-                <div class="settings-option">
-                    <div class="option-info">
-                        <h3>Email Notifications</h3>
-                        <p>Receive updates about new leaders and reviews</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" checked>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="settings-option">
-                    <div class="option-info">
-                        <h3>Push Notifications</h3>
-                        <p>Get alerts on your device</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
+            <div>
+              <dt>Institution</dt>
+              <dd data-settings-institution>Loading...</dd>
             </div>
-        </div>
-
-        <div class="settings-section">
-            <h2>Privacy & Security</h2>
-            <div class="card">
-                <div class="settings-option">
-                    <div class="option-info">
-                        <h3>Anonymous Feedback</h3>
-                        <p>Always post feedback anonymously</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" checked>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
+            <div>
+              <dt>Joined</dt>
+              <dd data-settings-created>Loading...</dd>
             </div>
-        </div>
+          </dl>
 
-        <div class="settings-section">
-            <h2>Account</h2>
-            <div class="card">
-                <div class="settings-option">
-                    <div class="option-info">
-                        <h3>Change Password</h3>
-                        <p>Update your account password (demo only)</p>
-                    </div>
-                    <button id="changePasswordBtn" class="btn">Change</button>
-                </div>
-                <div class="settings-option">
-                    <div class="option-info">
-                        <h3>Delete Account</h3>
-                        <p>Permanently delete your account and all data</p>
-                    </div>
-                    <button id="deleteAccountBtn" class="btn" style="background-color: #ef4444;">Delete</button>
-                </div>
+          <div class="settings-panel">
+            <div class="settings-option">
+              <div class="option-info">
+                <h3>Codename ideas</h3>
+                <p>Preview a few simple codenames without changing your current account.</p>
+              </div>
+              <button class="btn btn-secondary" type="button" data-preview-codenames>Show ideas</button>
             </div>
-        </div>
-    </main>
+            <div class="codename-preview-stack" data-codename-preview></div>
+          </div>
+        </article>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">LeaderRate</div>
-                <div class="footer-links">
-                    <a href="index.html">Home</a>
-                    <a href="leaders.html">Leaders</a>
-                    <a href="leaderboard.html">Leaderboard</a>
-                    <a href="feedback.html">Feedback</a>
-                    <a href="settings.html">Settings</a>
-                </div>
-                <div class="copyright">© 2026 LeaderRate. All rights reserved.</div>
+        <article class="card settings-card">
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">Appearance</div>
+              <h2>Theme</h2>
             </div>
+          </div>
+          <div class="settings-option">
+            <div class="option-info">
+              <h3>Display mode</h3>
+              <p>Choose the theme you prefer while using the app.</p>
+            </div>
+            <div class="theme-choice-group">
+              <button class="btn btn-outline" type="button" data-theme-choice="light">Light</button>
+              <button class="btn btn-outline" type="button" data-theme-choice="dark">Dark</button>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section card settings-card">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">My contributions</div>
+            <h2>Dashboard snapshot</h2>
+          </div>
         </div>
-    </footer>
+        <div class="settings-stats-grid" data-settings-stats></div>
+      </section>
 
-    <script>
-        // ==================== EMAILJS CONFIGURATION ====================
-        const EMAILJS_PUBLIC_KEY = 'tNwupwLjE6FGz9Z5n';
-        const EMAILJS_SERVICE_ID = 'service_ma41b97';
-        const EMAILJS_TEMPLATE_ID ='template_g2d6dg5';
-        const ADMIN_EMAIL = 'baffoetheophilus42@gmail.com';
+      <section class="section grid two">
+        <article class="card settings-card">
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">Notifications</div>
+              <h2>Notification preferences</h2>
+            </div>
+          </div>
+          <div class="settings-stack">
+            <div class="settings-option">
+              <div class="option-info">
+                <h3>Email notifications</h3>
+                <p>Receive updates about office activity in a future release.</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" data-setting-toggle="emailNotifications">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="settings-option">
+              <div class="option-info">
+                <h3>Push notifications</h3>
+                <p>Keep a placeholder preference for device alerts.</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" data-setting-toggle="pushNotifications">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </article>
 
-        if (typeof emailjs !== 'undefined') {
-            emailjs.init(EMAILJS_PUBLIC_KEY);
-        }
+        <article class="card settings-card">
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">Privacy</div>
+              <h2>Privacy & security</h2>
+            </div>
+          </div>
+          <div class="settings-stack">
+            <div class="settings-option">
+              <div class="option-info">
+                <h3>Anonymous feedback by default</h3>
+                <p>Keep the app focused on codename-only participation.</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" data-setting-toggle="anonymousFeedback" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="settings-option">
+              <div class="option-info">
+                <h3>Abuse monitoring awareness</h3>
+                <p>Remember that the system still logs risk signals internally.</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" data-setting-toggle="securityAwareness" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </article>
+      </section>
 
-        function sendEmailNotification(action, details) {
-            if (typeof emailjs === 'undefined') {
-                console.warn('EmailJS not loaded, skipping email');
-                return;
-            }
-            const templateParams = {
-                action: action,
-                details: details,
-                user: localStorage.getItem('anonymousAccount') ? JSON.parse(localStorage.getItem('anonymousAccount')).username : 'Guest',
-                time: new Date().toLocaleString(),
-                admin_email: ADMIN_EMAIL
-            };
-            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
-                .then(() => console.log('Email sent'))
-                .catch(err => console.error('Email send failed:', err));
-        }
-        // ==============================================================
+      <section class="section card settings-card">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Account</div>
+            <h2>Account actions</h2>
+          </div>
+        </div>
+        <div class="settings-stack">
+          <div class="settings-option">
+            <div class="option-info">
+              <h3>Change password</h3>
+              <p>Update the password attached to your current codename.</p>
+            </div>
+            <button class="btn btn-secondary" type="button" data-change-password>Change</button>
+          </div>
+          <div class="settings-option">
+            <div class="option-info">
+              <h3>Delete account</h3>
+              <p>Sign out and clear local preferences. Full account removal is handled outside this demo.</p>
+            </div>
+            <button class="btn btn-danger" type="button" data-delete-account>Delete</button>
+          </div>
+        </div>
+      </section>
 
-        // ==================== DOM elements ====================
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-        const themeToggle = document.getElementById('themeToggle');
-        const lightBtn = document.getElementById('lightThemeBtn');
-        const darkBtn = document.getElementById('darkThemeBtn');
-        const createAccountBtn = document.getElementById('createAccountBtn');
-        const changePasswordBtn = document.getElementById('changePasswordBtn');
-        const deleteAccountBtn = document.getElementById('deleteAccountBtn');
-        const accountInfoDiv = document.getElementById('accountInfo');
-        const dashboardContainer = document.getElementById('dashboardContent');
+      <section class="section card settings-card">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Shortcuts</div>
+            <h2>Next steps</h2>
+          </div>
+        </div>
+        <div class="button-row" data-settings-actions></div>
+      </section>
+    </div>
+  </main>
 
-        // ==================== Theme functions ====================
-        function applyTheme(theme) {
-            if (theme === 'dark') {
-                document.body.classList.add('dark');
-                if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-            } else {
-                document.body.classList.remove('dark');
-                if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-            }
-            localStorage.setItem('theme', theme);
-        }
+  <footer class="site-footer">
+    <div class="container footer-shell">
+      <div class="muted">&copy; <span data-year></span> LeaderRate</div>
+    </div>
+  </footer>
 
-        function initTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            applyTheme(savedTheme);
-        }
-
-        // ==================== Anonymous account functions ====================
-        function displayAccountInfo(account) {
-            if (account) {
-                accountInfoDiv.innerHTML = `
-                    <strong>Current anonymous account:</strong> ${escapeHtml(account.username)}<br>
-                    <small>Created: ${new Date(account.created).toLocaleDateString()}</small>
-                `;
-            } else {
-                accountInfoDiv.innerHTML = '<em>No anonymous account yet. Click the button above to create one.</em>';
-            }
-        }
-
-        function createAnonymousAccount() {
-            const adjectives = ['Swift', 'Brave', 'Silent', 'Wise', 'Mighty', 'Clever', 'Kind', 'Fierce'];
-            const nouns = ['Panda', 'Eagle', 'Wolf', 'Fox', 'Lion', 'Owl', 'Deer', 'Hawk'];
-            const randomName = `${adjectives[Math.floor(Math.random() * adjectives.length)]}${nouns[Math.floor(Math.random() * nouns.length)]}${Math.floor(Math.random() * 1000)}`;
-            const account = {
-                username: randomName,
-                created: new Date().toISOString()
-            };
-            localStorage.setItem('anonymousAccount', JSON.stringify(account));
-            displayAccountInfo(account);
-            showNotification(`Anonymous account created: ${randomName}`);
-            sendEmailNotification('New Anonymous Account', `Username: ${randomName}`);
-
-            if (!document.querySelector('.account-badge')) {
-                const badge = document.createElement('span');
-                badge.className = 'account-badge';
-                badge.textContent = `👤 ${randomName}`;
-                navLinks?.appendChild(badge);
-            }
-
-            loadDashboard(); // reload to show stats
-        }
-
-        function deleteAccount() {
-            if (confirm('Are you sure you want to delete your account and all data? This cannot be undone.')) {
-                localStorage.removeItem('anonymousAccount');
-                localStorage.removeItem('leaderRateReviews');
-                localStorage.removeItem('feedbackList');
-                localStorage.removeItem('likedFeedback');
-                localStorage.removeItem('demoPassword');
-                displayAccountInfo(null);
-                const badge = document.querySelector('.account-badge');
-                if (badge) badge.remove();
-                showNotification('Account deleted. All data removed.');
-                loadDashboard();
-                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
-            }
-        }
-
-        // ==================== Dashboard / My Contributions (only counts) ====================
-        function loadDashboard() {
-            if (!dashboardContainer) return;
-            const account = JSON.parse(localStorage.getItem('anonymousAccount') || 'null');
-            if (!account) {
-                dashboardContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-user-circle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                        <p>You don't have an anonymous account yet. Create one above to start contributing.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const username = account.username;
-            // Get reviews
-            const reviewsData = JSON.parse(localStorage.getItem('leaderRateReviews') || '{}');
-            let reviewCount = 0;
-            for (const leaderId in reviewsData) {
-                reviewCount += reviewsData[leaderId].filter(r => r.author === username).length;
-            }
-
-            // Get feedback
-            const feedbacks = JSON.parse(localStorage.getItem('feedbackList') || '[]');
-            const feedbackCount = feedbacks.filter(f => f.author === username).length;
-
-            let html = `
-                <div class="dashboard-stats">
-                    <div class="stat-card">
-                        <div class="stat-number">${reviewCount}</div>
-                        <div class="stat-label">Reviews Written</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${feedbackCount}</div>
-                        <div class="stat-label">Feedback Posts</div>
-                    </div>
-                </div>
-            `;
-
-            if (reviewCount === 0 && feedbackCount === 0) {
-                html += `
-                    <div class="empty-state">
-                        <i class="fas fa-pen-fancy" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                        <p>You haven't contributed yet. Be the first to leave a review or feedback!</p>
-                        <a href="leaders.html" class="btn-outline-small">Browse Leaders</a>
-                        <a href="feedback.html" class="btn-outline-small" style="margin-left: 1rem;">Share Feedback</a>
-                    </div>
-                `;
-            } else {
-                html += `
-                    <div class="empty-state">
-                        <p>Great job! Keep contributing to help improve our institution.</p>
-                    </div>
-                `;
-            }
-            dashboardContainer.innerHTML = html;
-        }
-
-        // ==================== Helper functions ====================
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
-
-        function showNotification(message) {
-            const n = document.createElement('div');
-            n.className = 'notification';
-            n.textContent = message;
-            document.body.appendChild(n);
-            setTimeout(() => n.remove(), 3000);
-        }
-
-        // ==================== Event Listeners & Initialization ====================
-        function init() {
-            initTheme();
-            if (themeToggle) themeToggle.addEventListener('click', () => {
-                const newTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
-                applyTheme(newTheme);
-            });
-            if (lightBtn) lightBtn.addEventListener('click', () => applyTheme('light'));
-            if (darkBtn) darkBtn.addEventListener('click', () => applyTheme('dark'));
-
-            if (mobileMenuBtn) {
-                mobileMenuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
-            }
-
-            if (createAccountBtn) createAccountBtn.addEventListener('click', createAnonymousAccount);
-            if (deleteAccountBtn) deleteAccountBtn.addEventListener('click', deleteAccount);
-            if (changePasswordBtn) {
-                changePasswordBtn.addEventListener('click', () => {
-                    const newPwd = prompt('Enter a new password (demo – no actual authentication)');
-                    if (newPwd) {
-                        localStorage.setItem('demoPassword', newPwd);
-                        showNotification('Password changed (demo)');
-                    }
-                });
-            }
-
-            const savedAccount = localStorage.getItem('anonymousAccount');
-            if (savedAccount) {
-                const account = JSON.parse(savedAccount);
-                displayAccountInfo(account);
-                if (!document.querySelector('.account-badge')) {
-                    const badge = document.createElement('span');
-                    badge.className = 'account-badge';
-                    badge.textContent = `👤 ${account.username}`;
-                    navLinks?.appendChild(badge);
-                }
-            } else {
-                displayAccountInfo(null);
-            }
-
-            loadDashboard();
-        }
-
-        init();
-    </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script type="module" src="assets/js/pages/settings.js"></script>
 </body>
 </html>

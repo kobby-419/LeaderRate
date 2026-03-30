@@ -1,0 +1,8 @@
+/*
+ * The updates page is intentionally simple. This file keeps the list spacing
+ * near the page instead of stuffing those decisions into the shared stylesheet.
+ */
+
+.updates-page .project-card {
+  min-height: 100%;
+}

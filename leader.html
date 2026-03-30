@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leader Profile | LeaderRate v1.0</title>
+  <link rel="stylesheet" href="assets/css/shared.css">
+  <link rel="stylesheet" href="assets/css/leader.css">
+</head>
+<body class="office-profile">
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">LR</span>
+        <span class="brand-copy">
+          <span data-app-name>LeaderRate v1.0</span>
+          <small>Office profile</small>
+        </span>
+      </a>
+      <nav class="nav-links" data-nav-links>
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="leaders.html" data-nav="leaders">Browse Leaders</a>
+        <a href="updates.html" data-nav="updates">View Updates</a>
+        <a href="register.html" data-nav="register">Register</a>
+        <a href="login.html" data-nav="login">Login</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
+        <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
+        <div data-auth-slot></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell-main">
+    <div class="container">
+      <div data-config-banner></div>
+      <!-- This page mixes public office information with a student-only submission form. -->
+      <section class="hero office-hero">
+        <div class="office-hero-grid">
+          <div>
+            <div class="eyebrow">Office profile</div>
+            <h1 data-office-title>Loading office...</h1>
+            <p class="office-role-line hidden" data-office-role></p>
+            <p class="office-summary-text" data-office-summary></p>
+            <div class="hero-badges">
+              <span class="pill">Focus</span>
+              <span class="pill" data-office-focus></span>
+            </div>
+          </div>
+          <div class="office-hero-side">
+            <div class="office-hero-card">
+              <div class="office-hero-label">Quick action</div>
+              <h2>Want to share feedback?</h2>
+              <p>Open a private feedback form and post under your codename.</p>
+              <div class="button-row">
+                <button class="btn btn-primary" type="button" data-open-feedback>Add your feedback</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section stats-grid office-stats-grid">
+        <article class="stat-card office-stat-card">
+          <div class="stat-value" data-approved-count>0</div>
+          <div class="stat-label">Approved public feedback</div>
+        </article>
+        <article class="stat-card office-stat-card">
+          <div class="stat-value" data-average-rating>0/5</div>
+          <div class="stat-label">Average public rating</div>
+        </article>
+      </section>
+
+      <section class="section form-shell office-feedback-launcher" id="office-feedback" data-feedback-shell>
+        <div>
+          <div class="eyebrow">Send feedback</div>
+          <h2>Share your view on this office</h2>
+          <p class="muted">Open a private feedback form and submit under your codename. Moderation still applies before anything is shown publicly.</p>
+        </div>
+        <div class="button-row">
+          <button class="btn btn-primary" type="button" data-open-feedback>Add your feedback</button>
+        </div>
+      </section>
+
+      <div class="feedback-modal hidden" data-feedback-modal aria-hidden="true">
+        <div class="feedback-modal-backdrop" data-close-feedback></div>
+        <div class="feedback-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="feedbackModalTitle">
+          <button class="feedback-modal-close" type="button" aria-label="Close feedback form" data-close-feedback>&times;</button>
+          <div class="office-feedback-shell">
+            <div class="feedback-modal-header">
+              <div class="feedback-modal-kicker">Private feedback</div>
+              <div class="office-feedback-head">
+                <div>
+                  <h2 id="feedbackModalTitle">Share your view on this office</h2>
+                  <p class="feedback-modal-summary">Feedback is submitted under your codename and goes to moderation before anything becomes public.</p>
+                </div>
+                <div class="feedback-codename hidden" data-feedback-codename></div>
+              </div>
+              <div class="feedback-modal-office-line">
+                <span class="pill">Posting to</span>
+                <span class="feedback-office-name" data-feedback-office-title>Loading office...</span>
+              </div>
+            </div>
+
+            <div class="feedback-access-note hidden" data-feedback-guest-note>
+              <strong>Login required.</strong>
+              <span>Sign in with your codename to post feedback for this office.</span>
+              <div class="button-row">
+                <a class="btn btn-secondary" href="login.html">Login</a>
+                <a class="btn btn-primary" href="register.html">Register</a>
+              </div>
+            </div>
+
+            <div class="feedback-access-note hidden" data-feedback-role-note>
+              <strong>Student account needed.</strong>
+              <span>Only student accounts can submit office feedback in this demo.</span>
+            </div>
+
+            <form class="hidden" data-feedback-form>
+              <div class="grid two">
+                <div class="field feedback-field-card">
+                  <label for="category">Category</label>
+                  <select class="select" id="category" name="category" data-feedback-category></select>
+                </div>
+                <div class="field feedback-field-card">
+                  <label>Rating</label>
+                  <input type="hidden" name="rating" value="0" data-rating-input>
+                  <div class="feedback-rating-picker" data-rating-picker>
+                    <button class="rating-chip" type="button" data-rating-choice="1" aria-label="Rate 1 out of 5">1</button>
+                    <button class="rating-chip" type="button" data-rating-choice="2" aria-label="Rate 2 out of 5">2</button>
+                    <button class="rating-chip" type="button" data-rating-choice="3" aria-label="Rate 3 out of 5">3</button>
+                    <button class="rating-chip" type="button" data-rating-choice="4" aria-label="Rate 4 out of 5">4</button>
+                    <button class="rating-chip" type="button" data-rating-choice="5" aria-label="Rate 5 out of 5">5</button>
+                  </div>
+                  <small class="rating-helper" data-rating-label>Select a rating for this office.</small>
+                </div>
+              </div>
+              <div class="field feedback-field-card">
+                <label for="message">Feedback</label>
+                <textarea class="textarea feedback-message-box" id="message" name="message" maxlength="500" placeholder="Describe the concern, experience, or suggestion in a clear and constructive way." data-feedback-message></textarea>
+                <div class="feedback-field-meta">
+                  <small>Keep it specific and respectful so moderation can approve it faster.</small>
+                  <span class="feedback-counter" data-feedback-counter>0 / 500</span>
+                </div>
+              </div>
+              <div class="feedback-submit-row">
+                <div class="feedback-submit-note">
+                  <strong>Moderation applies.</strong>
+                  <small>Your codename appears publicly only if the feedback is approved.</small>
+                </div>
+                <button class="btn btn-primary" type="submit" data-feedback-submit>Submit for moderation</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <section class="section split">
+        <div>
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">Approved feedback</div>
+              <h2>Public feedback and responses</h2>
+            </div>
+          </div>
+          <div class="stack office-content-stack" data-feedback-list></div>
+        </div>
+        <div>
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">Project visibility</div>
+              <h2>Office updates</h2>
+            </div>
+          </div>
+          <div class="stack office-content-stack" data-projects-list></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-shell">
+      <div class="muted">Public feedback here is moderated. Students can also support or report visible items.</div>
+      <div class="muted">&copy; <span data-year></span> LeaderRate</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script type="module" src="assets/js/pages/leader.js"></script>
+</body>
+</html>
+

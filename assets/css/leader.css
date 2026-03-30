@@ -1,0 +1,359 @@
+/*
+ * The office profile page mixes public data, projects, and student actions.
+ * These small tweaks make the two-column profile view read more cleanly.
+ */
+
+.office-profile .hero h1 {
+  max-width: 13ch;
+}
+
+.office-hero {
+  overflow: hidden;
+}
+
+.office-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(280px, 0.88fr);
+  gap: 1.35rem;
+  align-items: start;
+}
+
+.office-role-line {
+  margin: -0.45rem 0 0;
+  color: var(--primary);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.office-summary-text {
+  max-width: 60ch;
+}
+
+.office-hero-side {
+  display: flex;
+}
+
+.office-hero-card {
+  display: grid;
+  gap: 0.8rem;
+  width: 100%;
+  padding: 1.15rem 1.2rem;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.08), rgba(37, 99, 235, 0.02));
+  border: 1px solid rgba(37, 99, 235, 0.12);
+}
+
+.office-hero-card h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.office-hero-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.office-hero-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.office-stat-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.office-stat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.85), rgba(37, 99, 235, 0.2));
+}
+
+.office-feedback-shell {
+  display: grid;
+  gap: 1.35rem;
+}
+
+.office-feedback-launcher {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  scroll-margin-top: 6.5rem;
+  border-radius: 18px;
+}
+
+.office-feedback-launcher h2 {
+  margin-bottom: 0.35rem;
+}
+
+.office-feedback-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.office-feedback-head h2 {
+  margin-bottom: 0.4rem;
+}
+
+.feedback-modal-header {
+  display: grid;
+  gap: 0.95rem;
+  padding: 0.1rem 2.4rem 0.1rem 0.1rem;
+}
+
+.feedback-modal-kicker {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.feedback-modal-summary {
+  margin: 0;
+  color: var(--muted);
+}
+
+.feedback-modal-office-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.feedback-office-name {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.feedback-codename {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--primary);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.feedback-access-note {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  background: rgba(37, 99, 235, 0.05);
+  border: 1px solid rgba(37, 99, 235, 0.14);
+}
+
+.feedback-access-note strong {
+  color: var(--text);
+}
+
+.feedback-field-card {
+  margin-bottom: 0;
+  padding: 1rem 1rem 0.95rem;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.03), rgba(37, 99, 235, 0.015));
+  border: 1px solid rgba(37, 99, 235, 0.08);
+}
+
+.feedback-rating-picker {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.rating-chip {
+  min-width: 2.9rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card-bg);
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.rating-chip:hover,
+.rating-chip:focus-visible {
+  border-color: rgba(37, 99, 235, 0.3);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.rating-chip.active {
+  border-color: rgba(37, 99, 235, 0.15);
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--primary);
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.08);
+}
+
+.rating-helper {
+  color: var(--muted);
+}
+
+.feedback-message-box {
+  min-height: 150px;
+}
+
+.feedback-field-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.45rem;
+}
+
+.feedback-counter {
+  color: var(--muted);
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.feedback-submit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: 0.35rem;
+}
+
+.feedback-submit-note {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.feedback-submit-note strong {
+  color: var(--text);
+}
+
+.feedback-submit-row small {
+  color: var(--muted);
+}
+
+.office-content-stack .feedback-card,
+.office-content-stack .project-card {
+  border-radius: 18px;
+  padding: 1.2rem 1.25rem;
+}
+
+.office-content-stack .feedback-card p,
+.office-content-stack .project-card p {
+  margin: 0;
+  line-height: 1.62;
+}
+
+.response-box {
+  margin-top: 0.95rem;
+  padding: 0.95rem 1rem;
+  border-radius: 14px;
+  background: rgba(37, 99, 235, 0.05);
+  border: 1px solid rgba(37, 99, 235, 0.12);
+}
+
+.response-box strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--primary);
+}
+
+.feedback-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 260;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.feedback-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.62);
+  backdrop-filter: blur(2px);
+}
+
+.feedback-modal-dialog {
+  position: relative;
+  width: min(720px, 100%);
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  padding: 1.6rem;
+  border-radius: 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  box-shadow: 0 32px 60px -34px rgba(15, 23, 42, 0.7);
+}
+
+.feedback-modal-close {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.95rem;
+  width: 2.35rem;
+  height: 2.35rem;
+  border: none;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.14);
+  color: var(--text);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.feedback-modal-close:hover,
+.feedback-modal-close:focus-visible {
+  background: rgba(148, 163, 184, 0.22);
+}
+
+.modal-open {
+  overflow: hidden;
+}
+
+.office-profile .feedback-card,
+.office-profile .project-card {
+  min-height: 100%;
+}
+
+@media (max-width: 720px) {
+  .office-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .office-feedback-launcher {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .office-feedback-head {
+    flex-direction: column;
+  }
+
+  .feedback-field-meta,
+  .feedback-submit-row {
+    align-items: flex-start;
+  }
+
+  .feedback-modal-header {
+    padding-right: 2rem;
+  }
+
+  .feedback-modal {
+    padding: 0.9rem;
+  }
+
+  .feedback-modal-dialog {
+    padding: 1.15rem;
+  }
+}

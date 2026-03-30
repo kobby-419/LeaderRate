@@ -1,0 +1,82 @@
+/*
+ * The home page keeps the only intentionally animated moment in the app.
+ * It mirrors the original prototype's LR splash without affecting the rest
+ * of the pages.
+ */
+
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #0f2b3d 0%, #1e5a7a 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1200;
+  transition: opacity 0.6s ease;
+}
+
+.splash-text {
+  text-align: center;
+}
+
+.splash-logo-lr {
+  font-size: 5rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 8px;
+  animation: pulseGlow 1.2s ease-in-out infinite;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.splash-logo-full {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 2px;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.splash-slogan {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin-top: 1.25rem;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards 0.6s;
+}
+
+.home-hero {
+  margin-top: 0;
+}
+
+.home-feature-grid .panel {
+  min-height: 100%;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    transform: scale(1);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  }
+
+  50% {
+    transform: scale(1.05);
+    text-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

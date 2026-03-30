@@ -1,0 +1,106 @@
+/*
+ * Dashboard pages share the same visual language, but they carry denser admin
+ * and leader information. These rules keep long cards and forms balanced.
+ */
+
+.dashboard-page .hero h1 {
+  max-width: 12ch;
+}
+
+.dashboard-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.dashboard-hero-panel {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1.1rem 1.15rem;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.08), rgba(37, 99, 235, 0.02));
+  border: 1px solid rgba(37, 99, 235, 0.12);
+}
+
+.dashboard-hero-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.dashboard-hero-actions {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.dashboard-stat-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-stat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.82), rgba(37, 99, 235, 0.18));
+}
+
+.dashboard-stack .card {
+  padding: 1.2rem 1.25rem;
+  border-radius: 16px;
+}
+
+.student-feedback-card {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.student-feedback-message {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.62;
+}
+
+.student-feedback-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: 0.95rem;
+  border-top: 1px solid var(--border);
+}
+
+.student-update-card {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.student-update-card h3 {
+  margin: 0;
+}
+
+.student-update-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.58;
+}
+
+.dashboard-page .stack .card,
+.dashboard-page .stack .panel {
+  min-height: 100%;
+}
+
+.dashboard-page .form-shell {
+  align-self: start;
+}
+
+@media (max-width: 820px) {
+  .dashboard-hero-grid {
+    grid-template-columns: 1fr;
+  }
+}

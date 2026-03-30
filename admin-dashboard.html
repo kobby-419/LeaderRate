@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | LeaderRate v1.0</title>
+  <link rel="stylesheet" href="assets/css/shared.css">
+  <link rel="stylesheet" href="assets/css/dashboards.css">
+</head>
+<body class="dashboard-page admin-dashboard-page">
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">LR</span>
+        <span class="brand-copy">
+          <span data-app-name>LeaderRate v1.0</span>
+          <small>Admin dashboard</small>
+        </span>
+      </a>
+      <nav class="nav-links" data-nav-links>
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="leaders.html" data-nav="leaders">Browse Leaders</a>
+        <a href="updates.html" data-nav="updates">View Updates</a>
+        <a href="admin-dashboard.html" data-nav="admin-dashboard">Dashboard</a>
+        <a href="moderation.html" data-nav="moderation">Moderation</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
+        <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
+        <div data-auth-slot></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell-main">
+    <div class="container">
+      <div data-config-banner></div>
+      <section class="hero">
+        <div class="eyebrow">Admin controls</div>
+        <h1>Moderation, office management, and abuse review.</h1>
+        <p>
+          Admins keep the platform constructive by approving feedback, watching suspicious activity, and creating leader office records and login accounts.
+        </p>
+      </section>
+
+      <section class="section stats-grid">
+        <article class="stat-card">
+          <div class="stat-value" data-admin-user-count>0</div>
+          <div class="stat-label">Total user profiles</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-value" data-admin-feedback-count>0</div>
+          <div class="stat-label">Total feedback items</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-value" data-admin-pending-count>0</div>
+          <div class="stat-label">Pending moderation</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-value" data-admin-approved-count>0</div>
+          <div class="stat-label">Approved items</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-value" data-admin-rejected-count>0</div>
+          <div class="stat-label">Rejected items</div>
+        </article>
+      </section>
+
+      <section class="section split">
+        <div>
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">Leader management</div>
+              <h2>Create a leader office and login</h2>
+            </div>
+            <a class="btn btn-ghost" href="moderation.html">Open moderation queue</a>
+          </div>
+          <div class="form-shell">
+            <form data-create-leader-form>
+              <div class="field">
+                <label for="officeTitle">Office title</label>
+                <input class="input" id="officeTitle" name="officeTitle" required>
+              </div>
+              <div class="field">
+                <label for="officeSlug">Office slug</label>
+                <input class="input" id="officeSlug" name="officeSlug" required>
+              </div>
+              <div class="field">
+                <label for="officeSummary">Office summary</label>
+                <textarea class="textarea" id="officeSummary" name="officeSummary" required></textarea>
+              </div>
+              <div class="field">
+                <label for="officeFocus">Office focus</label>
+                <textarea class="textarea" id="officeFocus" name="officeFocus" required></textarea>
+              </div>
+              <div class="field">
+                <label for="loginCodename">Leader login codename</label>
+                <input class="input" id="loginCodename" name="loginCodename" required>
+              </div>
+              <div class="field">
+                <label for="leaderPassword">Initial password</label>
+                <input class="input" id="leaderPassword" name="password" type="password" required>
+              </div>
+              <button class="btn btn-primary" type="submit">Create leader account</button>
+            </form>
+          </div>
+          <div class="stack section" data-admin-leaders></div>
+        </div>
+        <div>
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">Suspicious activity</div>
+              <h2>Recent abuse logs</h2>
+            </div>
+          </div>
+          <div class="stack" data-admin-logs></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-shell">
+      <div class="muted">Admin-only actions rely on Supabase role checks and edge-function validation.</div>
+      <div class="muted">&copy; <span data-year></span> LeaderRate</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script type="module" src="assets/js/pages/admin-dashboard.js"></script>
+</body>
+</html>
+

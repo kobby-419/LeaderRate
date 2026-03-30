@@ -1,0 +1,169 @@
+/*
+ * The settings page keeps the broader feature set from the original prototype,
+ * but aligns it with the current shell and design system.
+ */
+
+.settings-card {
+  min-height: 100%;
+}
+
+.settings-list {
+  margin: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.settings-list div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.settings-list dt {
+  font-weight: 700;
+}
+
+.settings-list dd {
+  margin: 0;
+  color: var(--muted);
+}
+
+.settings-panel {
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.settings-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.settings-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.settings-option:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.option-info h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+}
+
+.option-info p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.theme-choice-group {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.theme-choice-group .btn.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.settings-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.settings-stat {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--light);
+  padding: 1.15rem;
+}
+
+.settings-stat strong,
+.settings-stat span {
+  display: block;
+}
+
+.settings-stat strong {
+  font-size: 1.8rem;
+  color: var(--primary);
+}
+
+.settings-stat span {
+  color: var(--muted);
+  margin-top: 0.3rem;
+}
+
+.codename-preview-stack {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+}
+
+.codename-preview-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-flex;
+  width: 52px;
+  height: 30px;
+  flex: 0 0 auto;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  border-radius: 999px;
+  background: #cbd5e1;
+  transition: background 0.2s ease;
+}
+
+.toggle-slider::before {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  left: 4px;
+  top: 4px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s ease;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--primary);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(22px);
+}
+
+@media (max-width: 720px) {
+  .settings-option {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,189 @@
+/*
+ * The leaderboard page revives the old project page, but uses the current
+ * office-based data instead of static browser-only mock rows.
+ */
+
+.leaderboard-table {
+  background: var(--card-bg);
+  border-radius: 8px;
+  overflow-x: auto;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border);
+}
+
+.leaderboard-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.leaderboard-table th {
+  background: var(--light);
+}
+
+.leaderboard-controls {
+  padding-top: 0;
+}
+
+.sort-controls {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.control-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.sort-btn {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.sort-btn:hover,
+.sort-btn:focus-visible {
+  border-color: rgba(37, 99, 235, 0.28);
+  color: var(--primary);
+}
+
+.sort-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.performer-card {
+  min-height: 100%;
+  display: grid;
+  gap: 1rem;
+}
+
+.performer-card .item-meta:first-child {
+  align-items: center;
+}
+
+.performer-card h3 {
+  margin: 0;
+  line-height: 1.3;
+}
+
+.performer-role {
+  margin: -0.6rem 0 0;
+  color: var(--primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.performer-summary {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.performer-stats {
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  align-items: center;
+  color: var(--muted);
+}
+
+.performer-stats .stars {
+  color: #f59e0b;
+  letter-spacing: 0.12em;
+}
+
+.leaderboard-rank {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 700;
+}
+
+.leader-name {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.leader-name strong {
+  line-height: 1.3;
+}
+
+.leader-role {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.leader-rating-cell {
+  min-width: 10rem;
+}
+
+.rating-bar {
+  width: 100%;
+  height: 0.5rem;
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 0.45rem;
+}
+
+.rating-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  border-radius: 999px;
+}
+
+.rating-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.rating-row .stars {
+  color: #f59e0b;
+  letter-spacing: 0.1em;
+}
+
+.leaderboard-table td {
+  vertical-align: top;
+}
+
+.btn-small {
+  padding: 0.5rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .sort-controls {
+    align-items: stretch;
+  }
+
+  .control-label {
+    width: 100%;
+  }
+
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 0.85rem;
+  }
+
+  .leader-rating-cell {
+    min-width: 8rem;
+  }
+}

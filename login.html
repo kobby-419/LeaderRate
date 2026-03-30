@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | LeaderRate v1.0</title>
+  <link rel="stylesheet" href="assets/css/shared.css">
+  <link rel="stylesheet" href="assets/css/auth.css">
+</head>
+<body class="auth-page">
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">LR</span>
+        <span class="brand-copy">
+          <span data-app-name>LeaderRate v1.0</span>
+          <small>Shared login</small>
+        </span>
+      </a>
+      <nav class="nav-links" data-nav-links>
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="leaders.html" data-nav="leaders">Browse Leaders</a>
+        <a href="updates.html" data-nav="updates">View Updates</a>
+        <a href="register.html" data-nav="register">Register</a>
+        <a href="login.html" data-nav="login">Login</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
+        <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
+        <div data-auth-slot></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell-main">
+    <div class="container">
+      <div data-config-banner></div>
+      <section class="split auth-layout">
+        <div class="hero">
+          <div class="eyebrow">Codename login</div>
+          <h1 data-login-title>One login for students and leaders.</h1>
+          <p data-login-copy>Use your codename and password to continue.</p>
+        </div>
+        <div class="form-shell">
+          <div class="app-banner hidden" data-admin-login-banner>
+            Admin login mode is active.
+            <div class="button-row admin-mode-actions">
+              <button class="btn btn-ghost" type="button" data-exit-admin-mode>Return to shared login</button>
+            </div>
+          </div>
+          <h2>Login</h2>
+          <form data-login-form>
+            <div class="field">
+              <label for="codename">Codename</label>
+              <input class="input" id="codename" name="codename" required>
+            </div>
+            <div class="field">
+              <label for="password">Password</label>
+              <input class="input" id="password" name="password" type="password" required>
+            </div>
+            <button class="btn btn-primary btn-full" type="submit">Login</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-shell">
+      <div class="muted">Leader and admin accounts are seeded or created by admin.</div>
+      <div class="muted">&copy; <span data-year></span> LeaderRate</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script type="module" src="assets/js/pages/login.js"></script>
+</body>
+</html>

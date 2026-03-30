@@ -1,235 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LeaderRate - Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        
-/* ========== SPLASH SCREEN ========== */
-        .splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0f2b3d 0%, #1e5a7a 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-         /* Container for the animated text */
-        .splash-text {
-            text-align: center;
-            transition: all 0.5s ease;
-        }
-
-        .splash-logo-lr {
-            font-size: 5rem;
-            font-weight: 800;
-            color: white;
-            letter-spacing: 8px;
-            animation: pulseGlow 1.2s ease-in-out infinite;
-            text-shadow: 0 0 20px rgba(255,255,255,0.3);
-            transition: all 0.5s ease;
-        }
-         /* The full name appears after the animation */
-        .splash-logo-full {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: white;
-            letter-spacing: 2px;
-            text-shadow: 0 0 20px rgba(255,255,255,0.3);
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-         .splash-slogan {
-            font-size: 1.2rem;
-            color: rgba(255,255,255,0.9);
-            font-weight: 500;
-            letter-spacing: 1px;
-            margin-top: 1.5rem;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out forwards 0.6s;
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% {
-                transform: scale(1);
-                text-shadow: 0 0 10px rgba(255,255,255,0.3);
-            }
-              50% {
-                transform: scale(1.05);
-                text-shadow: 0 0 25px rgba(255,255,255,0.6);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeaderRate v1.0</title>
+  <link rel="stylesheet" href="assets/css/shared.css">
+  <link rel="stylesheet" href="assets/css/home.css">
 </head>
-<body>
-    <!-- Splash Screen with LR transformation -->
-    <div class="splash-screen" id="splash">
-        <div class="splash-text" id="splashText">
-            <div class="splash-logo-lr" id="lrLogo">LR</div>
-            <!-- The full name will be inserted by JavaScript after the animation -->
-        </div>
-        <div class="splash-slogan" id="slogan">Anonymous Feedback. Real Impact.</div>
+<body class="home-page">
+  <div class="splash-screen" id="splash">
+    <div class="splash-text" id="splashText">
+      <div class="splash-logo-lr" id="lrLogo">LR</div>
     </div>
-<!-- Main Content (Landing Page) -->
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <a href="#" class="logo" id="siteLogo">LeaderRate</a>
-                <div class="nav-links">
-                    <a href="index.html" class="active">Home</a>
-                    <a href="leaders.html">Browse Leaders</a>
-                    <a href="leaderboard.html">Leaderboard</a>
-                    <a href="feedback.html">Feedback</a>
-                    <a href="settings.html">Settings</a>
-                </div>
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <button id="themeToggle" class="theme-toggle-btn">
-                        <i class="fas fa-sun"></i>
-                    </button>
-                    <button class="mobile-menu-btn">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
-            </nav>
+    <div class="splash-slogan" id="slogan">Anonymous Feedback. Real Impact.</div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">LR</span>
+        <span class="brand-copy">
+          <span data-app-name>LeaderRate v1.0</span>
+          <small>Foso College of Education</small>
+        </span>
+      </a>
+      <nav class="nav-links" data-nav-links>
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="leaders.html" data-nav="leaders">Browse Leaders</a>
+        <a href="updates.html" data-nav="updates">Updates</a>
+        <a href="register.html" data-nav="register">Register</a>
+        <a href="login.html" data-nav="login">Login</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
+        <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
+        <div data-auth-slot></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell-main">
+    <div class="container">
+      <div data-config-banner></div>
+      <h1 class="page-title">Rate and review leaders at FOSCO</h1>
+      <p class="subtitle">
+        Help improve student leadership at Foso College of Education by sharing constructive anonymous feedback, following office updates, and seeing how concerns are handled.
+      </p>
+
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-number" data-stat-leaders>0</div>
+          <div class="stat-label">Active leader offices</div>
         </div>
-    </header>
-
-    <main class="container">
-        <h1 class="page-title">Rate & Review Leaders</h1>
-        <p class="subtitle">Help improve our institution by sharing your honest feedback about leaders and concerns.</p>
-        
-        <div class="stats-container">
-            <div class="stat-card">
-                <div class="stat-number">62</div>
-                <div class="stat-label">Total Leaders</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">5.3K</div>
-                <div class="stat-label">Reviews</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">248</div>
-                <div class="stat-label">Feedback Posts</div>
-            </div>
+        <div class="stat-card">
+          <div class="stat-number" data-stat-feedback>0</div>
+          <div class="stat-label">Approved feedback</div>
         </div>
-        
-        <div class="quick-actions">
-            <h2>Quick Actions</h2>
-            <a href="leaders.html" class="action-card">
-                <h3>Browse Leaders</h3>
-                <p>View and review institutional leaders</p>
-            </a>
+        <div class="stat-card">
+          <div class="stat-number" data-stat-projects>0</div>
+          <div class="stat-label">Published updates</div>
         </div>
-        
-        <div class="leaderboard-preview">
-            <h2>Leaderboard</h2>
-            <div class="card">
-                <p>See the top performing leaders based on ratings and reviews.</p>
-                <a href="leaderboard.html" class="btn">View Leaderboard</a>
-            </div>
+        <div class="stat-card">
+          <div class="stat-number" data-stat-rating>0/5</div>
+          <div class="stat-label">Average public rating</div>
         </div>
-    </main>
+      </div>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">LeaderRate</div>
-                <div class="footer-links">
-                    <a href="index.html">Home</a>
-                    <a href="leaders.html">Leaders</a>
-                    <a href="leaderboard.html">Leaderboard</a>
-                    <a href="feedback.html">Feedback</a>
-                    <a href="settings.html">Settings</a>
-                </div>
-                <div class="copyright">© 2026 LeaderRate. All rights reserved.</div>
-            </div>
+      <section class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="grid three">
+          <a href="register.html" class="action-card">
+            <h3>Register</h3>
+            <p>Pick a generated codename and create a student account.</p>
+          </a>
+          <a href="leaders.html" class="action-card">
+            <h3>Browse Leaders</h3>
+            <p>View leader offices, approved feedback, and public responses.</p>
+          </a>
+          <a href="updates.html" class="action-card">
+            <h3>View Updates</h3>
+            <p>See projects and office updates leaders have published.</p>
+          </a>
         </div>
-    </footer>
+      </section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Mobile menu
-            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-            const navLinks = document.querySelector('.nav-links');
-            mobileMenuBtn?.addEventListener('click', () => navLinks.classList.toggle('active'));
+      <section class="leaderboard-preview">
+        <h2>How the demo works</h2>
+        <div class="card home-hero">
+          <p>
+            Students choose a generated codename instead of using a real name, email address, or student ID. Feedback is moderated before it becomes public, and leaders can respond or post updates so students can see both concerns and action.
+          </p>
+          <div class="button-row">
+            <a class="btn" href="login.html">Login</a>
+            <a class="btn btn-outline" href="leaders.html">Explore Offices</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
 
- // Splash screen animation: transform "LR" into "LeaderRate"
-        const splash = document.getElementById('splash');
-        const lrElem = document.getElementById('lrLogo');
-        const splashTextDiv = document.getElementById('splashText');
+  <footer class="site-footer">
+    <div class="container footer-shell">
+      <div class="footer-logo"><span data-app-name>LeaderRate v1.0</span></div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="leaders.html">Leaders</a>
+        <a href="updates.html">Updates</a>
+        <a href="register.html">Register</a>
+        <a href="login.html">Login</a>
+      </div>
+      <div class="muted">&copy; <span data-year></span> LeaderRate. All rights reserved.</div>
+    </div>
+  </footer>
 
-        // After a short delay, replace the "LR" element with a new div that shows "LeaderRate"
-        setTimeout(() => {
-            // Remove the old LR element
-            lrElem.remove();
-            // Create the new full name element
-            const fullNameDiv = document.createElement('div');
-            fullNameDiv.className = 'splash-logo-full';
-            fullNameDiv.textContent = 'LeaderRate';
-            splashTextDiv.appendChild(fullNameDiv);
-        }, 1000); 
-        setTimeout(() => {
-            if (splash) {
-                splash.style.opacity = '0';
-                setTimeout(() => {
-                    splash.style.display = 'none';
-                }, 600);
-            }
-        }, 2200);
-
-            // Theme management
-            const themeToggle = document.getElementById('themeToggle');
-            const applyTheme = (theme) => {
-                if (theme === 'dark') {
-                    document.body.classList.add('dark');
-                    if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-                } else {
-                    document.body.classList.remove('dark');
-                    if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-                }
-                localStorage.setItem('theme', theme);
-            };
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            applyTheme(savedTheme);
-            themeToggle?.addEventListener('click', () => {
-                const newTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
-                applyTheme(newTheme);
-            });
-
-            // Anonymous account badge
-            const savedAccount = localStorage.getItem('anonymousAccount');
-            if (savedAccount) {
-                const account = JSON.parse(savedAccount);
-                if (account.username && !document.querySelector('.account-badge')) {
-                    const badge = document.createElement('span');
-                    badge.className = 'account-badge';
-                    badge.textContent = `👤 ${account.username}`;
-                    navLinks?.appendChild(badge);
-                }
-            }
-        });
-
-        
-    </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script type="module" src="assets/js/pages/index.js"></script>
 </body>
 </html>
+

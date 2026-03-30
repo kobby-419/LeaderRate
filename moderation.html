@@ -3,22 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Feedback | LeaderRate v1.0</title>
+  <title>Moderation | LeaderRate v1.0</title>
   <link rel="stylesheet" href="assets/css/shared.css">
-  <link rel="stylesheet" href="assets/css/feedback.css">
+  <link rel="stylesheet" href="assets/css/dashboards.css">
 </head>
-<body class="feedback-page">
+<body class="dashboard-page moderation-page">
   <header class="site-header">
     <div class="container nav-shell">
       <a class="brand" href="index.html">
         <span class="brand-mark">LR</span>
         <span class="brand-copy">
           <span data-app-name>LeaderRate v1.0</span>
-          <small>Moderated feedback feed</small>
+          <small>Moderation queue</small>
         </span>
       </a>
       <nav class="nav-links" data-nav-links>
         <a href="index.html" data-nav="home">Home</a>
+        <a href="leaders.html" data-nav="leaders">Browse Leaders</a>
+        <a href="updates.html" data-nav="updates">View Updates</a>
+        <a href="admin-dashboard.html" data-nav="admin-dashboard">Dashboard</a>
+        <a href="moderation.html" data-nav="moderation">Moderation</a>
       </nav>
       <div class="nav-actions">
         <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
@@ -31,28 +35,28 @@
   <main class="shell-main">
     <div class="container">
       <div data-config-banner></div>
-      <h1 class="page-title">Feedback</h1>
-      <p class="subtitle">A public stream of approved anonymous feedback across FOSCO offices.</p>
+      <section class="hero">
+        <div class="eyebrow">Feedback review</div>
+        <h1>Approve or reject pending submissions.</h1>
+        <p>
+          This queue protects the public side of LeaderRate. Students can submit freely, but only approved items become visible on office pages.
+        </p>
+      </section>
 
-      <section class="stack" data-feedback-feed></section>
+      <section class="section stack" data-moderation-list></section>
     </div>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-shell">
-      <div class="footer-logo"><span data-app-name>LeaderRate v1.0</span></div>
-      <div class="footer-links">
-        <a href="index.html">Home</a>
-        <a href="leaders.html">Leaders</a>
-        <a href="leaderboard.html">Leaderboard</a>
-        <a href="updates.html">Updates</a>
-      </div>
-      <div class="muted">&copy; <span data-year></span> LeaderRate. All rights reserved.</div>
+      <div class="muted">Use moderation notes to leave an internal record of why a decision was made.</div>
+      <div class="muted">&copy; <span data-year></span> LeaderRate</div>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/js/config.js"></script>
-  <script type="module" src="assets/js/pages/feedback.js"></script>
+  <script type="module" src="assets/js/pages/moderation.js"></script>
 </body>
 </html>
+

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leader Dashboard | LeaderRate v1.0</title>
+  <link rel="stylesheet" href="assets/css/shared.css">
+  <link rel="stylesheet" href="assets/css/dashboards.css">
+</head>
+<body class="dashboard-page leader-dashboard-page">
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">LR</span>
+        <span class="brand-copy">
+          <span data-app-name>LeaderRate v1.0</span>
+          <small>Leader dashboard</small>
+        </span>
+      </a>
+      <nav class="nav-links" data-nav-links>
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="leaders.html" data-nav="leaders">Browse Leaders</a>
+        <a href="updates.html" data-nav="updates">View Updates</a>
+        <a href="leader-dashboard.html" data-nav="leader-dashboard">Dashboard</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
+        <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
+        <div data-auth-slot></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell-main">
+    <div class="container">
+      <div data-config-banner></div>
+      <section class="hero">
+        <div class="eyebrow">Leader workspace</div>
+        <h1 data-leader-office>Leader office</h1>
+        <p>
+          Leaders can see office feedback, respond publicly to approved concerns, and post simple project updates that students can review on the public side.
+        </p>
+      </section>
+
+      <section class="section stats-grid">
+        <article class="stat-card">
+          <div class="stat-value" data-leader-feedback-count>0</div>
+          <div class="stat-label">Total feedback items</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-value" data-leader-approved-count>0</div>
+          <div class="stat-label">Approved items</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-value" data-leader-average-rating>0/5</div>
+          <div class="stat-label">Average approved rating</div>
+        </article>
+      </section>
+
+      <section class="section split">
+        <div>
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">Project updates</div>
+              <h2>Post or edit office updates</h2>
+            </div>
+          </div>
+          <div class="form-shell">
+            <form data-project-form>
+              <div class="field">
+                <label for="projectTitle">Title</label>
+                <input class="input" id="projectTitle" name="title" data-project-title required>
+              </div>
+              <div class="field">
+                <label for="projectDescription">Description</label>
+                <textarea class="textarea" id="projectDescription" name="description" data-project-description required></textarea>
+              </div>
+              <div class="field">
+                <label for="projectStatus">Status</label>
+                <select class="select" id="projectStatus" name="status" data-project-status></select>
+              </div>
+              <button class="btn btn-primary" type="submit" data-project-submit>Post update</button>
+            </form>
+          </div>
+          <div class="stack section" data-leader-projects></div>
+        </div>
+
+        <div>
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">Office feedback</div>
+              <h2>Feedback stream</h2>
+            </div>
+          </div>
+          <div class="stack" data-leader-feedback></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-shell">
+      <div class="muted">Only approved items can receive a public leader response.</div>
+      <div class="muted">&copy; <span data-year></span> LeaderRate</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script type="module" src="assets/js/pages/leader-dashboard.js"></script>
+</body>
+</html>
+

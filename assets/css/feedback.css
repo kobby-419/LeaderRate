@@ -1,0 +1,18 @@
+/*
+ * The feedback feed page is a public moderated stream, so the styling stays
+ * simple and card-based like the original prototype.
+ */
+
+.feedback-item-card + .feedback-item-card {
+  margin-top: 1rem;
+}
+
+.feedback-item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
