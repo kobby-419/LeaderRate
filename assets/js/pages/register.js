@@ -91,10 +91,16 @@ async function init() {
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(form);
+    const submitButton = form.querySelector('button[type="submit"]');
 
     try {
       if (!selectedCodename) {
         throw new Error("Select one of the generated codenames before creating an account.");
+      }
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Creating account...";
       }
 
       await registerStudent({
@@ -118,6 +124,11 @@ async function init() {
         reason: error.message,
       });
       showToast(error.message, "error");
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = "Create account";
+      }
     }
   });
 }

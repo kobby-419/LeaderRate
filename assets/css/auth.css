@@ -56,6 +56,27 @@
   gap: 0.85rem;
 }
 
+.auth-page .btn[type="submit"] {
+  position: relative;
+  min-height: 3.7rem;
+  border-radius: 14px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.auth-page .btn[type="submit"]:hover {
+  transform: translateY(-1px);
+}
+
+.auth-page .btn[type="submit"]:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.auth-page .btn[type="submit"]:disabled {
+  opacity: 0.8;
+}
+
 .auth-page .field {
   margin-bottom: 0;
 }
@@ -207,7 +228,7 @@
   background: rgba(37, 99, 235, 0.06);
 }
 
-body.theme-dark .auth-page .form-shell {
+body.theme-dark.auth-page .form-shell {
   border-color: rgba(96, 165, 250, 0.16);
   background:
     radial-gradient(circle at top right, rgba(96, 165, 250, 0.12), transparent 36%),
@@ -215,9 +236,16 @@ body.theme-dark .auth-page .form-shell {
   box-shadow: 0 22px 42px -34px rgba(2, 6, 23, 0.56);
 }
 
-body.theme-dark .auth-page .app-banner {
+body.theme-dark.auth-page .app-banner {
   border-color: rgba(96, 165, 250, 0.16);
   background: rgba(96, 165, 250, 0.08);
+}
+
+body.theme-dark.auth-page .password-toggle:hover,
+body.theme-dark.auth-page .password-toggle:focus-visible,
+body.theme-dark.auth-page .codename-arrow:hover,
+body.theme-dark.auth-page .codename-arrow:focus-visible {
+  background: rgba(96, 165, 250, 0.16);
 }
 
 @media (max-width: 640px) {

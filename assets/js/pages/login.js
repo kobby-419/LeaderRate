@@ -61,8 +61,14 @@ async function init() {
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(form);
+    const submitButton = form.querySelector('button[type="submit"]');
 
     try {
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Logging in...";
+      }
+
       await loginWithCodename({
         codename: formData.get("codename"),
         password: formData.get("password"),
@@ -84,6 +90,11 @@ async function init() {
         reason: error.message,
       });
       showToast(error.message, "error");
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = "Login";
+      }
     }
   });
 }

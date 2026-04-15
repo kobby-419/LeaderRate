@@ -108,7 +108,7 @@
               <div class="office-feedback-head">
                 <div>
                   <h2 id="feedbackModalTitle">Share your view on this office</h2>
-                  <p class="feedback-modal-summary">Feedback is submitted under your codename and may be reviewed later if it breaks the platform rules.</p>
+                  <p class="feedback-modal-summary">Rate this office and leave your feedback under your codename.</p>
                 </div>
                 <div class="feedback-codename hidden" data-feedback-codename></div>
               </div>
@@ -133,37 +133,27 @@
             </div>
 
             <form class="hidden" data-feedback-form>
-              <div class="grid two">
-                <div class="field feedback-field-card">
-                  <label for="category">Category</label>
-                  <select class="select" id="category" name="category" data-feedback-category></select>
+              <div class="field feedback-field-card">
+                <label>Rating</label>
+                <input type="hidden" name="rating" value="0" data-rating-input>
+                <div class="feedback-rating-picker" data-rating-picker>
+                  <button class="rating-chip" type="button" data-rating-choice="1" aria-label="Rate 1 out of 5">1</button>
+                  <button class="rating-chip" type="button" data-rating-choice="2" aria-label="Rate 2 out of 5">2</button>
+                  <button class="rating-chip" type="button" data-rating-choice="3" aria-label="Rate 3 out of 5">3</button>
+                  <button class="rating-chip" type="button" data-rating-choice="4" aria-label="Rate 4 out of 5">4</button>
+                  <button class="rating-chip" type="button" data-rating-choice="5" aria-label="Rate 5 out of 5">5</button>
                 </div>
-                <div class="field feedback-field-card">
-                  <label>Rating</label>
-                  <input type="hidden" name="rating" value="0" data-rating-input>
-                  <div class="feedback-rating-picker" data-rating-picker>
-                    <button class="rating-chip" type="button" data-rating-choice="1" aria-label="Rate 1 out of 5">1</button>
-                    <button class="rating-chip" type="button" data-rating-choice="2" aria-label="Rate 2 out of 5">2</button>
-                    <button class="rating-chip" type="button" data-rating-choice="3" aria-label="Rate 3 out of 5">3</button>
-                    <button class="rating-chip" type="button" data-rating-choice="4" aria-label="Rate 4 out of 5">4</button>
-                    <button class="rating-chip" type="button" data-rating-choice="5" aria-label="Rate 5 out of 5">5</button>
-                  </div>
-                  <small class="rating-helper" data-rating-label>Select a rating for this office.</small>
-                </div>
+                <small class="rating-helper" data-rating-label>Select a rating for this office.</small>
               </div>
               <div class="field feedback-field-card">
                 <label for="message">Feedback</label>
                 <textarea class="textarea feedback-message-box" id="message" name="message" maxlength="500" placeholder="Describe the concern, experience, or suggestion in a clear and constructive way." data-feedback-message></textarea>
                 <div class="feedback-field-meta">
-                  <small>Keep it specific and respectful so it stays useful and public.</small>
+                  <small>Keep it specific and respectful.</small>
                   <span class="feedback-counter" data-feedback-counter>0 / 500</span>
                 </div>
               </div>
               <div class="feedback-submit-row">
-                <div class="feedback-submit-note">
-                  <strong>Visible by default.</strong>
-                  <small>Your codename appears with the feedback unless the post is later removed from public view.</small>
-                </div>
                 <button class="btn btn-primary" type="submit" data-feedback-submit>Post feedback</button>
               </div>
             </form>

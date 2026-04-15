@@ -1,6 +1,5 @@
 import { bootstrapPage } from "../app.js";
 import { createFingerprintHash, logAbuseEvent } from "../audit.js";
-import { FEEDBACK_CATEGORIES } from "../constants.js";
 import { getLeaderProfile, reportFeedback, submitFeedback, supportFeedback } from "../data.js";
 import { escapeHtml, formatDate, ratingStars, renderStackState, showToast } from "../ui.js";
 
@@ -40,12 +39,6 @@ function updateSeoForOffice(leader) {
   if (twitterDescriptionTag) {
     twitterDescriptionTag.setAttribute("content", `${officeType}. ${summary}`.trim());
   }
-}
-
-function renderCategoryOptions() {
-  const select = document.querySelector("[data-feedback-category]");
-  if (!select) return;
-  select.innerHTML = FEEDBACK_CATEGORIES.map((category) => `<option value="${category}">${category}</option>`).join("");
 }
 
 function setupRatingPicker() {
@@ -293,7 +286,6 @@ function applyLeaderData(data, profile) {
 async function init() {
   const profile = await bootstrapPage({ activeNav: "leaders" });
   const leaderId = leaderIdFromUrl();
-  renderCategoryOptions();
   renderStackState("[data-feedback-list]", "Loading public feedback for this office...");
   renderStackState("[data-projects-list]", "Loading office updates...");
 
@@ -342,7 +334,7 @@ async function init() {
         const fingerprintHash = await createFingerprintHash();
         await submitFeedback({
           leader_id: leaderId,
-          category: formData.get("category"),
+          category: "Other",
           rating: selectedRating,
           message,
           fingerprint_hash: fingerprintHash,
@@ -350,7 +342,7 @@ async function init() {
 
         await logAbuseEvent("feedback_submitted", {
           leaderId,
-          category: formData.get("category"),
+          category: "Other",
         });
 
         showToast("Feedback posted.", "success");

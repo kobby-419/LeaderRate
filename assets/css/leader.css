@@ -100,13 +100,13 @@
 }
 
 .office-feedback-head h2 {
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.25rem;
 }
 
 .feedback-modal-header {
   display: grid;
-  gap: 0.95rem;
-  padding: 0.1rem 2.4rem 0.1rem 0.1rem;
+  gap: 0.8rem;
+  padding: 0 2.4rem 0 0;
 }
 
 .feedback-modal-kicker {
@@ -120,6 +120,8 @@
 .feedback-modal-summary {
   margin: 0;
   color: var(--muted);
+  max-width: 38rem;
+  line-height: 1.55;
 }
 
 .feedback-modal-office-line {
@@ -127,6 +129,10 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0.55rem;
+  padding: 0.8rem 0.95rem;
+  border-radius: 14px;
+  background: rgba(37, 99, 235, 0.05);
+  border: 1px solid rgba(37, 99, 235, 0.1);
 }
 
 .feedback-office-name {
@@ -138,11 +144,12 @@
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.7rem 1rem;
+  padding: 0.62rem 0.9rem;
   border-radius: 999px;
   background: rgba(37, 99, 235, 0.1);
   color: var(--primary);
   font-weight: 700;
+  font-size: 0.94rem;
   white-space: nowrap;
 }
 
@@ -161,23 +168,34 @@
 
 .feedback-field-card {
   margin-bottom: 0;
-  padding: 1rem 1rem 0.95rem;
-  border-radius: 16px;
-  background: linear-gradient(180deg, rgba(37, 99, 235, 0.03), rgba(37, 99, 235, 0.015));
+  padding: 1.05rem 1.05rem 1rem;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.04), rgba(37, 99, 235, 0.015));
   border: 1px solid rgba(37, 99, 235, 0.08);
 }
 
+.office-feedback-shell [data-feedback-form] {
+  display: grid;
+  gap: 0.95rem;
+}
+
+.feedback-field-card label {
+  display: block;
+  margin-bottom: 0.7rem;
+}
+
 .feedback-rating-picker {
-  display: flex;
-  gap: 0.6rem;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.65rem;
 }
 
 .rating-chip {
-  min-width: 2.9rem;
-  padding: 0.7rem 0.85rem;
+  min-width: 0;
+  width: 100%;
+  padding: 0.75rem 0;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 14px;
   background: var(--card-bg);
   color: var(--text);
   font-weight: 700;
@@ -201,10 +219,11 @@
 
 .rating-helper {
   color: var(--muted);
+  margin-top: 0.65rem;
 }
 
 .feedback-message-box {
-  min-height: 150px;
+  min-height: 142px;
 }
 
 .feedback-field-meta {
@@ -212,7 +231,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  margin-top: 0.45rem;
+  margin-top: 0.55rem;
 }
 
 .feedback-counter {
@@ -223,24 +242,15 @@
 
 .feedback-submit-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   gap: 1rem;
-  flex-wrap: wrap;
-  padding-top: 0.35rem;
+  padding-top: 0.15rem;
 }
 
-.feedback-submit-note {
-  display: grid;
-  gap: 0.2rem;
-}
-
-.feedback-submit-note strong {
-  color: var(--text);
-}
-
-.feedback-submit-row small {
-  color: var(--muted);
+.feedback-submit-row .btn {
+  min-width: 11.5rem;
+  border-radius: 14px;
 }
 
 .office-content-stack .feedback-card,
@@ -285,6 +295,16 @@ body.theme-dark .office-content-stack .project-card {
     radial-gradient(circle at top right, rgba(45, 212, 191, 0.12), transparent 36%),
     linear-gradient(180deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.95));
   box-shadow: 0 18px 34px -30px rgba(2, 6, 23, 0.58);
+}
+
+body.theme-dark .response-box {
+  border-color: rgba(96, 165, 250, 0.16);
+  background: linear-gradient(180deg, rgba(96, 165, 250, 0.12), rgba(30, 41, 59, 0.82));
+}
+
+body.theme-dark .feedback-modal-office-line {
+  border-color: rgba(96, 165, 250, 0.16);
+  background: rgba(96, 165, 250, 0.08);
 }
 
 .response-box {

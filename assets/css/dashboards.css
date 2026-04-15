@@ -32,6 +32,11 @@
   border: 1px solid rgba(37, 99, 235, 0.12);
 }
 
+body.theme-dark .dashboard-hero-panel {
+  border-color: rgba(96, 165, 250, 0.16);
+  background: linear-gradient(180deg, rgba(96, 165, 250, 0.12), rgba(30, 41, 59, 0.84));
+}
+
 .dashboard-hero-label {
   font-size: 0.8rem;
   font-weight: 700;

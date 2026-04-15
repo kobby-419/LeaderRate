@@ -180,6 +180,14 @@ body.theme-dark .settings-stat {
   background: linear-gradient(180deg, rgba(96, 165, 250, 0.12), rgba(96, 165, 250, 0.04));
 }
 
+body.theme-dark .toggle-slider {
+  background: rgba(71, 85, 105, 0.92);
+}
+
+body.theme-dark .toggle-slider::before {
+  background: rgba(226, 232, 240, 0.96);
+}
+
 @media (max-width: 720px) {
   .settings-option {
     align-items: flex-start;
