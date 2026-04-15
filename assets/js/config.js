@@ -3,8 +3,8 @@
 */
 
 window.LEADERRATE_CONFIG = {
-  supabaseUrl: "https://hlgvytgfknuxyytjylze.supabase.co",
-  supabaseAnonKey: "sb_publishable_M-usN1NHnWFFi0ueQMs1XA_RmzbEodU",
+  supabaseUrl: "https://axntfqdgykocldcchhus.supabase.co",
+  supabaseAnonKey: "sb_publishable_h9Yk2vHBdIBueIGEh90FmQ_YO8y_8yY",
   institutionSlug: "foso-college-of-education",
   appName: "LeaderRate v1.0",
 };
