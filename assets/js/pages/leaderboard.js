@@ -42,29 +42,39 @@ function rankLabel(index) {
 
 function renderTopPerformers(leaders) {
   const container = document.querySelector("[data-top-performers]");
-  const topThree = leaders.slice(0, 3);
+  const topThree = leaders
+    .filter((leader) => Number(leader.approved_feedback_count || 0) > 0 || leader.rating_basis === "demo")
+    .slice(0, 3);
 
   if (!topThree.length) {
-    renderStackState(container, "No approved reviews are available yet.");
+    renderStackState(container, "No public reviews are available yet.");
     return;
   }
 
   container.innerHTML = topThree.map((leader, index) => `
     <article class="card performer-card">
-      <div class="item-meta">
-        <span class="pill">${rankLabel(index)}</span>
-        <span class="rating">${escapeHtml(leader.average_rating)}/5</span>
-      </div>
-      <div class="leader-name">
-        <h3>${escapeHtml(leader.display_name || leader.office_title)}</h3>
-        <div class="performer-role">${escapeHtml(leader.office_title)}</div>
-      </div>
+      <header class="performer-head">
+        <div class="performer-heading">
+          <div class="item-meta">
+            <span class="pill">${rankLabel(index)}</span>
+            <span class="performer-department">${escapeHtml(leader.department_label || "Office")}</span>
+          </div>
+          <div class="leader-name">
+            <h3>${escapeHtml(leader.display_name || leader.office_title)}</h3>
+            <div class="performer-role">${escapeHtml(leader.office_title)}</div>
+          </div>
+        </div>
+        <div class="performer-rating">
+          <strong>${escapeHtml(leader.average_rating)}</strong>
+          <span>/5</span>
+          <div class="stars">${ratingStars(leader.average_rating)}</div>
+        </div>
+      </header>
       <p class="performer-summary">${escapeHtml(leader.office_summary)}</p>
       <div class="performer-stats">
-        <span>${escapeHtml(leader.department_label || "Office")}</span>
-        <span class="stars">${ratingStars(leader.average_rating)}</span>
         <span>${leader.approved_feedback_count} reviews</span>
         <span>${leader.performance_score}% score</span>
+        <span>${leader.rating_basis === "demo" ? "Snapshot rating" : "Live public rating"}</span>
       </div>
       <div class="button-row">
         <a class="btn btn-outline" href="leader.html?id=${leader.id}">View office</a>
@@ -76,31 +86,31 @@ function renderTopPerformers(leaders) {
 function renderTable(leaders) {
   const tbody = document.querySelector("[data-leaderboard-body]");
   if (!leaders.length) {
-    renderTableState(tbody, 7, "No approved reviews are available yet.");
+    renderTableState(tbody, 7, "No public reviews are available yet.");
     return;
   }
 
   tbody.innerHTML = leaders.map((leader, index) => `
     <tr>
-      <td><span class="leaderboard-rank">${index < 3 ? "\uD83C\uDFC6" : ""} ${index + 1}</span></td>
-      <td>
+      <td data-label="Rank"><span class="leaderboard-rank">${index < 3 ? "\uD83C\uDFC6" : ""} ${index + 1}</span></td>
+      <td data-label="Office">
         <div class="leader-name">
           <strong>${escapeHtml(leader.display_name || leader.office_title)}</strong>
           <div class="leader-role">${escapeHtml(leader.office_title)}</div>
           <div class="muted">${escapeHtml(leader.office_focus)}</div>
         </div>
       </td>
-      <td>${escapeHtml(leader.department_label || "Office")}</td>
-      <td class="leader-rating-cell">
-        <div class="rating-bar"><div class="rating-fill" style="width:${Math.max(0, Math.min(100, (Number(leader.average_rating) / 5) * 100))}%"></div></div>
+      <td data-label="Department">${escapeHtml(leader.department_label || "Office")}</td>
+      <td class="leader-rating-cell" data-label="Rating">
+        <div class="rating-bar"><div class="rating-fill" style="width:${leader.rating_basis === "none" ? 0 : Math.max(0, Math.min(100, (Number(leader.average_rating) / 5) * 100))}%"></div></div>
         <div class="rating-row">
-          <span>${escapeHtml(leader.average_rating)}/5</span>
-          <span class="stars">${ratingStars(leader.average_rating)}</span>
+          <span>${leader.rating_basis === "none" ? "No rating" : `${escapeHtml(leader.average_rating)}/5`}</span>
+          <span class="stars">${leader.rating_basis === "none" ? "" : ratingStars(leader.average_rating)}</span>
         </div>
       </td>
-      <td>${leader.approved_feedback_count}</td>
-      <td>${leader.performance_score}%</td>
-      <td><a class="btn btn-outline btn-small" href="leader.html?id=${leader.id}">Open</a></td>
+      <td data-label="Reviews">${leader.approved_feedback_count}</td>
+      <td data-label="Score">${leader.performance_score}%</td>
+      <td data-label="Profile"><a class="btn btn-outline btn-small" href="leader.html?id=${leader.id}">Open</a></td>
     </tr>
   `).join("");
 }

@@ -1,29 +1,18 @@
 import { bootstrapPage } from "../app.js";
 import { logAbuseEvent } from "../audit.js";
 import { generateCodenameSuggestions, registerStudent } from "../auth.js";
+import { initPasswordVisibilityToggles } from "../password-toggle.js";
 import { showToast } from "../ui.js";
-
-function formatCodenameLabel(codename) {
-  const match = String(codename || "").match(/^([a-z]+)(\d{2,3})$/i);
-  if (!match) {
-    return String(codename || "");
-  }
-
-  const [, word, digits] = match;
-  return `${word.charAt(0).toUpperCase()}${word.slice(1)} ${digits}`;
-}
 
 async function init() {
   await bootstrapPage({ activeNav: "register" });
+  initPasswordVisibilityToggles();
 
   const form = document.querySelector("[data-register-form]");
-  const optionsSlot = document.querySelector("[data-codename-options]");
-  const progressCopy = document.querySelector("[data-codename-progress]");
-  const refreshButton = document.querySelector("[data-refresh-codenames]");
+  const codenameInput = document.querySelector("[data-selected-codename]");
+  const helpCopy = document.querySelector("[data-codename-help]");
   const previousButton = document.querySelector("[data-codename-prev]");
   const nextButton = document.querySelector("[data-codename-next]");
-  const hiddenInput = document.querySelector("[data-selected-codename]");
-  const selectionCopy = document.querySelector("[data-selected-copy]");
   const seenSuggestions = new Set();
 
   let currentOptions = [];
@@ -33,53 +22,30 @@ async function init() {
   function setSelectedCodename(codename) {
     selectedCodename = codename;
 
-    if (hiddenInput) {
-      hiddenInput.value = codename;
-    }
-
-    if (selectionCopy) {
-      selectionCopy.textContent = codename
-        ? `Selected codename: ${codename}. Keep it because you will use it when logging in.`
-        : "Select one codename to continue.";
+    if (codenameInput) {
+      codenameInput.value = codename;
     }
   }
 
   function renderCurrentCodename() {
-    if (!optionsSlot) {
-      return;
-    }
-
     const currentCodename = currentOptions[currentIndex];
     if (!currentCodename) {
-      optionsSlot.innerHTML = "";
-      if (progressCopy) {
-        progressCopy.textContent = "No codename options are available right now.";
+      if (codenameInput) {
+        codenameInput.value = "";
+      }
+      if (helpCopy) {
+        helpCopy.textContent = "No codename options are available right now.";
       }
       setSelectedCodename("");
       return;
     }
 
-    optionsSlot.innerHTML = `
-      <button
-        class="codename-option"
-        type="button"
-        data-codename-option="${currentCodename}"
-        aria-pressed="true"
-      >
-        <strong>${formatCodenameLabel(currentCodename)}</strong>
-        <span>${currentCodename}</span>
-      </button>
-    `;
-
-    optionsSlot.querySelector("[data-codename-option]")?.addEventListener("click", () => {
-      setSelectedCodename(currentCodename);
-    });
-
-    if (progressCopy) {
-      progressCopy.textContent = `Option ${currentIndex + 1} of ${currentOptions.length}. Use the arrows to browse the codenames one after another.`;
+    if (helpCopy) {
+      helpCopy.innerHTML = `If you do not like these options, <button class="codename-refresh" type="button" data-refresh-codenames>show other options</button>.`;
     }
 
     setSelectedCodename(currentCodename);
+    helpCopy?.querySelector("[data-refresh-codenames]")?.addEventListener("click", loadCodenameOptions);
   }
 
   function stepCodename(direction) {
@@ -108,9 +74,19 @@ async function init() {
   }
 
   loadCodenameOptions();
-  refreshButton?.addEventListener("click", loadCodenameOptions);
   previousButton?.addEventListener("click", () => stepCodename(-1));
   nextButton?.addEventListener("click", () => stepCodename(1));
+  codenameInput?.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      stepCodename(-1);
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      stepCodename(1);
+    }
+  });
 
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();

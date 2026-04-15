@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Settings | LeaderRate v1.0</title>
+  <title>Settings | LeaderRate</title>
+  <meta name="description" content="Manage your LeaderRate account settings and preferences.">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#2c7da0">
+  <link rel="icon" type="image/png" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="shortcut icon" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="apple-touch-icon" href="assets/images/leaderrate-logo-transparent.png">
   <link rel="stylesheet" href="assets/css/shared.css">
   <link rel="stylesheet" href="assets/css/settings.css">
 </head>
@@ -13,7 +19,7 @@
       <a class="brand" href="index.html">
         <span class="brand-mark">LR</span>
         <span class="brand-copy">
-          <span data-app-name>LeaderRate v1.0</span>
+          <span data-app-name>LeaderRate</span>
           <small>Account settings</small>
         </span>
       </a>
@@ -21,7 +27,7 @@
         <a href="index.html" data-nav="home">Home</a>
       </nav>
       <div class="nav-actions">
-        <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
+        <button class="theme-toggle" type="button" data-theme-toggle>Theme</button>
         <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
         <div data-auth-slot></div>
       </div>
@@ -35,66 +41,34 @@
       <section class="hero">
         <div class="eyebrow">Settings</div>
         <h1>Account settings</h1>
-        <p>Manage your anonymous profile, preferences, and dashboard shortcuts.</p>
+        <p>Manage your account details, preferences, and quick actions.</p>
       </section>
 
-      <section class="section grid two">
-        <article class="card settings-card">
-          <div class="section-heading">
-            <div>
-              <div class="eyebrow">Anonymous account</div>
-              <h2>Your account</h2>
-            </div>
+      <section class="section card settings-card settings-card-compact">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Account</div>
+            <h2>Your account</h2>
           </div>
-          <dl class="settings-list">
-            <div>
-              <dt>Codename</dt>
-              <dd data-settings-codename>Loading...</dd>
-            </div>
-            <div>
-              <dt>Role</dt>
-              <dd data-settings-role>Loading...</dd>
-            </div>
-            <div>
-              <dt>Institution</dt>
-              <dd data-settings-institution>Loading...</dd>
-            </div>
-            <div>
-              <dt>Joined</dt>
-              <dd data-settings-created>Loading...</dd>
-            </div>
-          </dl>
-
-          <div class="settings-panel">
-            <div class="settings-option">
-              <div class="option-info">
-                <h3>Codename ideas</h3>
-                <p>Preview a few simple codenames without changing your current account.</p>
-              </div>
-              <button class="btn btn-secondary" type="button" data-preview-codenames>Show ideas</button>
-            </div>
-            <div class="codename-preview-stack" data-codename-preview></div>
+        </div>
+        <dl class="settings-list settings-list-compact">
+          <div>
+            <dt>Codename</dt>
+            <dd data-settings-codename>Loading...</dd>
           </div>
-        </article>
-
-        <article class="card settings-card">
-          <div class="section-heading">
-            <div>
-              <div class="eyebrow">Appearance</div>
-              <h2>Theme</h2>
-            </div>
+          <div>
+            <dt>Account</dt>
+            <dd data-settings-role>Loading...</dd>
           </div>
-          <div class="settings-option">
-            <div class="option-info">
-              <h3>Display mode</h3>
-              <p>Choose the theme you prefer while using the app.</p>
-            </div>
-            <div class="theme-choice-group">
-              <button class="btn btn-outline" type="button" data-theme-choice="light">Light</button>
-              <button class="btn btn-outline" type="button" data-theme-choice="dark">Dark</button>
-            </div>
+          <div>
+            <dt>Institution</dt>
+            <dd data-settings-institution>Loading...</dd>
           </div>
-        </article>
+          <div>
+            <dt>Joined</dt>
+            <dd data-settings-created>Loading...</dd>
+          </div>
+        </dl>
       </section>
 
       <section class="section card settings-card">
@@ -112,7 +86,7 @@
           <div class="section-heading">
             <div>
               <div class="eyebrow">Notifications</div>
-              <h2>Notification preferences</h2>
+              <h2>Notifications</h2>
             </div>
           </div>
           <div class="settings-stack">
@@ -143,7 +117,7 @@
           <div class="section-heading">
             <div>
               <div class="eyebrow">Privacy</div>
-              <h2>Privacy & security</h2>
+              <h2>Privacy</h2>
             </div>
           </div>
           <div class="settings-stack">
@@ -159,7 +133,7 @@
             </div>
             <div class="settings-option">
               <div class="option-info">
-                <h3>Abuse monitoring awareness</h3>
+                <h3>Safety monitoring awareness</h3>
                 <p>Remember that the system still logs risk signals internally.</p>
               </div>
               <label class="toggle-switch">

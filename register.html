@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register | LeaderRate v1.0</title>
+  <title>Register | LeaderRate</title>
+  <meta name="description" content="Create a LeaderRate account with a generated codename and password to share anonymous feedback.">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#2c7da0">
+  <link rel="icon" type="image/png" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="shortcut icon" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="apple-touch-icon" href="assets/images/leaderrate-logo-transparent.png">
   <link rel="stylesheet" href="assets/css/shared.css">
   <link rel="stylesheet" href="assets/css/auth.css">
 </head>
@@ -13,19 +19,20 @@
       <a class="brand" href="index.html">
         <span class="brand-mark">LR</span>
         <span class="brand-copy">
-          <span data-app-name>LeaderRate v1.0</span>
-          <small>Student registration</small>
+          <span data-app-name>LeaderRate</span>
+          <small>Registration page</small>
         </span>
       </a>
       <nav class="nav-links" data-nav-links>
         <a href="index.html" data-nav="home">Home</a>
-        <a href="leaders.html" data-nav="leaders">Browse Leaders</a>
-        <a href="updates.html" data-nav="updates">View Updates</a>
+        <a href="leaders.html" data-nav="leaders">Browse Offices</a>
+        <a href="updates.html" data-nav="updates">Updates</a>
+        <a href="about.html" data-nav="about">About</a>
         <a href="register.html" data-nav="register">Register</a>
         <a href="login.html" data-nav="login">Login</a>
       </nav>
       <div class="nav-actions">
-        <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
+        <button class="theme-toggle" type="button" data-theme-toggle>Theme</button>
         <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
         <div data-auth-slot></div>
       </div>
@@ -35,40 +42,75 @@
   <main class="shell-main">
     <div class="container">
       <div data-config-banner></div>
-      <section class="split auth-layout">
-        <div class="hero">
-          <div class="eyebrow">Student sign-up</div>
-          <h1>Choose a generated codename for FOSCO.</h1>
-          <p>Pick a codename, set a password, and keep both for login.</p>
-        </div>
+      <section class="auth-layout auth-single-layout">
         <div class="form-shell">
-          <h2>Register as a student</h2>
-          <p class="muted">Use the arrows to choose a codename, then create your password.</p>
+          <h2>Register</h2>
           <form data-register-form>
             <div class="field">
-              <label>Choose a codename</label>
-              <div class="codename-picker">
-                <button class="codename-arrow" type="button" data-codename-prev aria-label="Show previous codename">&larr;</button>
-                <div class="codename-stage" data-codename-options></div>
-                <button class="codename-arrow" type="button" data-codename-next aria-label="Show next codename">&rarr;</button>
+              <label for="codename">Codename</label>
+              <div class="codename-field">
+                <button class="codename-arrow codename-arrow-left" type="button" data-codename-prev aria-label="Show previous codename">
+                  <span aria-hidden="true">&larr;</span>
+                </button>
+                <input
+                  class="input codename-input"
+                  id="codename"
+                  name="codename"
+                  data-selected-codename
+                  readonly
+                  required
+                >
+                <button class="codename-arrow codename-arrow-right" type="button" data-codename-next aria-label="Show next codename">
+                  <span aria-hidden="true">&rarr;</span>
+                </button>
               </div>
-              <small class="muted" data-codename-progress>Loading codename options...</small>
-              <div class="button-row codename-actions">
-                <button class="btn btn-secondary" type="button" data-refresh-codenames>Show new options</button>
-              </div>
-              <input type="hidden" name="codename" data-selected-codename required>
-              <small data-selected-copy>Select one codename to continue.</small>
+              <small class="muted codename-help" data-codename-help>Loading codename options...</small>
             </div>
             <div class="field">
               <label for="password">Password</label>
-              <input class="input" id="password" name="password" type="password" required>
+              <div class="password-field" data-password-field>
+                <input
+                  class="input"
+                  id="password"
+                  name="password"
+                  type="password"
+                  minlength="6"
+                  autocomplete="new-password"
+                  data-password-input
+                  data-password-label="password"
+                  required
+                >
+                <button class="password-toggle" type="button" data-password-toggle aria-controls="password">
+                  <span class="password-toggle-icon" aria-hidden="true"></span>
+                </button>
+              </div>
+              <small class="muted">Password must be at least 6 characters.</small>
             </div>
             <div class="field">
               <label for="confirmPassword">Confirm password</label>
-              <input class="input" id="confirmPassword" name="confirmPassword" type="password" required>
+              <div class="password-field" data-password-field>
+                <input
+                  class="input"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  minlength="6"
+                  autocomplete="new-password"
+                  data-password-input
+                  data-password-label="confirm password"
+                  required
+                >
+                <button class="password-toggle" type="button" data-password-toggle aria-controls="confirmPassword">
+                  <span class="password-toggle-icon" aria-hidden="true"></span>
+                </button>
+              </div>
             </div>
-            <button class="btn btn-primary btn-full" type="submit">Create student account</button>
+            <button class="btn btn-primary btn-full" type="submit">Create account</button>
           </form>
+          <p class="auth-switch-note">
+            Already have an account?
+            <a href="login.html">Login here</a>.
+          </p>
         </div>
       </section>
     </div>
@@ -76,7 +118,7 @@
 
   <footer class="site-footer">
     <div class="container footer-shell">
-      <div class="muted">Students self-register. Leaders and admins are controlled separately.</div>
+      <div class="muted">Accounts are built around generated codenames so participation stays anonymous.</div>
       <div class="muted">&copy; <span data-year></span> LeaderRate</div>
     </div>
   </footer>

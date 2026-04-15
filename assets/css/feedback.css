@@ -3,16 +3,91 @@
  * simple and card-based like the original prototype.
  */
 
-.feedback-item-card + .feedback-item-card {
-  margin-top: 1rem;
+.feedback-page [data-feedback-feed] {
+  width: min(100%, 72rem);
+  margin: 0 auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.15rem;
+  align-items: start;
+}
+
+.feedback-item-card {
+  max-width: none;
+  min-height: 100%;
+  padding: 1.2rem 1.2rem 1.05rem;
+  border-radius: 22px;
+  border: 1px solid rgba(37, 99, 235, 0.1);
+  background:
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.08), transparent 35%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.96));
+  box-shadow: 0 18px 34px -28px rgba(15, 23, 42, 0.34);
 }
 
 .feedback-item-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
+  margin-top: 0;
+}
+
+.feedback-item-card .response-box {
+  margin-top: 0;
+  border-radius: 16px;
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.06), rgba(37, 99, 235, 0.02));
+}
+
+.feedback-item-card .response-box p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.feedback-item-card .feedback-shell-actions {
+  gap: 0.6rem;
+}
+
+.feedback-item-card .feedback-shell-support {
+  align-self: flex-start;
+}
+
+body.theme-dark .feedback-item-card {
+  border-color: rgba(96, 165, 250, 0.16);
+  background:
+    radial-gradient(circle at top right, rgba(96, 165, 250, 0.12), transparent 36%),
+    linear-gradient(180deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.94));
+  box-shadow: 0 18px 34px -28px rgba(2, 6, 23, 0.6);
+}
+
+@media (max-width: 640px) {
+  .feedback-page [data-feedback-feed] {
+    width: 100%;
+    grid-template-columns: 1fr;
+  }
+
+  .feedback-item-card {
+    max-width: none;
+    padding: 1rem;
+    border-radius: 18px;
+  }
+
+  .feedback-item-card .feedback-shell-head {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+
+  .feedback-item-card .feedback-shell-rating {
+    justify-items: end;
+    min-width: 5.1rem;
+    padding: 0.68rem 0.72rem;
+  }
+
+  .feedback-item-card .feedback-shell-score {
+    justify-content: flex-end;
+  }
+
+  .feedback-item-footer {
+    gap: 0.8rem;
+  }
+
+  .feedback-item-card .feedback-shell-support {
+    width: 100%;
+    justify-content: center;
+  }
 }

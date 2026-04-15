@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | LeaderRate</title>
+  <meta name="description" content="Learn how LeaderRate started, how it was built, who created it, and the team guiding the project.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#2c7da0">
+  <meta property="og:site_name" content="LeaderRate">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="About LeaderRate">
+  <meta property="og:description" content="Learn the story, build approach, creator, and project team behind LeaderRate.">
+  <meta property="og:image" content="assets/images/leaderrate-logo.jpeg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="About LeaderRate">
+  <meta name="twitter:description" content="Learn the story, build approach, creator, and project team behind LeaderRate.">
+  <meta name="twitter:image" content="assets/images/leaderrate-logo.jpeg">
+  <link rel="icon" type="image/png" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="shortcut icon" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="apple-touch-icon" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="stylesheet" href="assets/css/shared.css">
+</head>
+<body class="about-page">
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">LR</span>
+        <span class="brand-copy">
+          <span data-app-name>LeaderRate</span>
+          <small>About the project</small>
+        </span>
+      </a>
+      <nav class="nav-links" data-nav-links>
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="about.html" data-nav="about">About</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle>Theme</button>
+        <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
+        <div data-auth-slot></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell-main">
+    <div class="container">
+      <div data-config-banner></div>
+
+      <section class="hero">
+        <div class="eyebrow">About LeaderRate</div>
+        <h1>Why the project exists and how it was put together.</h1>
+        <p>
+          LeaderRate was shaped as a simple public-interest platform for FOSCO: a place where people can speak honestly under codenames, track visible updates, and keep office feedback grounded in real experience.
+        </p>
+      </section>
+
+      <section class="section grid two">
+        <article class="card">
+          <div class="eyebrow">The idea</div>
+          <h2>How it came about</h2>
+          <p>
+            The project started from a practical gap: people often have concerns, suggestions, and praise about campus offices, but many do not have a safe and structured way to share them openly. LeaderRate was designed to make that process simpler, more respectful, and easier to follow over time.
+          </p>
+        </article>
+        <article class="card">
+          <div class="eyebrow">The build</div>
+          <h2>How it was created</h2>
+          <p>
+            The product is built as a web application using HTML, CSS, JavaScript, and Supabase. That approach keeps the interface fast, the deployment simple, and the data model flexible enough for profiles, feedback, updates, and review workflows.
+          </p>
+        </article>
+      </section>
+
+      <section class="section grid two">
+        <article class="card">
+          <div class="eyebrow">Creator</div>
+          <h2>Who created it</h2>
+          <p>
+            LeaderRate was created by Theophilus Baffoe as a focused software project around anonymous participation, public accountability, and clearer institutional communication.
+          </p>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Team</div>
+          <h2>Who manages it</h2>
+          <p>
+            The project is managed by the LeaderRate team and collaborators who maintain the product direction, content standards, operational setup, and future improvements around the platform.
+          </p>
+        </article>
+      </section>
+
+      <section class="section card">
+        <div class="eyebrow">What it aims to do</div>
+        <h2>What success looks like</h2>
+        <p>
+          The goal is not noise. The goal is useful signal: clearer feedback, visible follow-through, and a healthier loop between people who raise issues and the offices expected to respond to them.
+        </p>
+        <div class="button-row">
+          <a class="btn btn-primary" href="leaders.html">Browse offices</a>
+          <a class="btn btn-secondary" href="feedback.html">Read feedback</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-shell">
+      <div class="footer-logo"><span data-app-name>LeaderRate</span></div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="leaders.html">Browse Offices</a>
+        <a href="feedback.html">Feedback</a>
+        <a href="updates.html">Updates</a>
+        <a href="about.html">About</a>
+      </div>
+      <div class="muted">&copy; <span data-year></span> LeaderRate. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script type="module" src="assets/js/pages/about.js"></script>
+</body>
+</html>
+

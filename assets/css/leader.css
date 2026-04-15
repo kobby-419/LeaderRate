@@ -255,6 +255,38 @@
   line-height: 1.62;
 }
 
+.office-content-stack .feedback-card {
+  border: 1px solid rgba(37, 99, 235, 0.1);
+  background:
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.96));
+  box-shadow: 0 18px 34px -30px rgba(15, 23, 42, 0.32);
+}
+
+body.theme-dark .office-content-stack .feedback-card {
+  border-color: rgba(96, 165, 250, 0.16);
+  background:
+    radial-gradient(circle at top right, rgba(96, 165, 250, 0.11), transparent 36%),
+    linear-gradient(180deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.95));
+  box-shadow: 0 18px 34px -30px rgba(2, 6, 23, 0.58);
+}
+
+.office-content-stack .project-card {
+  border: 1px solid rgba(14, 116, 144, 0.12);
+  background:
+    radial-gradient(circle at top right, rgba(14, 116, 144, 0.1), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.96));
+  box-shadow: 0 18px 34px -30px rgba(15, 23, 42, 0.3);
+}
+
+body.theme-dark .office-content-stack .project-card {
+  border-color: rgba(45, 212, 191, 0.16);
+  background:
+    radial-gradient(circle at top right, rgba(45, 212, 191, 0.12), transparent 36%),
+    linear-gradient(180deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.95));
+  box-shadow: 0 18px 34px -30px rgba(2, 6, 23, 0.58);
+}
+
 .response-box {
   margin-top: 0.95rem;
   padding: 0.95rem 1rem;
@@ -267,6 +299,23 @@
   display: block;
   margin-bottom: 0.3rem;
   color: var(--primary);
+}
+
+.office-content-stack .feedback-card .feedback-shell-support {
+  align-self: flex-start;
+}
+
+.office-content-stack .feedback-card .feedback-shell-actions {
+  gap: 0.65rem;
+}
+
+.office-content-stack .project-card .project-shell-kicker {
+  gap: 0.5rem;
+}
+
+.office-content-stack .project-card .pill {
+  background: rgba(14, 116, 144, 0.09);
+  color: #0f766e;
 }
 
 .feedback-modal {
@@ -355,5 +404,56 @@
 
   .feedback-modal-dialog {
     padding: 1.15rem;
+  }
+
+  .office-content-stack .feedback-card {
+    padding: 1rem;
+  }
+
+  .office-content-stack .feedback-card .feedback-shell-support {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 560px) {
+  .feedback-codename {
+    width: 100%;
+    justify-content: center;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .feedback-rating-picker {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .rating-chip {
+    min-width: 0;
+    width: 100%;
+    padding-inline: 0;
+  }
+
+  .feedback-field-meta,
+  .feedback-submit-row {
+    flex-direction: column;
+  }
+
+  .feedback-counter {
+    align-self: flex-start;
+    white-space: normal;
+  }
+
+  .feedback-modal {
+    padding: 0;
+  }
+
+  .feedback-modal-dialog {
+    width: 100%;
+    max-height: 100vh;
+    min-height: 100vh;
+    border-radius: 0;
+    border-inline: none;
   }
 }

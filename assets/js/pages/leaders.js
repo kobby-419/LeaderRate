@@ -4,19 +4,36 @@ import { escapeHtml, ratingStars, renderStackState, showToast } from "../ui.js";
 
 let leaders = [];
 
+function getLeaderCategory(leader) {
+  return leader.department_label || leader.department_slug || "Office";
+}
+
+function renderCategoryOptions(list) {
+  const select = document.querySelector("[data-leader-category]");
+  if (!select) return;
+
+  const categories = [...new Set(list.map((leader) => getLeaderCategory(leader)).filter(Boolean))]
+    .sort((left, right) => left.localeCompare(right));
+
+  select.innerHTML = `
+    <option value="">All categories</option>
+    ${categories.map((category) => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`).join("")}
+  `;
+}
+
 function render(list) {
   const container = document.querySelector("[data-leaders-list]");
   if (!container) return;
 
   if (!list.length) {
-    container.innerHTML = `<div class="empty-state panel">No offices matched your search.</div>`;
+    container.innerHTML = `<div class="empty-state panel">No offices matched your search or filter.</div>`;
     return;
   }
 
   container.innerHTML = list.map((leader) => `
     <article class="card leader-card">
       <div class="leader-card-top">
-        <span class="pill">${escapeHtml(leader.department_label || "Office")}</span>
+        <span class="pill">${escapeHtml(getLeaderCategory(leader))}</span>
         <span class="leader-review-count">${leader.approved_feedback_count} reviews</span>
       </div>
       <div class="leader-card-body">
@@ -25,11 +42,11 @@ function render(list) {
         <p class="leader-summary">${escapeHtml(leader.office_summary)}</p>
       </div>
       <div class="leader-rating-panel">
-        <span class="leader-rating-badge">${leader.average_rating}/5</span>
-        <span class="stars">${ratingStars(leader.average_rating)}</span>
+        <span class="leader-rating-badge">${leader.rating_basis === "none" ? "No rating" : `${leader.average_rating}/5`}</span>
+        <span class="stars">${leader.rating_basis === "none" ? "" : ratingStars(leader.average_rating)}</span>
         <span class="leader-rating-note">${
           leader.rating_basis === "approved"
-            ? "Approved public rating"
+            ? "Public rating"
             : leader.rating_basis === "demo"
               ? "Directory rating snapshot"
               : "No ratings yet"
@@ -48,32 +65,36 @@ function render(list) {
 
 function filterLeaders() {
   const term = String(document.querySelector("[data-leader-search]")?.value || "").toLowerCase().trim();
+  const category = String(document.querySelector("[data-leader-category]")?.value || "").trim();
   const filtered = leaders.filter((leader) => {
+    const matchesCategory = !category || getLeaderCategory(leader) === category;
     const searchText = [
       leader.display_name,
       leader.office_title,
-      leader.department_label,
+      getLeaderCategory(leader),
       leader.office_summary,
       leader.office_focus,
     ].filter(Boolean).join(" ").toLowerCase();
-    return searchText.includes(term);
+    return matchesCategory && searchText.includes(term);
   });
   render(filtered);
 }
 
 async function init() {
   await bootstrapPage({ activeNav: "leaders" });
-  renderStackState("[data-leaders-list]", "Loading leader offices...");
+  renderStackState("[data-leaders-list]", "Loading offices...");
 
   try {
     leaders = await getPublicLeaders();
+    renderCategoryOptions(leaders);
     render(leaders);
   } catch (error) {
-    renderStackState("[data-leaders-list]", "Leader offices could not be loaded right now.");
+    renderStackState("[data-leaders-list]", "Offices could not be loaded right now.");
     showToast(error.message, "error");
   }
 
   document.querySelector("[data-leader-search]")?.addEventListener("input", filterLeaders);
+  document.querySelector("[data-leader-category]")?.addEventListener("change", filterLeaders);
 }
 
 init();

@@ -1,5 +1,44 @@
 import { requireSupabaseClient } from "./supabase-client.js";
 
+function mapFeedbackWithResponsesAndVotes(
+  feedbackItems = [],
+  responses = [],
+  voteTotals = [],
+  supportedFeedbackIds = []
+) {
+  const responsesByFeedbackId = new Map(responses.map((item) => [item.feedback_id, item]));
+  const votesByFeedbackId = new Map(
+    voteTotals.map((item) => [item.feedback_id, Number(item.vote_count || 0)])
+  );
+  const supportedFeedbackSet = new Set(
+    supportedFeedbackIds.map((feedbackId) => String(feedbackId))
+  );
+
+  return feedbackItems.map((item) => ({
+    ...item,
+    response: responsesByFeedbackId.get(item.id) || null,
+    upvotes: votesByFeedbackId.get(item.id) || 0,
+    has_supported: supportedFeedbackSet.has(String(item.id)),
+  }));
+}
+
+async function getFeedbackVoteSnapshot(supabase, viewerProfileId = null) {
+  const [voteTotalsResult, supportedVotesResult] = await Promise.all([
+    supabase.rpc("get_feedback_vote_totals"),
+    viewerProfileId
+      ? supabase.from("feedback_votes").select("feedback_id").eq("profile_id", viewerProfileId)
+      : Promise.resolve({ data: [], error: null }),
+  ]);
+
+  if (voteTotalsResult.error) throw voteTotalsResult.error;
+  if (supportedVotesResult.error) throw supportedVotesResult.error;
+
+  return {
+    voteTotals: voteTotalsResult.data || [],
+    supportedFeedbackIds: (supportedVotesResult.data || []).map((item) => item.feedback_id),
+  };
+}
+
 /*
  * This file groups database reads and writes so the page scripts stay readable.
  * The functions here are intentionally direct and explicit for beginner-friendly tracing.
@@ -96,9 +135,9 @@ export async function getPublicLeaders() {
   });
 }
 
-export async function getLeaderProfile(leaderId) {
+export async function getLeaderProfile(leaderId, viewerProfileId = null) {
   const supabase = requireSupabaseClient();
-  const [leaderResult, feedbackResult, responseResult, projectResult, votesResult] = await Promise.all([
+  const [leaderResult, feedbackResult, responseResult, projectResult, voteSnapshot] = await Promise.all([
     supabase.from("leaders").select("*").eq("id", leaderId).single(),
     supabase
       .from("feedback")
@@ -108,31 +147,24 @@ export async function getLeaderProfile(leaderId) {
       .order("created_at", { ascending: false }),
     supabase.from("leader_responses").select("*").eq("leader_id", leaderId),
     supabase.from("projects").select("*").eq("leader_id", leaderId).order("created_at", { ascending: false }),
-    supabase.from("feedback_votes").select("feedback_id"),
+    getFeedbackVoteSnapshot(supabase, viewerProfileId),
   ]);
 
   if (leaderResult.error) throw leaderResult.error;
   if (feedbackResult.error) throw feedbackResult.error;
   if (responseResult.error) throw responseResult.error;
   if (projectResult.error) throw projectResult.error;
-  if (votesResult.error) throw votesResult.error;
-
-  const responsesByFeedbackId = new Map((responseResult.data || []).map((item) => [item.feedback_id, item]));
-  const votesByFeedbackId = new Map();
-  for (const vote of votesResult.data || []) {
-    votesByFeedbackId.set(vote.feedback_id, (votesByFeedbackId.get(vote.feedback_id) || 0) + 1);
-  }
-
   return {
     leader: {
       ...leaderResult.data,
       ...buildLeaderMetrics(leaderResult.data, feedbackResult.data || []),
     },
-    feedback: (feedbackResult.data || []).map((item) => ({
-      ...item,
-      response: responsesByFeedbackId.get(item.id) || null,
-      upvotes: votesByFeedbackId.get(item.id) || 0,
-    })),
+    feedback: mapFeedbackWithResponsesAndVotes(
+      feedbackResult.data || [],
+      responseResult.data || [],
+      voteSnapshot.voteTotals,
+      voteSnapshot.supportedFeedbackIds
+    ),
     projects: projectResult.data || [],
   };
 }
@@ -147,7 +179,7 @@ export async function submitFeedback(payload, profile) {
     category: payload.category,
     rating: payload.rating,
     message: payload.message.trim(),
-    moderation_status: "pending",
+    moderation_status: "approved",
     fingerprint_hash: payload.fingerprint_hash,
   };
 
@@ -167,34 +199,27 @@ export async function getPublicProjects() {
   return data || [];
 }
 
-export async function getPublicFeedbackFeed() {
+export async function getPublicFeedbackFeed(viewerProfileId = null) {
   const supabase = requireSupabaseClient();
-  const [feedbackResult, responsesResult, votesResult] = await Promise.all([
+  const [feedbackResult, responsesResult, voteSnapshot] = await Promise.all([
     supabase
       .from("feedback")
       .select("*, leaders(office_title)")
       .eq("moderation_status", "approved")
       .order("created_at", { ascending: false }),
     supabase.from("leader_responses").select("*"),
-    supabase.from("feedback_votes").select("feedback_id"),
+    getFeedbackVoteSnapshot(supabase, viewerProfileId),
   ]);
 
   if (feedbackResult.error) throw feedbackResult.error;
   if (responsesResult.error) throw responsesResult.error;
-  if (votesResult.error) throw votesResult.error;
 
-  const responsesByFeedbackId = new Map((responsesResult.data || []).map((item) => [item.feedback_id, item]));
-  const votesByFeedbackId = new Map();
-
-  for (const vote of votesResult.data || []) {
-    votesByFeedbackId.set(vote.feedback_id, (votesByFeedbackId.get(vote.feedback_id) || 0) + 1);
-  }
-
-  return (feedbackResult.data || []).map((item) => ({
-    ...item,
-    response: responsesByFeedbackId.get(item.id) || null,
-    upvotes: votesByFeedbackId.get(item.id) || 0,
-  }));
+  return mapFeedbackWithResponsesAndVotes(
+    feedbackResult.data || [],
+    responsesResult.data || [],
+    voteSnapshot.voteTotals,
+    voteSnapshot.supportedFeedbackIds
+  );
 }
 
 export async function getLeaderboardData() {
@@ -218,7 +243,11 @@ export async function getLeaderboardData() {
 export async function getStudentDashboard(profile) {
   const supabase = requireSupabaseClient();
   const [feedbackResult, projectsResult] = await Promise.all([
-    supabase.from("feedback").select("*").eq("student_profile_id", profile.id).order("created_at", { ascending: false }),
+    supabase
+      .from("feedback")
+      .select("*, leaders(office_title)")
+      .eq("student_profile_id", profile.id)
+      .order("created_at", { ascending: false }),
     supabase.from("projects").select("*, leaders(office_title)").order("created_at", { ascending: false }).limit(5),
   ]);
 
@@ -227,6 +256,42 @@ export async function getStudentDashboard(profile) {
 
   return {
     myFeedback: feedbackResult.data || [],
+    recentProjects: projectsResult.data || [],
+  };
+}
+
+export async function getDashboardData(profile) {
+  const supabase = requireSupabaseClient();
+  const [myFeedbackResult, publicFeedbackResult, responsesResult, voteSnapshot, projectsResult] = await Promise.all([
+    supabase
+      .from("feedback")
+      .select("*, leaders(office_title)")
+      .eq("student_profile_id", profile.id)
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("feedback")
+      .select("*, leaders(office_title)")
+      .eq("moderation_status", "approved")
+      .order("created_at", { ascending: false })
+      .limit(12),
+    supabase.from("leader_responses").select("*"),
+    getFeedbackVoteSnapshot(supabase, profile?.id || null),
+    supabase.from("projects").select("*, leaders(office_title)").order("created_at", { ascending: false }).limit(12),
+  ]);
+
+  if (myFeedbackResult.error) throw myFeedbackResult.error;
+  if (publicFeedbackResult.error) throw publicFeedbackResult.error;
+  if (responsesResult.error) throw responsesResult.error;
+  if (projectsResult.error) throw projectsResult.error;
+
+  return {
+    myFeedback: myFeedbackResult.data || [],
+    communityFeedback: mapFeedbackWithResponsesAndVotes(
+      publicFeedbackResult.data || [],
+      responsesResult.data || [],
+      voteSnapshot.voteTotals,
+      voteSnapshot.supportedFeedbackIds
+    ),
     recentProjects: projectsResult.data || [],
   };
 }
@@ -253,7 +318,7 @@ export async function getLeaderDashboard(profile) {
 
   return {
     leaderAccount: account,
-    feedback: feedbackResult.data || [],
+    feedback: (feedbackResult.data || []).filter((item) => item.moderation_status !== "rejected"),
     responses: responsesResult.data || [],
     projects: projectsResult.data || [],
   };
@@ -280,6 +345,12 @@ export async function saveProject(payload, projectId = null) {
   const { data, error } = await query.select().single();
   if (error) throw error;
   return data;
+}
+
+export async function deleteProject(projectId) {
+  const supabase = requireSupabaseClient();
+  const { error } = await supabase.from("projects").delete().eq("id", projectId);
+  if (error) throw error;
 }
 
 export async function getAdminOverview() {
@@ -309,11 +380,34 @@ export async function getPendingFeedback() {
   const { data, error } = await supabase
     .from("feedback")
     .select("*, leaders(office_title)")
-    .eq("moderation_status", "pending")
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: false });
 
   if (error) throw error;
   return data || [];
+}
+
+export async function getAdminContentOverview() {
+  const supabase = requireSupabaseClient();
+  const [feedbackResult, projectsResult] = await Promise.all([
+    supabase
+      .from("feedback")
+      .select("*, leaders(office_title)")
+      .order("created_at", { ascending: false })
+      .limit(40),
+    supabase
+      .from("projects")
+      .select("*, leaders(office_title)")
+      .order("created_at", { ascending: false })
+      .limit(24),
+  ]);
+
+  if (feedbackResult.error) throw feedbackResult.error;
+  if (projectsResult.error) throw projectsResult.error;
+
+  return {
+    feedback: feedbackResult.data || [],
+    projects: projectsResult.data || [],
+  };
 }
 
 export async function moderateFeedback(feedbackId, payload) {

@@ -3,105 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Dashboard | LeaderRate v1.0</title>
-  <link rel="stylesheet" href="assets/css/shared.css">
-  <link rel="stylesheet" href="assets/css/dashboards.css">
+  <title>Dashboard | LeaderRate</title>
+  <meta name="description" content="Redirecting to the current LeaderRate dashboard.">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#2c7da0">
+  <meta http-equiv="refresh" content="0; url=dashboard.html">
+  <link rel="icon" type="image/png" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="shortcut icon" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="apple-touch-icon" href="assets/images/leaderrate-logo-transparent.png">
 </head>
-<body class="dashboard-page student-dashboard-page">
-  <header class="site-header">
-    <div class="container nav-shell">
-      <a class="brand" href="index.html">
-        <span class="brand-mark">LR</span>
-        <span class="brand-copy">
-          <span data-app-name>LeaderRate v1.0</span>
-          <small>Student dashboard</small>
-        </span>
-      </a>
-      <nav class="nav-links" data-nav-links>
-        <a href="index.html" data-nav="home">Home</a>
-        <a href="leaders.html" data-nav="leaders">Browse Leaders</a>
-        <a href="updates.html" data-nav="updates">View Updates</a>
-        <a href="student-dashboard.html" data-nav="student-dashboard">Dashboard</a>
-      </nav>
-      <div class="nav-actions">
-        <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
-        <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
-        <div data-auth-slot></div>
-      </div>
-    </div>
-  </header>
-
-  <main class="shell-main">
-    <div class="container">
-      <div data-config-banner></div>
-      <section class="hero">
-        <div class="dashboard-hero-grid">
-          <div>
-            <div class="eyebrow">Student workspace</div>
-            <h1>Welcome back, <span data-student-codename>student</span>.</h1>
-            <p>
-              Review what you have submitted, see where each item stands, and keep up with recent office activity without leaving your dashboard.
-            </p>
-          </div>
-          <div class="dashboard-hero-panel">
-            <div class="dashboard-hero-label">Quick links</div>
-            <div class="dashboard-hero-actions">
-              <a class="btn btn-primary" href="leaders.html">Browse offices</a>
-              <a class="btn btn-secondary" href="feedback.html">Public feedback</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section stats-grid">
-        <article class="stat-card dashboard-stat-card">
-          <div class="stat-value" data-student-feedback-count>0</div>
-          <div class="stat-label">Your submissions</div>
-        </article>
-        <article class="stat-card dashboard-stat-card">
-          <div class="stat-value" data-student-approved-count>0</div>
-          <div class="stat-label">Approved submissions</div>
-        </article>
-        <article class="stat-card dashboard-stat-card">
-          <div class="stat-value" data-student-pending-count>0</div>
-          <div class="stat-label">Pending review</div>
-        </article>
-      </section>
-
-      <section class="section split">
-        <div>
-          <div class="section-heading">
-            <div>
-              <div class="eyebrow">Your feedback</div>
-              <h2>Submission history</h2>
-            </div>
-            <a class="btn btn-ghost" href="leaders.html">Browse offices</a>
-          </div>
-          <div class="stack dashboard-stack" data-my-feedback></div>
-        </div>
-        <div>
-          <div class="section-heading">
-            <div>
-              <div class="eyebrow">Recent activity</div>
-              <h2>Office updates</h2>
-            </div>
-            <a class="btn btn-ghost" href="updates.html">All updates</a>
-          </div>
-          <div class="stack dashboard-stack" data-student-updates></div>
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-shell">
-      <div class="muted">&copy; <span data-year></span> LeaderRate</div>
-    </div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/config.js"></script>
-  <script type="module" src="assets/js/pages/student-dashboard.js"></script>
+<body>
+  <script>
+    window.location.replace("dashboard.html");
+  </script>
 </body>
 </html>
 

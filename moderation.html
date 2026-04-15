@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Moderation | LeaderRate v1.0</title>
+  <title>Review Queue | LeaderRate</title>
+  <meta name="description" content="Private review tools for feedback and updates on LeaderRate.">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#2c7da0">
+  <link rel="icon" type="image/png" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="shortcut icon" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="apple-touch-icon" href="assets/images/leaderrate-logo-transparent.png">
   <link rel="stylesheet" href="assets/css/shared.css">
   <link rel="stylesheet" href="assets/css/dashboards.css">
 </head>
@@ -13,19 +19,19 @@
       <a class="brand" href="index.html">
         <span class="brand-mark">LR</span>
         <span class="brand-copy">
-          <span data-app-name>LeaderRate v1.0</span>
-          <small>Moderation queue</small>
+          <span data-app-name>LeaderRate</span>
+          <small>Review queue</small>
         </span>
       </a>
       <nav class="nav-links" data-nav-links>
         <a href="index.html" data-nav="home">Home</a>
-        <a href="leaders.html" data-nav="leaders">Browse Leaders</a>
-        <a href="updates.html" data-nav="updates">View Updates</a>
+        <a href="leaders.html" data-nav="leaders">Browse Offices</a>
+        <a href="updates.html" data-nav="updates">Updates</a>
         <a href="admin-dashboard.html" data-nav="admin-dashboard">Dashboard</a>
-        <a href="moderation.html" data-nav="moderation">Moderation</a>
+        <a href="moderation.html" data-nav="moderation">Review Queue</a>
       </nav>
       <div class="nav-actions">
-        <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
+        <button class="theme-toggle" type="button" data-theme-toggle>Theme</button>
         <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
         <div data-auth-slot></div>
       </div>
@@ -36,20 +42,38 @@
     <div class="container">
       <div data-config-banner></div>
       <section class="hero">
-        <div class="eyebrow">Feedback review</div>
-        <h1>Approve or reject pending submissions.</h1>
+        <div class="eyebrow">Content review</div>
+        <h1>Review public feedback and remove updates when needed.</h1>
         <p>
-          This queue protects the public side of LeaderRate. Students can submit freely, but only approved items become visible on office pages.
+          Feedback is public by default. This queue is only used when an item needs review or a public update should be removed from view.
         </p>
       </section>
 
-      <section class="section stack" data-moderation-list></section>
+      <section class="section">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Feedback</div>
+            <h2>Feedback review</h2>
+          </div>
+        </div>
+        <div class="stack" data-moderation-list></div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Updates</div>
+            <h2>Update review</h2>
+          </div>
+        </div>
+        <div class="stack" data-project-control-list></div>
+      </section>
     </div>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-shell">
-      <div class="muted">Use moderation notes to leave an internal record of why a decision was made.</div>
+      <div class="muted">Removed feedback remains visible to its sender with a removed label, but disappears from public views.</div>
       <div class="muted">&copy; <span data-year></span> LeaderRate</div>
     </div>
   </footer>

@@ -253,6 +253,22 @@ begin
 end;
 $$;
 
+create or replace function public.get_feedback_vote_totals()
+returns table (
+  feedback_id uuid,
+  vote_count bigint
+)
+language sql
+security definer
+set search_path = public
+as $$
+  select
+    public.feedback_votes.feedback_id,
+    count(*)::bigint as vote_count
+  from public.feedback_votes
+  group by public.feedback_votes.feedback_id
+$$;
+
 drop trigger if exists set_profiles_updated_at on public.profiles;
 create trigger set_profiles_updated_at
 before update on public.profiles
@@ -330,7 +346,7 @@ with check (
   and student_profile_id = auth.uid()
   and student_codename_snapshot = public.current_profile_codename()
   and institution_slug = public.current_institution_slug()
-  and moderation_status = 'pending'
+  and moderation_status = 'approved'
 );
 
 create policy "feedback_admin_update"

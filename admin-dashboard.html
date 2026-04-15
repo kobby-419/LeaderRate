@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard | LeaderRate v1.0</title>
+  <title>Workspace | LeaderRate</title>
+  <meta name="description" content="Private workspace for records, review actions, and platform operations in LeaderRate.">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#2c7da0">
+  <link rel="icon" type="image/png" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="shortcut icon" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="apple-touch-icon" href="assets/images/leaderrate-logo-transparent.png">
   <link rel="stylesheet" href="assets/css/shared.css">
   <link rel="stylesheet" href="assets/css/dashboards.css">
 </head>
@@ -13,19 +19,19 @@
       <a class="brand" href="index.html">
         <span class="brand-mark">LR</span>
         <span class="brand-copy">
-          <span data-app-name>LeaderRate v1.0</span>
-          <small>Admin dashboard</small>
+          <span data-app-name>LeaderRate</span>
+          <small>Private workspace</small>
         </span>
       </a>
       <nav class="nav-links" data-nav-links>
         <a href="index.html" data-nav="home">Home</a>
-        <a href="leaders.html" data-nav="leaders">Browse Leaders</a>
-        <a href="updates.html" data-nav="updates">View Updates</a>
+        <a href="leaders.html" data-nav="leaders">Browse Offices</a>
+        <a href="updates.html" data-nav="updates">Updates</a>
         <a href="admin-dashboard.html" data-nav="admin-dashboard">Dashboard</a>
-        <a href="moderation.html" data-nav="moderation">Moderation</a>
+        <a href="moderation.html" data-nav="moderation">Review Queue</a>
       </nav>
       <div class="nav-actions">
-        <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
+        <button class="theme-toggle" type="button" data-theme-toggle>Theme</button>
         <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
         <div data-auth-slot></div>
       </div>
@@ -36,17 +42,17 @@
     <div class="container">
       <div data-config-banner></div>
       <section class="hero">
-        <div class="eyebrow">Admin controls</div>
-        <h1>Moderation, office management, and abuse review.</h1>
+        <div class="eyebrow">Private workspace</div>
+        <h1>Records, review tools, and office management.</h1>
         <p>
-          Admins keep the platform constructive by approving feedback, watching suspicious activity, and creating leader office records and login accounts.
+          This private workspace handles platform records, review actions, and office setup behind the scenes.
         </p>
       </section>
 
       <section class="section stats-grid">
         <article class="stat-card">
           <div class="stat-value" data-admin-user-count>0</div>
-          <div class="stat-label">Total user profiles</div>
+          <div class="stat-label">Total profiles</div>
         </article>
         <article class="stat-card">
           <div class="stat-value" data-admin-feedback-count>0</div>
@@ -54,15 +60,15 @@
         </article>
         <article class="stat-card">
           <div class="stat-value" data-admin-pending-count>0</div>
-          <div class="stat-label">Pending moderation</div>
+          <div class="stat-label">Visible feedback</div>
         </article>
         <article class="stat-card">
           <div class="stat-value" data-admin-approved-count>0</div>
-          <div class="stat-label">Approved items</div>
+          <div class="stat-label">Removed feedback</div>
         </article>
         <article class="stat-card">
           <div class="stat-value" data-admin-rejected-count>0</div>
-          <div class="stat-label">Rejected items</div>
+          <div class="stat-label">Office records</div>
         </article>
       </section>
 
@@ -70,10 +76,10 @@
         <div>
           <div class="section-heading">
             <div>
-              <div class="eyebrow">Leader management</div>
-              <h2>Create a leader office and login</h2>
+              <div class="eyebrow">Office records</div>
+              <h2>Create an office record and access codename</h2>
             </div>
-            <a class="btn btn-ghost" href="moderation.html">Open moderation queue</a>
+            <a class="btn btn-ghost" href="moderation.html">Open review queue</a>
           </div>
           <div class="form-shell">
             <form data-create-leader-form>
@@ -94,14 +100,14 @@
                 <textarea class="textarea" id="officeFocus" name="officeFocus" required></textarea>
               </div>
               <div class="field">
-                <label for="loginCodename">Leader login codename</label>
+                <label for="loginCodename">Access codename</label>
                 <input class="input" id="loginCodename" name="loginCodename" required>
               </div>
               <div class="field">
                 <label for="leaderPassword">Initial password</label>
                 <input class="input" id="leaderPassword" name="password" type="password" required>
               </div>
-              <button class="btn btn-primary" type="submit">Create leader account</button>
+              <button class="btn btn-primary" type="submit">Create office record</button>
             </form>
           </div>
           <div class="stack section" data-admin-leaders></div>
@@ -109,8 +115,8 @@
         <div>
           <div class="section-heading">
             <div>
-              <div class="eyebrow">Suspicious activity</div>
-              <h2>Recent abuse logs</h2>
+              <div class="eyebrow">Signals</div>
+              <h2>Recent safety logs</h2>
             </div>
           </div>
           <div class="stack" data-admin-logs></div>
@@ -121,7 +127,7 @@
 
   <footer class="site-footer">
     <div class="container footer-shell">
-      <div class="muted">Admin-only actions rely on Supabase role checks and edge-function validation.</div>
+      <div class="muted">Private actions rely on Supabase role checks and edge-function validation.</div>
       <div class="muted">&copy; <span data-year></span> LeaderRate</div>
     </div>
   </footer>

@@ -1,5 +1,5 @@
 import { bootstrapPage } from "../app.js";
-import { generateCodenameSuggestions, logout } from "../auth.js";
+import { logout } from "../auth.js";
 import {
   getAdminOverview,
   getLeaderDashboard,
@@ -11,15 +11,11 @@ import { requireSupabaseClient } from "../supabase-client.js";
 const SETTINGS_STORAGE_KEY = "leaderrate-settings";
 
 function dashboardRoute(role) {
-  if (role === "leader") {
-    return "leader-dashboard.html";
-  }
-
   if (role === "admin") {
     return "admin-dashboard.html";
   }
 
-  return "student-dashboard.html";
+  return "dashboard.html";
 }
 
 function loadSettingsPreferences() {
@@ -32,30 +28,6 @@ function loadSettingsPreferences() {
 
 function saveSettingsPreferences(preferences) {
   localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(preferences));
-}
-
-function applyThemeChoice(theme) {
-  document.body.classList.toggle("theme-dark", theme === "dark");
-  localStorage.setItem("leaderrate-theme", theme);
-  const themeToggle = document.querySelector("[data-theme-toggle]");
-  if (themeToggle) {
-    themeToggle.textContent = theme === "dark" ? "Light mode" : "Dark mode";
-  }
-
-  document.querySelectorAll("[data-theme-choice]").forEach((button) => {
-    button.classList.toggle("active", button.dataset.themeChoice === theme);
-  });
-}
-
-function renderCodenamePreview(slot) {
-  if (!slot) {
-    return;
-  }
-
-  const suggestions = generateCodenameSuggestions({ count: 3 });
-  slot.innerHTML = suggestions.map((codename) => `
-    <span class="codename-preview-pill">${codename}</span>
-  `).join("");
 }
 
 function renderStats(profile, stats) {
@@ -71,8 +43,8 @@ function renderStats(profile, stats) {
         <span>Feedback submitted</span>
       </article>
       <article class="settings-stat">
-        <strong>${stats.myFeedback.filter((item) => item.moderation_status === "approved").length}</strong>
-        <span>Approved items</span>
+        <strong>${stats.myFeedback.filter((item) => item.moderation_status !== "rejected").length}</strong>
+        <span>Visible items</span>
       </article>
       <article class="settings-stat">
         <strong>${stats.recentProjects.length}</strong>
@@ -89,8 +61,8 @@ function renderStats(profile, stats) {
         <span>Feedback items</span>
       </article>
       <article class="settings-stat">
-        <strong>${stats.feedback.filter((item) => item.moderation_status === "approved").length}</strong>
-        <span>Approved feedback</span>
+        <strong>${stats.feedback.filter((item) => item.moderation_status !== "rejected").length}</strong>
+        <span>Visible feedback</span>
       </article>
       <article class="settings-stat">
         <strong>${stats.projects.length}</strong>
@@ -110,16 +82,16 @@ function renderStats(profile, stats) {
       <span>User profiles</span>
     </article>
     <article class="settings-stat">
-      <strong>${stats.feedback.filter((item) => item.moderation_status === "pending").length}</strong>
-      <span>Pending moderation</span>
+      <strong>${stats.feedback.filter((item) => item.moderation_status === "rejected").length}</strong>
+      <span>Censored feedback</span>
     </article>
     <article class="settings-stat">
       <strong>${stats.leaders.length}</strong>
-      <span>Leader offices</span>
+      <span>Office records</span>
     </article>
     <article class="settings-stat">
       <strong>${stats.logs.length}</strong>
-      <span>Recent abuse logs</span>
+      <span>Recent safety logs</span>
     </article>
   `;
 }
@@ -162,18 +134,6 @@ function wirePreferenceToggles() {
   });
 }
 
-function wireThemeChoices() {
-  const savedTheme = localStorage.getItem("leaderrate-theme") || "light";
-  applyThemeChoice(savedTheme);
-
-  document.querySelectorAll("[data-theme-choice]").forEach((button) => {
-    button.addEventListener("click", () => {
-      applyThemeChoice(button.dataset.themeChoice);
-      showToast("Theme updated.", "success");
-    });
-  });
-}
-
 async function changePassword() {
   const newPassword = window.prompt("Enter a new password.");
   if (!newPassword) {
@@ -211,7 +171,9 @@ async function init() {
 
   try {
     document.querySelector("[data-settings-codename]").textContent = profile.codename;
-    document.querySelector("[data-settings-role]").textContent = profile.role;
+    document.querySelector("[data-settings-role]").textContent = profile.role === "admin"
+      ? "Private workspace"
+      : "Anonymous account";
     document.querySelector("[data-settings-institution]").textContent = "Foso College of Education";
     document.querySelector("[data-settings-created]").textContent = profile.created_at ? formatDate(profile.created_at) : "Recently created";
 
@@ -220,13 +182,7 @@ async function init() {
       <a class="btn btn-secondary" href="leaders.html">Browse leaders</a>
     `;
 
-    renderCodenamePreview(document.querySelector("[data-codename-preview]"));
-    document.querySelector("[data-preview-codenames]")?.addEventListener("click", () => {
-      renderCodenamePreview(document.querySelector("[data-codename-preview]"));
-    });
-
     wirePreferenceToggles();
-    wireThemeChoices();
     await loadContributionStats(profile);
 
     document.querySelector("[data-change-password]")?.addEventListener("click", async () => {

@@ -1,6 +1,7 @@
 import { bootstrapPage } from "../app.js";
 import { logAbuseEvent } from "../audit.js";
 import { getCurrentProfile, loginWithCodename } from "../auth.js";
+import { initPasswordVisibilityToggles } from "../password-toggle.js";
 import { showToast } from "../ui.js";
 
 function adminModeIsActive() {
@@ -16,10 +17,10 @@ function applyLoginMode(adminMode) {
   if (!adminMode) {
     banner?.classList.add("hidden");
     if (title) {
-      title.textContent = "One login for students and leaders.";
+      title.textContent = "Login";
     }
     if (copy) {
-      copy.textContent = "Use your codename and password to continue.";
+    copy.textContent = "Use your codename and password to continue.";
     }
     if (help) {
       help.textContent = "Enter your codename and password.";
@@ -29,18 +30,19 @@ function applyLoginMode(adminMode) {
 
   banner?.classList.remove("hidden");
   if (title) {
-    title.textContent = "Admin login mode is open.";
+    title.textContent = "Private access";
   }
   if (copy) {
-    copy.textContent = "Use the admin codename and password.";
+    copy.textContent = "Use the private access codename and password.";
   }
   if (help) {
-    help.textContent = "Enter the admin codename and password.";
+    help.textContent = "Enter the private access codename and password.";
   }
 }
 
 async function init() {
   await bootstrapPage({ activeNav: "login" });
+  initPasswordVisibilityToggles();
   let currentAdminMode = adminModeIsActive();
   applyLoginMode(currentAdminMode);
 
@@ -74,11 +76,7 @@ async function init() {
 
       showToast("Login successful.", "success");
       setTimeout(() => {
-        window.location.href = profile.role === "leader"
-          ? "leader-dashboard.html"
-          : profile.role === "admin"
-            ? "admin-dashboard.html"
-            : "student-dashboard.html";
+        window.location.href = profile.role === "admin" ? "admin-dashboard.html" : "dashboard.html";
       }, 500);
     } catch (error) {
       await logAbuseEvent("login_failure", {

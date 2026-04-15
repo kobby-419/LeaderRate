@@ -50,7 +50,7 @@ async function init() {
             </div>
           </article>
         `).join("")
-      : `<div class="empty-state panel">No leader updates are available yet.</div>`;
+      : `<div class="empty-state panel">No office updates are available yet.</div>`;
   } catch (error) {
     renderStackState("[data-my-feedback]", "Your dashboard could not be loaded right now.");
     renderStackState("[data-student-updates]", "Your dashboard could not be loaded right now.");

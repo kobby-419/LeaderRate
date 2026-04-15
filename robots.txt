@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /login.html
+Disallow: /register.html
+Disallow: /dashboard.html
+Disallow: /student-dashboard.html
+Disallow: /leader-dashboard.html
+Disallow: /admin-dashboard.html
+Disallow: /moderation.html
+Disallow: /settings.html
+
+# Add a sitemap entry here once the production domain is finalized.

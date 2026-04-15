@@ -3,7 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leader Profile | LeaderRate v1.0</title>
+  <title>Office Profile | LeaderRate</title>
+  <meta name="description" content="View a LeaderRate office profile with public feedback, ratings, office focus, and visible update history.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#2c7da0">
+  <meta property="og:site_name" content="LeaderRate">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Office Profile | LeaderRate" data-dynamic-meta="og-title">
+  <meta property="og:description" content="View public feedback, ratings, and visible updates for this FOSCO office." data-dynamic-meta="og-description">
+  <meta property="og:image" content="assets/images/leaderrate-logo.jpeg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Office Profile | LeaderRate" data-dynamic-meta="twitter-title">
+  <meta name="twitter:description" content="View public feedback, ratings, and visible updates for this FOSCO office." data-dynamic-meta="twitter-description">
+  <meta name="twitter:image" content="assets/images/leaderrate-logo.jpeg">
+  <link rel="icon" type="image/png" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="shortcut icon" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="apple-touch-icon" href="assets/images/leaderrate-logo-transparent.png">
   <link rel="stylesheet" href="assets/css/shared.css">
   <link rel="stylesheet" href="assets/css/leader.css">
 </head>
@@ -13,19 +28,20 @@
       <a class="brand" href="index.html">
         <span class="brand-mark">LR</span>
         <span class="brand-copy">
-          <span data-app-name>LeaderRate v1.0</span>
+          <span data-app-name>LeaderRate</span>
           <small>Office profile</small>
         </span>
       </a>
       <nav class="nav-links" data-nav-links>
         <a href="index.html" data-nav="home">Home</a>
-        <a href="leaders.html" data-nav="leaders">Browse Leaders</a>
-        <a href="updates.html" data-nav="updates">View Updates</a>
+        <a href="leaders.html" data-nav="leaders">Browse Offices</a>
+        <a href="updates.html" data-nav="updates">Updates</a>
+        <a href="about.html" data-nav="about">About</a>
         <a href="register.html" data-nav="register">Register</a>
         <a href="login.html" data-nav="login">Login</a>
       </nav>
       <div class="nav-actions">
-        <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
+        <button class="theme-toggle" type="button" data-theme-toggle>Theme</button>
         <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
         <div data-auth-slot></div>
       </div>
@@ -35,7 +51,6 @@
   <main class="shell-main">
     <div class="container">
       <div data-config-banner></div>
-      <!-- This page mixes public office information with a student-only submission form. -->
       <section class="hero office-hero">
         <div class="office-hero-grid">
           <div>
@@ -64,7 +79,7 @@
       <section class="section stats-grid office-stats-grid">
         <article class="stat-card office-stat-card">
           <div class="stat-value" data-approved-count>0</div>
-          <div class="stat-label">Approved public feedback</div>
+          <div class="stat-label">Public feedback</div>
         </article>
         <article class="stat-card office-stat-card">
           <div class="stat-value" data-average-rating>0/5</div>
@@ -76,7 +91,7 @@
         <div>
           <div class="eyebrow">Send feedback</div>
           <h2>Share your view on this office</h2>
-          <p class="muted">Open a private feedback form and submit under your codename. Moderation still applies before anything is shown publicly.</p>
+          <p class="muted">Open a private feedback form and submit under your codename. Visible items can still be reviewed later if needed.</p>
         </div>
         <div class="button-row">
           <button class="btn btn-primary" type="button" data-open-feedback>Add your feedback</button>
@@ -93,7 +108,7 @@
               <div class="office-feedback-head">
                 <div>
                   <h2 id="feedbackModalTitle">Share your view on this office</h2>
-                  <p class="feedback-modal-summary">Feedback is submitted under your codename and goes to moderation before anything becomes public.</p>
+                  <p class="feedback-modal-summary">Feedback is submitted under your codename and may be reviewed later if it breaks the platform rules.</p>
                 </div>
                 <div class="feedback-codename hidden" data-feedback-codename></div>
               </div>
@@ -113,8 +128,8 @@
             </div>
 
             <div class="feedback-access-note hidden" data-feedback-role-note>
-              <strong>Student account needed.</strong>
-              <span>Only student accounts can submit office feedback in this demo.</span>
+              <strong>Posting not available.</strong>
+              <span>This account cannot submit office feedback in this demo.</span>
             </div>
 
             <form class="hidden" data-feedback-form>
@@ -140,16 +155,16 @@
                 <label for="message">Feedback</label>
                 <textarea class="textarea feedback-message-box" id="message" name="message" maxlength="500" placeholder="Describe the concern, experience, or suggestion in a clear and constructive way." data-feedback-message></textarea>
                 <div class="feedback-field-meta">
-                  <small>Keep it specific and respectful so moderation can approve it faster.</small>
+                  <small>Keep it specific and respectful so it stays useful and public.</small>
                   <span class="feedback-counter" data-feedback-counter>0 / 500</span>
                 </div>
               </div>
               <div class="feedback-submit-row">
                 <div class="feedback-submit-note">
-                  <strong>Moderation applies.</strong>
-                  <small>Your codename appears publicly only if the feedback is approved.</small>
+                  <strong>Visible by default.</strong>
+                  <small>Your codename appears with the feedback unless the post is later removed from public view.</small>
                 </div>
-                <button class="btn btn-primary" type="submit" data-feedback-submit>Submit for moderation</button>
+                <button class="btn btn-primary" type="submit" data-feedback-submit>Post feedback</button>
               </div>
             </form>
           </div>
@@ -160,7 +175,7 @@
         <div>
           <div class="section-heading">
             <div>
-              <div class="eyebrow">Approved feedback</div>
+              <div class="eyebrow">Public feedback</div>
               <h2>Public feedback and responses</h2>
             </div>
           </div>
@@ -181,7 +196,7 @@
 
   <footer class="site-footer">
     <div class="container footer-shell">
-      <div class="muted">Public feedback here is moderated. Students can also support or report visible items.</div>
+      <div class="muted">Public feedback here is visible by default. People can also support or report visible items.</div>
       <div class="muted">&copy; <span data-year></span> LeaderRate</div>
     </div>
   </footer>

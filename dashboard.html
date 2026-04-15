@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | LeaderRate</title>
+  <meta name="description" content="Your LeaderRate dashboard for feedback history, community voices, and office updates.">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#2c7da0">
+  <link rel="icon" type="image/png" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="shortcut icon" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="apple-touch-icon" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="stylesheet" href="assets/css/shared.css">
+  <link rel="stylesheet" href="assets/css/dashboards.css">
+</head>
+<body class="dashboard-page user-dashboard-page">
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">LR</span>
+        <span class="brand-copy">
+          <span data-app-name>LeaderRate</span>
+          <small>Dashboard</small>
+        </span>
+      </a>
+      <nav class="nav-links" data-nav-links>
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="leaders.html" data-nav="leaders">Browse Leaders</a>
+        <a href="updates.html" data-nav="updates">Updates</a>
+        <a href="about.html" data-nav="about">About</a>
+        <a href="dashboard.html" data-nav="dashboard">Dashboard</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle>Theme</button>
+        <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
+        <div data-auth-slot></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell-main">
+    <div class="container">
+      <div data-config-banner></div>
+
+      <section class="hero">
+        <div class="dashboard-hero-grid">
+          <div>
+            <div class="eyebrow">Your space</div>
+            <h1 class="dashboard-welcome-title">
+              <span>Welcome back</span>
+              <span data-dashboard-codename>user</span>
+            </h1>
+            <p data-dashboard-copy>
+              Track your own submissions, listen to what others are saying, and keep up with updates.
+            </p>
+          </div>
+          <div class="dashboard-hero-panel">
+            <div class="dashboard-hero-label">Quick links</div>
+            <div class="dashboard-hero-actions">
+              <a class="btn btn-primary" href="leaders.html">Browse leaders</a>
+              <a class="btn btn-secondary" href="updates.html">See updates</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section stats-grid">
+        <article class="stat-card dashboard-stat-card">
+          <div class="stat-value" data-dashboard-stat-leaders>0</div>
+          <div class="stat-label">Active offices</div>
+        </article>
+        <article class="stat-card dashboard-stat-card">
+          <div class="stat-value" data-dashboard-stat-feedback>0</div>
+          <div class="stat-label">Public feedback</div>
+        </article>
+        <article class="stat-card dashboard-stat-card">
+          <div class="stat-value" data-dashboard-stat-projects>0</div>
+          <div class="stat-label">Published updates</div>
+        </article>
+        <article class="stat-card dashboard-stat-card">
+          <div class="stat-value" data-dashboard-stat-rating>0/5</div>
+          <div class="stat-label">Average public rating</div>
+        </article>
+      </section>
+
+      <section class="section stats-grid">
+        <article class="stat-card dashboard-stat-card">
+          <div class="stat-value" data-dashboard-my-count>0</div>
+          <div class="stat-label">Your submissions</div>
+        </article>
+        <article class="stat-card dashboard-stat-card">
+          <div class="stat-value" data-dashboard-visible-count>0</div>
+          <div class="stat-label">Visible submissions</div>
+        </article>
+        <article class="stat-card dashboard-stat-card">
+          <div class="stat-value" data-dashboard-censored-count>0</div>
+          <div class="stat-label">Removed submissions</div>
+        </article>
+      </section>
+
+      <section class="section dashboard-section">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Your record</div>
+            <h2>Your feedback and submission history</h2>
+          </div>
+          <a class="btn btn-ghost" href="leaders.html">Post more feedback</a>
+        </div>
+        <div class="dashboard-slider" data-dashboard-my-feedback></div>
+      </section>
+
+      <section class="section dashboard-section">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Community voices</div>
+            <h2>Feedback from other people</h2>
+          </div>
+          <a class="btn btn-ghost" href="feedback.html">Open feedback feed</a>
+        </div>
+        <div class="dashboard-slider" data-dashboard-community-feedback></div>
+      </section>
+
+      <section class="section dashboard-section">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Recent activity</div>
+            <h2>Office updates</h2>
+          </div>
+          <a class="btn btn-ghost" href="updates.html">All updates</a>
+        </div>
+        <div class="dashboard-slider" data-dashboard-updates></div>
+      </section>
+
+      <section class="section dashboard-section hidden" data-leader-tools>
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Office tools</div>
+            <h2>Post, edit, or delete updates</h2>
+          </div>
+        </div>
+        <div class="dashboard-office-grid">
+          <div class="form-shell">
+            <form data-project-form>
+              <div class="field">
+                <label for="projectTitle">Title</label>
+                <input class="input" id="projectTitle" name="title" data-project-title required>
+              </div>
+              <div class="field">
+                <label for="projectDescription">Description</label>
+                <textarea class="textarea" id="projectDescription" name="description" data-project-description required></textarea>
+              </div>
+              <div class="field">
+                <label for="projectStatus">Status</label>
+                <select class="select" id="projectStatus" name="status" data-project-status></select>
+              </div>
+              <div class="button-row">
+                <button class="btn btn-primary" type="submit" data-project-submit>Post update</button>
+                <button class="btn btn-ghost hidden" type="button" data-project-cancel>Edit cancel</button>
+              </div>
+            </form>
+          </div>
+          <div>
+            <div class="section-heading dashboard-subheading">
+              <div>
+                <div class="eyebrow">Your office feed</div>
+                <h3 data-leader-office-title>Your office</h3>
+              </div>
+            </div>
+            <div class="dashboard-slider" data-leader-projects></div>
+            <div class="section-heading dashboard-subheading">
+              <div>
+                <div class="eyebrow">Office feedback</div>
+                <h3>Feedback on your office</h3>
+              </div>
+            </div>
+            <div class="dashboard-slider" data-leader-feedback></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-shell">
+      <div class="muted">&copy; <span data-year></span> LeaderRate</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script type="module" src="assets/js/pages/dashboard.js"></script>
+</body>
+</html>
+

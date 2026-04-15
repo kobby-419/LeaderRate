@@ -3,16 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LeaderRate v1.0</title>
+  <title>LeaderRate | Anonymous Feedback and Office Reviews at FOSCO</title>
+  <meta name="description" content="LeaderRate helps people at Foso College of Education share anonymous feedback, track office updates, and compare public office performance.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#2c7da0">
+  <meta property="og:site_name" content="LeaderRate">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="LeaderRate | Anonymous Feedback and Office Reviews at FOSCO">
+  <meta property="og:description" content="Anonymous feedback, public office ratings, and visible updates for Foso College of Education.">
+  <meta property="og:image" content="assets/images/leaderrate-logo.jpeg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="LeaderRate | Anonymous Feedback and Office Reviews at FOSCO">
+  <meta name="twitter:description" content="Anonymous feedback, public office ratings, and visible updates for Foso College of Education.">
+  <meta name="twitter:image" content="assets/images/leaderrate-logo.jpeg">
+  <link rel="icon" type="image/png" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="shortcut icon" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="apple-touch-icon" href="assets/images/leaderrate-logo-transparent.png">
   <link rel="stylesheet" href="assets/css/shared.css">
   <link rel="stylesheet" href="assets/css/home.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "LeaderRate",
+          "description": "Anonymous feedback, public office ratings, and visible updates for Foso College of Education."
+        },
+        {
+          "@type": "WebApplication",
+          "name": "LeaderRate",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "Web",
+          "description": "LeaderRate is an anonymous feedback and office review platform for Foso College of Education.",
+          "featureList": [
+            "Anonymous feedback",
+            "Office ratings",
+            "Public office updates",
+            "Public feedback feed"
+          ]
+        }
+      ]
+    }
+  </script>
 </head>
 <body class="home-page">
-  <div class="splash-screen" id="splash">
-    <div class="splash-text" id="splashText">
-      <div class="splash-logo-lr" id="lrLogo">LR</div>
+  <div class="splash-screen hidden" id="splash" aria-hidden="true">
+    <div class="splash-text">
+      <div class="splash-brand-lockup">
+        <div class="splash-logo-lr" aria-hidden="true"></div>
+        <div class="splash-brand-copy">
+          <div class="splash-brand-name" data-app-name>LeaderRate</div>
+          <div class="splash-slogan">Anonymous Feedback. Real Impact.</div>
+        </div>
+      </div>
     </div>
-    <div class="splash-slogan" id="slogan">Anonymous Feedback. Real Impact.</div>
   </div>
 
   <header class="site-header">
@@ -20,19 +65,20 @@
       <a class="brand" href="index.html">
         <span class="brand-mark">LR</span>
         <span class="brand-copy">
-          <span data-app-name>LeaderRate v1.0</span>
+          <span data-app-name>LeaderRate</span>
           <small>Foso College of Education</small>
         </span>
       </a>
       <nav class="nav-links" data-nav-links>
         <a href="index.html" data-nav="home">Home</a>
-        <a href="leaders.html" data-nav="leaders">Browse Leaders</a>
+        <a href="leaders.html" data-nav="leaders">Browse Offices</a>
         <a href="updates.html" data-nav="updates">Updates</a>
+        <a href="about.html" data-nav="about">About</a>
         <a href="register.html" data-nav="register">Register</a>
         <a href="login.html" data-nav="login">Login</a>
       </nav>
       <div class="nav-actions">
-        <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
+        <button class="theme-toggle" type="button" data-theme-toggle>Theme</button>
         <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
         <div data-auth-slot></div>
       </div>
@@ -42,57 +88,62 @@
   <main class="shell-main">
     <div class="container">
       <div data-config-banner></div>
-      <h1 class="page-title">Rate and review leaders at FOSCO</h1>
-      <p class="subtitle">
-        Help improve student leadership at Foso College of Education by sharing constructive anonymous feedback, following office updates, and seeing how concerns are handled.
-      </p>
+      <section class="home-top-grid">
+        <div class="home-intro">
+          <h1 class="page-title">Rate and give<br>feedback on leaders<br>at FOSCO</h1>
+          <p class="subtitle">
+            Speak honestly under a codename, follow visible updates, and help make leaders performance better.
+          </p>
+        </div>
 
-      <div class="stats-container">
-        <div class="stat-card">
-          <div class="stat-number" data-stat-leaders>0</div>
-          <div class="stat-label">Active leader offices</div>
+        <div class="stats-container">
+          <div class="stat-card">
+            <div class="stat-number" data-stat-leaders>0</div>
+            <div class="stat-label">Active offices</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" data-stat-feedback>0</div>
+            <div class="stat-label">Feedbacks</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" data-stat-projects>0</div>
+            <div class="stat-label">Published updates</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" data-stat-rating>0/5</div>
+            <div class="stat-label">Average public rating</div>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-number" data-stat-feedback>0</div>
-          <div class="stat-label">Approved feedback</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" data-stat-projects>0</div>
-          <div class="stat-label">Published updates</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" data-stat-rating>0/5</div>
-          <div class="stat-label">Average public rating</div>
-        </div>
-      </div>
+      </section>
 
       <section class="quick-actions">
         <h2>Quick Actions</h2>
         <div class="grid three">
           <a href="register.html" class="action-card">
             <h3>Register</h3>
-            <p>Pick a generated codename and create a student account.</p>
+            <p>Pick a generated codename and create your account.</p>
           </a>
           <a href="leaders.html" class="action-card">
-            <h3>Browse Leaders</h3>
-            <p>View leader offices, approved feedback, and public responses.</p>
+            <h3>Browse Offices</h3>
+            <p>Open office profiles, public feedback, and visible responses.</p>
           </a>
           <a href="updates.html" class="action-card">
             <h3>View Updates</h3>
-            <p>See projects and office updates leaders have published.</p>
+            <p>See projects and office updates published on the platform.</p>
           </a>
         </div>
       </section>
 
       <section class="leaderboard-preview">
-        <h2>How the demo works</h2>
+        <h2>How LeaderRate works</h2>
         <div class="card home-hero">
           <p>
-            Students choose a generated codename instead of using a real name, email address, or student ID. Feedback is moderated before it becomes public, and leaders can respond or post updates so students can see both concerns and action.
+            People choose a generated codename instead of using a real name. They rate and give feedback on offices, follow visible updates, and keep the platform focused on constructive issues, public responses, and real follow-through.
           </p>
           <div class="button-row">
             <a class="btn" href="login.html">Login</a>
             <a class="btn btn-outline" href="leaders.html">Explore Offices</a>
+            <a class="btn btn-outline" href="about.html">About LeaderRate</a>
           </div>
         </div>
       </section>
@@ -101,11 +152,12 @@
 
   <footer class="site-footer">
     <div class="container footer-shell">
-      <div class="footer-logo"><span data-app-name>LeaderRate v1.0</span></div>
+      <div class="footer-logo"><span data-app-name>LeaderRate</span></div>
       <div class="footer-links">
         <a href="index.html">Home</a>
-        <a href="leaders.html">Leaders</a>
+        <a href="leaders.html">Browse Offices</a>
         <a href="updates.html">Updates</a>
+        <a href="about.html">About</a>
         <a href="register.html">Register</a>
         <a href="login.html">Login</a>
       </div>
@@ -118,4 +170,3 @@
   <script type="module" src="assets/js/pages/index.js"></script>
 </body>
 </html>
-

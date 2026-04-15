@@ -3,7 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Browse Leaders | LeaderRate v1.0</title>
+  <title>Browse Leaders | LeaderRate</title>
+  <meta name="description" content="Browse FOSCO leaders, explore public profiles, and view feedback, ratings, and focus areas.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#2c7da0">
+  <meta property="og:site_name" content="LeaderRate">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Browse Leaders | LeaderRate">
+  <meta property="og:description" content="Explore FOSCO leader profiles, public feedback summaries, and categories on LeaderRate.">
+  <meta property="og:image" content="assets/images/leaderrate-logo.jpeg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Browse Leaders | LeaderRate">
+  <meta name="twitter:description" content="Explore FOSCO leader profiles, public feedback summaries, and categories on LeaderRate.">
+  <meta name="twitter:image" content="assets/images/leaderrate-logo.jpeg">
+  <link rel="icon" type="image/png" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="shortcut icon" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="apple-touch-icon" href="assets/images/leaderrate-logo-transparent.png">
   <link rel="stylesheet" href="assets/css/shared.css">
   <link rel="stylesheet" href="assets/css/leaders.css">
 </head>
@@ -13,19 +28,20 @@
       <a class="brand" href="index.html">
         <span class="brand-mark">LR</span>
         <span class="brand-copy">
-          <span data-app-name>LeaderRate v1.0</span>
-          <small>Office directory</small>
+          <span data-app-name>LeaderRate</span>
+          <small>Leader directory</small>
         </span>
       </a>
       <nav class="nav-links" data-nav-links>
         <a href="index.html" data-nav="home">Home</a>
         <a href="leaders.html" data-nav="leaders">Browse Leaders</a>
         <a href="updates.html" data-nav="updates">Updates</a>
+        <a href="about.html" data-nav="about">About</a>
         <a href="register.html" data-nav="register">Register</a>
         <a href="login.html" data-nav="login">Login</a>
       </nav>
       <div class="nav-actions">
-        <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
+        <button class="theme-toggle" type="button" data-theme-toggle>Theme</button>
         <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
         <div data-auth-slot></div>
       </div>
@@ -35,11 +51,19 @@
   <main class="shell-main">
     <div class="container">
       <div data-config-banner></div>
-      <h1 class="page-title">Browse leader offices</h1>
-      <p class="subtitle">Open any office to view approved feedback, responses, and updates.</p>
+      <h1 class="page-title">Browse leaders</h1>
+      <p class="subtitle">Open any leader profile to view feedback, responses, and updates.</p>
 
-      <div class="search-container">
-        <input class="search-box" data-leader-search placeholder="Search leaders by office title, summary, or focus">
+      <div class="leaders-toolbar">
+        <div class="search-container">
+          <input class="search-box" data-leader-search placeholder="Search offices by title, summary, or focus">
+        </div>
+        <div class="leaders-filter-group">
+          <label class="leaders-filter-label" for="leaderCategory">Category</label>
+          <select class="select leaders-filter-select" id="leaderCategory" data-leader-category>
+            <option value="">All categories</option>
+          </select>
+        </div>
       </div>
 
       <section class="section">
@@ -50,11 +74,12 @@
 
   <footer class="site-footer">
     <div class="container footer-shell">
-      <div class="footer-logo"><span data-app-name>LeaderRate v1.0</span></div>
+      <div class="footer-logo"><span data-app-name>LeaderRate</span></div>
       <div class="footer-links">
         <a href="index.html">Home</a>
-        <a href="leaders.html">Leaders</a>
+        <a href="leaders.html">Browse Leaders</a>
         <a href="updates.html">Updates</a>
+        <a href="about.html">About</a>
         <a href="login.html">Login</a>
       </div>
       <div class="muted">&copy; <span data-year></span> LeaderRate. All rights reserved.</div>

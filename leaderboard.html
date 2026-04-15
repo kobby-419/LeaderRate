@@ -3,7 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leaderboard | LeaderRate v1.0</title>
+  <title>Leaderboard | LeaderRate</title>
+  <meta name="description" content="See the public FOSCO leaderboard based on anonymous feedback, ratings, review counts, and performance scores.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#2c7da0">
+  <meta property="og:site_name" content="LeaderRate">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Leaderboard | LeaderRate">
+  <meta property="og:description" content="Compare ranked FOSCO leaders by public feedback, public ratings, and overall performance.">
+  <meta property="og:image" content="assets/images/leaderrate-logo.jpeg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Leaderboard | LeaderRate">
+  <meta name="twitter:description" content="Compare ranked FOSCO leaders by public feedback, public ratings, and overall performance.">
+  <meta name="twitter:image" content="assets/images/leaderrate-logo.jpeg">
+  <link rel="icon" type="image/png" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="shortcut icon" href="assets/images/leaderrate-logo-transparent.png">
+  <link rel="apple-touch-icon" href="assets/images/leaderrate-logo-transparent.png">
   <link rel="stylesheet" href="assets/css/shared.css">
   <link rel="stylesheet" href="assets/css/leaderboard.css">
 </head>
@@ -13,15 +28,15 @@
       <a class="brand" href="index.html">
         <span class="brand-mark">LR</span>
         <span class="brand-copy">
-          <span data-app-name>LeaderRate v1.0</span>
-          <small>Office leaderboard</small>
+          <span data-app-name>LeaderRate</span>
+          <small>Leaderboard</small>
         </span>
       </a>
       <nav class="nav-links" data-nav-links>
         <a href="index.html" data-nav="home">Home</a>
       </nav>
       <div class="nav-actions">
-        <button class="theme-toggle" type="button" data-theme-toggle>Dark mode</button>
+        <button class="theme-toggle" type="button" data-theme-toggle>Theme</button>
         <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
         <div data-auth-slot></div>
       </div>
@@ -32,7 +47,7 @@
     <div class="container">
       <div data-config-banner></div>
       <h1 class="page-title">Leaderboard</h1>
-      <p class="subtitle">Ranked public office performance using approved feedback only.</p>
+      <p class="subtitle">Ranked public leader performance using visible feedback.</p>
 
       <div class="stats-container">
         <div class="stat-card">
@@ -41,7 +56,7 @@
         </div>
         <div class="stat-card">
           <div class="stat-number" data-total-reviews>0</div>
-          <div class="stat-label">Approved reviews</div>
+          <div class="stat-label">Visible reviews</div>
         </div>
         <div class="stat-card">
           <div class="stat-number" data-average-rating>0/5</div>
@@ -70,7 +85,7 @@
             <thead>
               <tr>
                 <th>Rank</th>
-                <th>Leader</th>
+                <th>Office</th>
                 <th>Department</th>
                 <th>Rating</th>
                 <th>Reviews</th>
@@ -87,12 +102,13 @@
 
   <footer class="site-footer">
     <div class="container footer-shell">
-      <div class="footer-logo"><span data-app-name>LeaderRate v1.0</span></div>
+      <div class="footer-logo"><span data-app-name>LeaderRate</span></div>
       <div class="footer-links">
         <a href="index.html">Home</a>
-        <a href="leaders.html">Leaders</a>
+        <a href="leaders.html">Browse Leaders</a>
         <a href="feedback.html">Feedback</a>
         <a href="updates.html">Updates</a>
+        <a href="about.html">About</a>
       </div>
       <div class="muted">&copy; <span data-year></span> LeaderRate. All rights reserved.</div>
     </div>

@@ -1,4 +1,4 @@
-# LeaderRate v1.0
+# LeaderRate
 
 LeaderRate is a small demo for Foso College of Education (FOSCO). Students use codenames to submit moderated feedback on offices, leaders respond publicly, and office updates stay visible in one place.
 
@@ -6,7 +6,7 @@ LeaderRate is a small demo for Foso College of Education (FOSCO). Students use c
 
 - HTML
 - CSS
-- Vanilla JavaScript
+- JavaScript
 - Supabase
 
 ## What It Does
@@ -19,32 +19,35 @@ LeaderRate is a small demo for Foso College of Education (FOSCO). Students use c
 - moderated feedback
 - leader responses
 - office updates
-- student, leader, and admin dashboards
+- unified student and leader dashboard
+- admin dashboard
 
 ## Project Structure
 
 ```text
 leaderrate/
-├── assets/
-│   ├── css/
-│   └── js/
-├── supabase/
-│   ├── schema.sql
-│   ├── demo-seed.sql
-│   └── functions/
-├── index.html
-├── leaders.html
-├── leader.html
-├── leaderboard.html
-├── feedback.html
-├── login.html
-├── register.html
-├── student-dashboard.html
-├── leader-dashboard.html
-├── admin-dashboard.html
-├── moderation.html
-├── settings.html
-└── updates.html
+|-- assets/
+|   |-- css/
+|   |-- images/
+|   `-- js/
+|-- supabase/
+|   |-- schema.sql
+|   |-- demo-seed.sql
+|   `-- functions/
+|-- index.html
+|-- leaders.html
+|-- leader.html
+|-- leaderboard.html
+|-- feedback.html
+|-- login.html
+|-- register.html
+|-- dashboard.html
+|-- admin-dashboard.html
+|-- moderation.html
+|-- settings.html
+|-- updates.html
+|-- student-dashboard.html
+`-- leader-dashboard.html
 ```
 
 ## Setup
@@ -78,19 +81,13 @@ Admin:
 - codename: `campus_admin`
 - password: `AdminDemo!2026`
 
-Seeded leader login codenames:
-
-- `steady_lantern`
-- `quiet_bridge`
-- `civic_oak`
-- `hall_echo`
-- `bright_compass`
-
-Students register from the public UI.
+This is the only seeded login account.
+Students register from the public UI. Office-linked accounts are not seeded.
 
 ## Notes
 
 - Users log in publicly with codename and password only.
 - Supabase Auth still uses internal synthetic emails behind the scenes.
-- Feedback is public only after admin moderation.
+- `dashboard.html` is role-aware for students and leaders. The legacy `student-dashboard.html` and `leader-dashboard.html` routes now redirect there.
+- Feedback is public immediately in this demo and admins can censor harmful content afterward.
 - Abuse logging is used to reduce spam, not to remove public anonymity.

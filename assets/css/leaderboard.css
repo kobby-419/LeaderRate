@@ -4,11 +4,12 @@
  */
 
 .leaderboard-table {
-  background: var(--card-bg);
-  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.96));
+  border-radius: 22px;
   overflow-x: auto;
-  box-shadow: var(--card-shadow);
-  border: 1px solid var(--border);
+  box-shadow: 0 20px 40px -32px rgba(15, 23, 42, 0.34);
+  border: 1px solid rgba(37, 99, 235, 0.1);
 }
 
 .leaderboard-table table {
@@ -24,7 +25,11 @@
 }
 
 .leaderboard-table th {
-  background: var(--light);
+  background: rgba(37, 99, 235, 0.05);
+  color: var(--text);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .leaderboard-controls {
@@ -72,10 +77,64 @@
   min-height: 100%;
   display: grid;
   gap: 1rem;
+  padding: 1.3rem;
+  border-radius: 22px;
+  border: 1px solid rgba(37, 99, 235, 0.1);
+  background:
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.96));
+  box-shadow: 0 18px 34px -28px rgba(15, 23, 42, 0.32);
+}
+
+.performer-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.9rem;
+  align-items: start;
+}
+
+.performer-heading {
+  display: grid;
+  gap: 0.7rem;
+  min-width: 0;
 }
 
 .performer-card .item-meta:first-child {
   align-items: center;
+  gap: 0.5rem;
+}
+
+.performer-department {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.performer-rating {
+  display: grid;
+  justify-items: end;
+  gap: 0.2rem;
+  min-width: 6rem;
+  padding: 0.8rem 0.85rem;
+  border-radius: 16px;
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.08), rgba(37, 99, 235, 0.02));
+  color: var(--text);
+}
+
+.performer-rating strong {
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.performer-rating span {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.performer-rating .stars {
+  font-size: 0.92rem;
+  letter-spacing: 0.08em;
 }
 
 .performer-card h3 {
@@ -104,9 +163,10 @@
   color: var(--muted);
 }
 
-.performer-stats .stars {
-  color: #f59e0b;
-  letter-spacing: 0.12em;
+.performer-stats span {
+  padding: 0.45rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.07);
 }
 
 .leaderboard-rank {
@@ -164,9 +224,37 @@
   vertical-align: top;
 }
 
+.leaderboard-table tbody tr {
+  transition: background-color 0.18s ease;
+}
+
+.leaderboard-table tbody tr:hover {
+  background: rgba(37, 99, 235, 0.03);
+}
+
 .btn-small {
   padding: 0.5rem 0.8rem;
   font-size: 0.9rem;
+}
+
+body.theme-dark .performer-card,
+body.theme-dark .leaderboard-table {
+  border-color: rgba(96, 165, 250, 0.16);
+  box-shadow: 0 20px 40px -32px rgba(2, 6, 23, 0.58);
+}
+
+body.theme-dark .performer-card,
+body.theme-dark .leaderboard-table {
+  background:
+    linear-gradient(180deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.94));
+}
+
+body.theme-dark .leaderboard-table th {
+  background: rgba(96, 165, 250, 0.08);
+}
+
+body.theme-dark .leaderboard-table tbody tr:hover {
+  background: rgba(96, 165, 250, 0.05);
 }
 
 @media (max-width: 768px) {
@@ -178,6 +266,11 @@
     width: 100%;
   }
 
+  .sort-btn {
+    flex: 1 1 10rem;
+    text-align: center;
+  }
+
   .leaderboard-table th,
   .leaderboard-table td {
     padding: 0.85rem;
@@ -185,5 +278,86 @@
 
   .leader-rating-cell {
     min-width: 8rem;
+  }
+
+  .performer-head {
+    grid-template-columns: 1fr;
+  }
+
+  .performer-rating {
+    justify-items: start;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .rating-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .leaderboard-table {
+    border-radius: 14px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .leaderboard-table table,
+  .leaderboard-table thead,
+  .leaderboard-table tbody,
+  .leaderboard-table tr,
+  .leaderboard-table th,
+  .leaderboard-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .leaderboard-table thead {
+    display: none;
+  }
+
+  .leaderboard-table tbody {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .leaderboard-table tr {
+    padding: 1rem;
+    border-radius: 18px;
+    border: 1px solid rgba(37, 99, 235, 0.1);
+    background:
+      radial-gradient(circle at top right, rgba(37, 99, 235, 0.08), transparent 34%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.96));
+    box-shadow: 0 16px 30px -28px rgba(15, 23, 42, 0.28);
+  }
+
+  .leaderboard-table td {
+    padding: 0;
+    border: none;
+  }
+
+  .leaderboard-table td + td {
+    margin-top: 0.8rem;
+  }
+
+  .leaderboard-table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.32rem;
+    color: var(--muted);
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  body.theme-dark .leaderboard-table tr {
+    border-color: rgba(96, 165, 250, 0.16);
+    background:
+      radial-gradient(circle at top right, rgba(96, 165, 250, 0.12), transparent 36%),
+      linear-gradient(180deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.94));
+    box-shadow: 0 16px 30px -28px rgba(2, 6, 23, 0.56);
   }
 }

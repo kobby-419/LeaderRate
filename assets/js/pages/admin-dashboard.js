@@ -7,16 +7,16 @@ import { escapeHtml, formatDate, renderStackState, showToast } from "../ui.js";
 async function init() {
   const profile = await bootstrapPage({ activeNav: "admin-dashboard", requiredRole: "admin" });
   if (!profile) return;
-  renderStackState("[data-admin-leaders]", "Loading leader office records...");
-  renderStackState("[data-admin-logs]", "Loading abuse logs...");
+  renderStackState("[data-admin-leaders]", "Loading office records...");
+  renderStackState("[data-admin-logs]", "Loading safety logs...");
 
   try {
     const overview = await getAdminOverview();
     document.querySelector("[data-admin-user-count]").textContent = String(overview.profiles.length);
     document.querySelector("[data-admin-feedback-count]").textContent = String(overview.feedback.length);
-    document.querySelector("[data-admin-pending-count]").textContent = String(overview.feedback.filter((item) => item.moderation_status === "pending").length);
-    document.querySelector("[data-admin-approved-count]").textContent = String(overview.feedback.filter((item) => item.moderation_status === "approved").length);
-    document.querySelector("[data-admin-rejected-count]").textContent = String(overview.feedback.filter((item) => item.moderation_status === "rejected").length);
+    document.querySelector("[data-admin-pending-count]").textContent = String(overview.feedback.filter((item) => item.moderation_status !== "rejected").length);
+    document.querySelector("[data-admin-approved-count]").textContent = String(overview.feedback.filter((item) => item.moderation_status === "rejected").length);
+    document.querySelector("[data-admin-rejected-count]").textContent = String(overview.leaders.length);
 
     document.querySelector("[data-admin-leaders]").innerHTML = overview.leaders.length
       ? overview.leaders.map((leader) => `
@@ -28,7 +28,7 @@ async function init() {
             <p>${escapeHtml(leader.office_summary)}</p>
           </article>
         `).join("")
-      : `<div class="empty-state panel">No leader offices are available yet.</div>`;
+      : `<div class="empty-state panel">No office records are available yet.</div>`;
 
     document.querySelector("[data-admin-logs]").innerHTML = overview.logs.length
       ? overview.logs.map((log) => `
@@ -41,10 +41,10 @@ async function init() {
             <p>${escapeHtml(JSON.stringify(log.metadata || {}))}</p>
           </article>
       `).join("")
-      : `<div class="empty-state panel">No abuse log records are available yet.</div>`;
+      : `<div class="empty-state panel">No safety log records are available yet.</div>`;
   } catch (error) {
-    renderStackState("[data-admin-leaders]", "The admin overview could not be loaded right now.");
-    renderStackState("[data-admin-logs]", "The admin overview could not be loaded right now.");
+    renderStackState("[data-admin-leaders]", "The workspace overview could not be loaded right now.");
+    renderStackState("[data-admin-logs]", "The workspace overview could not be loaded right now.");
     showToast(error.message, "error");
   }
 
@@ -73,7 +73,7 @@ async function init() {
       });
 
       leaderForm.reset();
-      showToast("Leader office and login account created.", "success");
+      showToast("Office record created.", "success");
       init();
     } catch (error) {
       showToast(error.message, "error");
