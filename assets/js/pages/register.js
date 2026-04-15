@@ -91,16 +91,10 @@ async function init() {
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(form);
-    const submitButton = form.querySelector('button[type="submit"]');
 
     try {
       if (!selectedCodename) {
         throw new Error("Select one of the generated codenames before creating an account.");
-      }
-
-      if (submitButton) {
-        submitButton.disabled = true;
-        submitButton.textContent = "Creating account...";
       }
 
       await registerStudent({
@@ -108,6 +102,14 @@ async function init() {
         password: formData.get("password"),
         confirmPassword: formData.get("confirmPassword"),
       });
+
+const acceptTerms = document.getElementById('acceptTerms')?.checked;
+const acceptPrivacy = document.getElementById('acceptPrivacy')?.checked;
+
+if (!acceptTerms || !acceptPrivacy) {
+  showToast('You must accept the Terms of Service and Privacy Statement to register.', 'error');
+  return;
+}
 
       await logAbuseEvent("student_register_success", {
         codename: String(formData.get("codename") || "").toLowerCase(),
@@ -124,13 +126,72 @@ async function init() {
         reason: error.message,
       });
       showToast(error.message, "error");
-    } finally {
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.textContent = "Create account";
-      }
     }
   });
 }
 
 init();
+
+// Load Terms or Privacy content into modal
+async function loadLegalContent(type) {
+  const modalBody = document.querySelector(`#${type}Modal .legal-modal-body`);
+  if (!modalBody) return;
+  
+  // Show loading
+  modalBody.innerHTML = '<div class="legal-loading">Loading...</div>';
+  
+  try {
+    const response = await fetch(`${type}.html`);
+    if (!response.ok) throw new Error('Failed to load');
+    let html = await response.text();
+    
+    // Extract only the main content (between <main> tags or a specific container)
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const mainContent = doc.querySelector('main') || doc.querySelector('.container');
+    
+    if (mainContent) {
+      modalBody.innerHTML = mainContent.innerHTML;
+    } else {
+      modalBody.innerHTML = '<p>Content could not be loaded.</p>';
+    }
+  } catch (error) {
+    modalBody.innerHTML = '<p>Unable to load content. Please check your internet connection.</p>';
+  }
+}
+
+// Setup modal open/close
+function setupLegalModals() {
+  const modals = {
+    terms: document.getElementById('termsModal'),
+    privacy: document.getElementById('privacyModal')
+  };
+  
+  // Open modal when preview link clicked
+  document.querySelectorAll('[data-modal]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const type = link.dataset.modal; // 'terms' or 'privacy'
+      const modal = modals[type];
+      if (modal) {
+        loadLegalContent(type);
+        modal.style.display = 'flex';
+      }
+    });
+  });
+  
+  // Close modal when X clicked or clicking outside content
+  Object.values(modals).forEach(modal => {
+    if (!modal) return;
+    const closeBtn = modal.querySelector('.legal-modal-close');
+    closeBtn?.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.style.display = 'none';
+    });
+  });
+}
+
+// Call this after DOM is ready
+document.addEventListener('DOMContentLoaded', setupLegalModals);
