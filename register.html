@@ -105,6 +105,21 @@
                 </button>
               </div>
             </div>
+          <div class="field">
+  <label class="checkbox-label">
+    <input type="checkbox" id="acceptTerms" required>
+    I have read and agree to the 
+    <button type="button" class="legal-preview-link" data-modal="terms">Terms of Service</button>
+  </label>
+</div>
+<div class="field">
+  <label class="checkbox-label">
+    <input type="checkbox" id="acceptPrivacy" required>
+    I have read and understand the 
+    <button type="button" class="legal-preview-link" data-modal="privacy">Privacy Statement</button>
+  </label>
+</div>
+
             <button class="btn btn-primary btn-full" type="submit">Create account</button>
           </form>
           <p class="auth-switch-note">
@@ -126,5 +141,26 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/js/config.js"></script>
   <script type="module" src="assets/js/pages/register.js"></script>
+
+  <!-- Terms of Service Modal -->
+<div id="termsModal" class="legal-modal" style="display: none;">
+  <div class="legal-modal-content">
+    <span class="legal-modal-close">&times;</span>
+    <div class="legal-modal-body">
+      <!-- Content will be loaded here -->
+      <div class="legal-loading">Loading Terms of Service...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Privacy Statement Modal -->
+<div id="privacyModal" class="legal-modal" style="display: none;">
+  <div class="legal-modal-content">
+    <span class="legal-modal-close">&times;</span>
+    <div class="legal-modal-body">
+      <div class="legal-loading">Loading Privacy Statement...</div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
