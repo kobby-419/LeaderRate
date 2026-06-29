@@ -135,7 +135,7 @@ values
     'foso-college-of-education',
     'Hall President',
     'hall-president',
-    'Bismark & Peter',
+    'Bismark & Sophia',
     'hall-executives',
     'Hall Executives',
     'Represents hall welfare concerns and coordinates resident support with student leadership.',
@@ -303,7 +303,7 @@ values
     'foso-college-of-education',
     'Cafeteria Prefect',
     'cafeteria-prefect',
-    'Aryi & Zigah',
+    'Aryi & Emmanuella',
     'coordinators',
     'Coordinators',
     'Handles cafeteria coordination, student food-service concerns, and daily operating feedback.',
@@ -317,7 +317,7 @@ values
     'foso-college-of-education',
     'General Coordinators',
     'general-coordinators',
-    'Justice & Elijah',
+    'Justice & Emilia',
     'coordinators',
     'Coordinators',
     'Support broad student activity coordination and assist with general executive follow-through.',
@@ -357,23 +357,9 @@ values
   ),
   (
     'foso-college-of-education',
-    'Obiri Hall Presidents',
-    'obiri-hall-presidents',
-    'Bismark & Peter',
-    'hall-executives',
-    'Hall Executives',
-    'Lead hall-level welfare, representation, and support issues for students living in Obiri Hall.',
-    'Hall welfare, sanitation, and resident representation',
-    4.8,
-    121,
-    96,
-    20
-  ),
-  (
-    'foso-college-of-education',
     'Essah Hall Presidents',
     'essah-hall-presidents',
-    'Isaac & Prince',
+    'Prince & Ester',
     'hall-executives',
     'Hall Executives',
     'Represent student concerns in Essah Hall and coordinate resident welfare support.',
@@ -381,13 +367,13 @@ values
     4.5,
     83,
     90,
-    21
+    20
   ),
   (
     'foso-college-of-education',
     'Quayson Hall Presidents',
     'quayson-hall-presidents',
-    'Enock',
+    'Enock &',
     'hall-executives',
     'Hall Executives',
     'Support hall representation and help surface resident concerns in Quayson Hall.',
@@ -395,13 +381,13 @@ values
     4.5,
     83,
     90,
-    22
+    21
   ),
   (
     'foso-college-of-education',
     'Electoral Commissioner',
     'electoral-commissioner',
-    'Unknown',
+    'Samuel, Theophilus & Sarah',
     'other-executives',
     'Other Executives',
     'Handles student election processes and supports trust in electoral coordination.',
@@ -409,7 +395,7 @@ values
     4.1,
     52,
     82,
-    23
+    22
   ),
   (
     'foso-college-of-education',
@@ -423,7 +409,7 @@ values
     4.1,
     52,
     82,
-    24
+    23
   ),
   (
     'foso-college-of-education',
@@ -437,13 +423,13 @@ values
     4.1,
     52,
     82,
-    25
+    24
   ),
   (
     'foso-college-of-education',
     'Aboabo Hall Presidents',
     'aboabo-hall-presidents',
-    'Labic & Adomakoh',
+    'Labic & Juliana',
     'hall-executives',
     'Hall Executives',
     'Represent resident concerns in Aboabo Hall and coordinate welfare follow-up.',
@@ -451,7 +437,7 @@ values
     4.5,
     83,
     90,
-    26
+    25
   ),
   (
     'foso-college-of-education',
@@ -465,7 +451,7 @@ values
     4.4,
     76,
     88,
-    27
+    26
   ),
   (
     'foso-college-of-education',
@@ -479,7 +465,7 @@ values
     4.4,
     76,
     88,
-    28
+    27
   ),
   (
     'foso-college-of-education',
@@ -493,21 +479,21 @@ values
     4.4,
     76,
     88,
-    29
+    28
   ),
   (
     'foso-college-of-education',
-    'IT Officer',
-    'it-officer-ebenezer-takyi-danquah',
+    'Internal Auditor',
+    'internal-auditor-ebenezer-takyi-danquah',
     'Mr. Ebenezer Takyi-Danquah',
     'officer',
     'Officers',
-    'Supports campus technology operations and helps address ICT access and system issues that affect students and staff.',
-    'System reliability, access support, and issue resolution',
+    'Independently evaluates an organizational operations, internal controls, and risk management processes to ensure efficiency and compliance.',
+    'Objective insights and recommendations to help improve operations and mitigate risks',
     4.4,
     76,
     88,
-    30
+    39
   ),
   (
     'foso-college-of-education',
@@ -521,7 +507,7 @@ values
     4.4,
     76,
     88,
-    31
+    30
   ),
   (
     'foso-college-of-education',
@@ -535,7 +521,7 @@ values
     4.4,
     76,
     88,
-    32
+    31
   ),
   (
     'foso-college-of-education',
@@ -549,7 +535,7 @@ values
     4.4,
     76,
     88,
-    33
+    32
   ),
   (
     'foso-college-of-education',
@@ -563,7 +549,7 @@ values
     4.4,
     76,
     88,
-    34
+    33
   ),
   (
     'foso-college-of-education',
@@ -577,7 +563,7 @@ values
     4.4,
     76,
     88,
-    35
+    34
   ),
   (
     'foso-college-of-education',
@@ -591,13 +577,13 @@ values
     4.4,
     76,
     88,
-    36
+    35
   ),
   (
     'foso-college-of-education',
     'Sports Coordinators',
     'sports-coordinators',
-    'Williams & Bismark',
+    'Williams & Grace',
     'coordinators',
     'Coordinators',
     'Coordinate student sports activities, fixtures, and participation logistics across campus.',
@@ -605,7 +591,7 @@ values
     4.4,
     76,
     88,
-    37
+    36
   ),
   (
     'foso-college-of-education',
@@ -619,7 +605,7 @@ values
     4.4,
     76,
     88,
-    38
+    37
   ),
   (
     'foso-college-of-education',
@@ -633,7 +619,7 @@ values
     4.4,
     76,
     88,
-    39
+    38
   ),
   (
     'foso-college-of-education',
@@ -647,7 +633,7 @@ values
     4.4,
     76,
     88,
-    40
+    39
   ),
   (
     'foso-college-of-education',
@@ -661,7 +647,7 @@ values
     4.4,
     76,
     88,
-    41
+    40
   ),
   (
     'foso-college-of-education',
@@ -675,7 +661,7 @@ values
     4.4,
     76,
     88,
-    42
+    41
   ),
   (
     'foso-college-of-education',
@@ -689,7 +675,7 @@ values
     4.4,
     76,
     88,
-    43
+    42
   ),
   (
     'foso-college-of-education',
@@ -703,7 +689,7 @@ values
     4.4,
     76,
     88,
-    44
+    43
   ),
   (
     'foso-college-of-education',
@@ -717,7 +703,7 @@ values
     4.4,
     76,
     88,
-    45
+    44
   ),
   (
     'foso-college-of-education',
@@ -731,7 +717,7 @@ values
     4.4,
     76,
     88,
-    46
+    45
   ),
   (
     'foso-college-of-education',
@@ -745,7 +731,7 @@ values
     4.4,
     76,
     88,
-    47
+    46
   ),
   (
     'foso-college-of-education',
@@ -759,7 +745,7 @@ values
     4.4,
     76,
     88,
-    48
+    47
   ),
   (
     'foso-college-of-education',
@@ -773,7 +759,7 @@ values
     4.4,
     76,
     88,
-    49
+    48
   ),
   (
     'foso-college-of-education',
@@ -787,7 +773,7 @@ values
     4.4,
     76,
     88,
-    50
+    49
   ),
   (
     'foso-college-of-education',
@@ -801,7 +787,7 @@ values
     4.4,
     76,
     88,
-    51
+    50
   ),
   (
     'foso-college-of-education',
@@ -815,7 +801,7 @@ values
     4.4,
     76,
     88,
-    52
+    51
   ),
   (
     'foso-college-of-education',
@@ -829,7 +815,7 @@ values
     4.4,
     76,
     88,
-    53
+    52
   ),
   (
     'foso-college-of-education',
@@ -843,7 +829,7 @@ values
     4.4,
     76,
     88,
-    54
+    53
   ),
   (
     'foso-college-of-education',
@@ -857,7 +843,7 @@ values
     4.4,
     76,
     88,
-    55
+    54
   ),
   (
     'foso-college-of-education',
@@ -871,7 +857,7 @@ values
     4.4,
     76,
     88,
-    56
+    55
   ),
   (
     'foso-college-of-education',
@@ -885,7 +871,7 @@ values
     4.4,
     76,
     88,
-    57
+    56
   ),
   (
     'foso-college-of-education',
@@ -899,7 +885,7 @@ values
     4.4,
     76,
     88,
-    58
+    57
   ),
   (
     'foso-college-of-education',
@@ -913,7 +899,7 @@ values
     4.4,
     76,
     88,
-    59
+    58
   ),
   (
     'foso-college-of-education',
@@ -927,7 +913,7 @@ values
     4.4,
     76,
     88,
-    60
+    59
   ),
   (
     'foso-college-of-education',
@@ -941,7 +927,7 @@ values
     4.4,
     76,
     88,
-    61
+    60
   ),
   (
     'foso-college-of-education',
@@ -955,7 +941,7 @@ values
     4.4,
     76,
     88,
-    62
+    61
   ),
   (
     'foso-college-of-education',
@@ -969,7 +955,7 @@ values
     4.4,
     76,
     88,
-    63
+    62
   )
 on conflict (office_slug) do update
 set

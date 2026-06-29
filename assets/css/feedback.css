@@ -96,3 +96,43 @@ body.theme-dark .feedback-item-card .response-box {
     justify-content: center;
   }
 }
+
+/*feedback feed scroll horizontally */
+[data-feedback-feed] {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 1rem !important;
+    padding: 0.5rem 0.25rem 1rem 0.25rem !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+/*Style each feedback card */
+[data-feedback-feed] .feedback-item,
+[data-feedback-feed] > * {
+    flex: 0 0 320px !important; /* Fixed width for each card */
+    scroll-snap-align: start !important;
+    min-height: 180px !important;
+    max-width: 320px !important;
+}
+
+/*Custom scrollbar styling */
+[data-feedback-feed]::-webkit-scrollbar {
+    height: 8px;
+}
+
+[data-feedback-feed]::-webkit-scrollbar-track {
+    background: var(--bg-muted, #f1f1f1);
+    border-radius: 4px;
+}
+
+[data-feedback-feed]::-webkit-scrollbar-thumb {
+    background: var(--primary-color, #2c7da0);
+    border-radius: 4px;
+}
+
+[data-feedback-feed]::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark, #1a5a7a);
+}
