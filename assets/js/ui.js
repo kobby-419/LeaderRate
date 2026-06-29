@@ -110,6 +110,7 @@ function themeToggleIcon(theme) {
 }
 
 function applyTheme(theme) {
+  document.documentElement.classList.toggle("theme-dark", theme === "dark");
   document.body.classList.toggle("theme-dark", theme === "dark");
   localStorage.setItem("leaderrate-theme", theme);
   const themeToggle = document.querySelector("[data-theme-toggle]");

@@ -14,6 +14,16 @@
   <link rel="stylesheet" href="assets/css/dashboards.css">
 </head>
 <body class="dashboard-page moderation-page">
+  <script>
+    (() => {
+      try {
+        if (localStorage.getItem("leaderrate-theme") === "dark") {
+          document.documentElement.classList.add("theme-dark");
+          document.body.classList.add("theme-dark");
+        }
+      } catch {}
+    })();
+  </script>
   <header class="site-header">
     <div class="container nav-shell">
       <a class="brand" href="index.html">
