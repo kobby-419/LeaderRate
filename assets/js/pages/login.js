@@ -5,98 +5,102 @@ import { initPasswordVisibilityToggles } from "../password-toggle.js";
 import { showToast } from "../ui.js";
 
 function adminModeIsActive() {
-  return new URLSearchParams(window.location.search).get("mode") === "admin";
+    return new URLSearchParams(window.location.search).get("mode") === "admin";
 }
 
 function applyLoginMode(adminMode) {
-  const title = document.querySelector("[data-login-title]");
-  const copy = document.querySelector("[data-login-copy]");
-  const help = document.querySelector("[data-login-help]");
-  const banner = document.querySelector("[data-admin-login-banner]");
+    const title = document.querySelector("[data-login-title]");
+    const copy = document.querySelector("[data-login-copy]");
+    const help = document.querySelector("[data-login-help]");
+    const banner = document.querySelector("[data-admin-login-banner]");
 
-  if (!adminMode) {
-    banner?.classList.add("hidden");
-    if (title) {
-      title.textContent = "Login";
+    if (!adminMode) {
+        banner?.classList.add("hidden");
+        if (title) title.textContent = "Login";
+        if (copy) copy.textContent = "Use your codename and password to continue.";
+        if (help) help.textContent = "Enter your codename and password.";
+        return;
     }
-    if (copy) {
-    copy.textContent = "Use your codename and password to continue.";
-    }
-    if (help) {
-      help.textContent = "Enter your codename and password.";
-    }
-    return;
-  }
 
-  banner?.classList.remove("hidden");
-  if (title) {
-    title.textContent = "Private access";
-  }
-  if (copy) {
-    copy.textContent = "Use the private access codename and password.";
-  }
-  if (help) {
-    help.textContent = "Enter the private access codename and password.";
-  }
+    banner?.classList.remove("hidden");
+    if (title) title.textContent = "Private access";
+    if (copy) copy.textContent = "Use the private access codename and password.";
+    if (help) help.textContent = "Enter the private access codename and password.";
 }
 
 async function init() {
-  await bootstrapPage({ activeNav: "login" });
-  initPasswordVisibilityToggles();
-  let currentAdminMode = adminModeIsActive();
-  applyLoginMode(currentAdminMode);
-
-  window.addEventListener("leaderrate-admin-mode", () => {
-    currentAdminMode = true;
+    await bootstrapPage({ activeNav: "login" });
+    initPasswordVisibilityToggles();
+    let currentAdminMode = adminModeIsActive();
     applyLoginMode(currentAdminMode);
-  });
 
-  document.querySelector("[data-exit-admin-mode]")?.addEventListener("click", () => {
-    currentAdminMode = false;
-    window.history.replaceState({}, "", "login.html");
-    applyLoginMode(currentAdminMode);
-  });
+    window.addEventListener("leaderrate-admin-mode", () => {
+        currentAdminMode = true;
+        applyLoginMode(currentAdminMode);
+    });
 
-  const form = document.querySelector("[data-login-form]");
-  form?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const formData = new FormData(form);
-    const submitButton = form.querySelector('button[type="submit"]');
+    document.querySelector("[data-exit-admin-mode]")?.addEventListener("click", () => {
+        currentAdminMode = false;
+        window.history.replaceState({}, "", "login.html");
+        applyLoginMode(currentAdminMode);
+    });
 
-    try {
-      if (submitButton) {
-        submitButton.disabled = true;
-        submitButton.textContent = "Logging in...";
-      }
+    const form = document.querySelector("[data-login-form]");
+    form?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const submitButton = form.querySelector('button[type="submit"]');
 
-      await loginWithCodename({
-        codename: formData.get("codename"),
-        password: formData.get("password"),
-        adminMode: currentAdminMode,
-      });
+        try {
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = "Logging in...";
+            }
 
-      const profile = await getCurrentProfile();
-      await logAbuseEvent("login_success", {
-        mode: currentAdminMode ? "admin" : "shared",
-      });
+            await loginWithCodename({
+                codename: formData.get("codename"),
+                password: formData.get("password"),
+                adminMode: currentAdminMode,
+            });
 
-      showToast("Login successful.", "success");
-      setTimeout(() => {
-        window.location.href = profile.role === "admin" ? "admin-dashboard.html" : "dashboard.html";
-      }, 500);
-    } catch (error) {
-      await logAbuseEvent("login_failure", {
-        mode: currentAdminMode ? "admin" : "shared",
-        reason: error.message,
-      });
-      showToast(error.message, "error");
-    } finally {
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.textContent = "Login";
-      }
-    }
-  });
+            const profile = await getCurrentProfile();
+            await logAbuseEvent("login_success", {
+                mode: currentAdminMode ? "admin" : "shared",
+            });
+
+            showToast("Login successful.", "success");
+            
+            // Redirect logic with SRC check
+            setTimeout(() => {
+                // Check if user is an SRC member (Core Seven)
+                if (profile.is_src_member) {
+                    window.location.href = "src-dashboard.html";
+                    return;
+                }
+                
+                // Check for admin
+                if (profile.role === "admin") {
+                    window.location.href = "admin-dashboard.html";
+                    return;
+                }
+                
+                // Default to dashboard for students and regular leaders
+                window.location.href = "dashboard.html";
+            }, 500);
+            
+        } catch (error) {
+            await logAbuseEvent("login_failure", {
+                mode: currentAdminMode ? "admin" : "shared",
+                reason: error.message,
+            });
+            showToast(error.message, "error");
+        } finally {
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = "Login";
+            }
+        }
+    });
 }
 
 init();

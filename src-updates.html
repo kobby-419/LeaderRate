@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRC Updates | LeaderRate</title>
+    <meta name="description" content="View and post Core Seven SRC updates.">
+    <meta name="robots" content="noindex,nofollow,noarchive">
+    <meta name="theme-color" content="#1a5a7a">
+    <link rel="icon" type="image/png" href="assets/images/leaderrate-logo-transparent.png">
+    <link rel="shortcut icon" href="assets/images/leaderrate-logo-transparent.png">
+    <link rel="apple-touch-icon" href="assets/images/leaderrate-logo-transparent.png">
+    <link rel="stylesheet" href="assets/css/shared.css">
+    <link rel="stylesheet" href="assets/css/src-common.css">
+</head>
+<body class="src-dashboard-page">
+    <header class="site-header">
+        <div class="container nav-shell">
+            <a class="brand" href="index.html">
+                <span class="brand-mark">LR</span>
+                <span class="brand-copy">
+                    <span data-app-name>LeaderRate</span>
+                    <small>SRC Updates</small>
+                    <span class="src-badge">⭐ Core Seven</span>
+                </span>
+            </a>
+            <nav class="nav-links" data-nav-links>
+                <a href="index.html" data-nav="home">Home</a>
+                <a href="src-dashboard.html" data-nav="src-dashboard">Dashboard</a>
+                <a href="src-feedback.html" data-nav="src-feedback">Feedback</a>
+                <a href="src-updates.html" data-nav="src-updates" class="active">Updates</a>
+                <a href="leaders.html" data-nav="leaders">Browse Offices</a>
+                <a href="about.html" data-nav="about">About</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="theme-toggle" type="button" data-theme-toggle>Theme</button>
+                <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
+                <div data-auth-slot></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="shell-main">
+        <div class="container">
+            <div data-config-banner></div>
+
+            <section class="hero">
+                <div class="eyebrow">SRC Updates</div>
+                <h1>View and post Core Seven updates</h1>
+                <p>
+                    <span data-src-name>Loading...</span>
+                    <span style="color: var(--text-muted);">|</span>
+                    <span data-src-position>Loading...</span>
+                </p>
+            </section>
+
+            <!-- Identity Toggle -->
+            <section class="identity-toggle-container">
+                <span class="identity-toggle-label">Post as:</span>
+                <label class="identity-toggle">
+                    <input type="checkbox" id="identityToggle" data-identity-toggle>
+                    <span class="toggle-track">
+                        <span class="toggle-thumb"></span>
+                    </span>
+                </label>
+                <span class="identity-status real" data-identity-status>Official SRC</span>
+            </section>
+
+            <!-- Create Update -->
+            <section class="section card">
+                <div class="section-heading">
+                    <div>
+                        <div class="eyebrow">Create</div>
+                        <h2>Post a New Update</h2>
+                    </div>
+                </div>
+                <form data-update-form>
+                    <div class="field">
+                        <label for="updateTitle">Title</label>
+                        <input class="input" id="updateTitle" name="title" placeholder="What's the update about?" required>
+                    </div>
+                    <div class="field">
+                        <label for="updateContent">Content</label>
+                        <textarea class="textarea" id="updateContent" name="content" rows="4" placeholder="Describe the update in detail..." required></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="isOfficial" checked>
+                            Post as official SRC update
+                        </label>
+                        <small class="muted">Official updates appear with the Core Seven badge.</small>
+                    </div>
+                    <div class="button-row">
+                        <button class="btn btn-primary" type="submit">Post Update</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Updates Feed -->
+            <section class="section">
+                <div class="section-heading">
+                    <div>
+                        <div class="eyebrow">Feed</div>
+                        <h2>Updates from Core Seven Executives</h2>
+                    </div>
+                </div>
+                <div class="stack" data-updates-feed></div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-shell">
+            <div class="muted">Core Seven updates are visible to all students and other executives.</div>
+            <div class="muted">&copy; <span data-year></span> LeaderRate</div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    <script type="module" src="assets/js/pages/src-updates.js"></script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRC Dashboard | LeaderRate</title>
+    <meta name="description" content="Core Seven SRC member dashboard.">
+    <meta name="robots" content="noindex,nofollow,noarchive">
+    <meta name="theme-color" content="#1a5a7a">
+    <link rel="icon" type="image/png" href="assets/images/leaderrate-logo-transparent.png">
+    <link rel="shortcut icon" href="assets/images/leaderrate-logo-transparent.png">
+    <link rel="apple-touch-icon" href="assets/images/leaderrate-logo-transparent.png">
+    <link rel="stylesheet" href="assets/css/shared.css">
+    <link rel="stylesheet" href="assets/css/src-common.css">
+</head>
+<body class="src-dashboard-page">
+    <header class="site-header">
+        <div class="container nav-shell">
+            <a class="brand" href="index.html">
+                <span class="brand-mark">LR</span>
+                <span class="brand-copy">
+                    <span data-app-name>LeaderRate</span>
+                    <small>SRC Dashboard</small>
+                    <span class="src-badge">⭐ Core Seven</span>
+                </span>
+            </a>
+            <nav class="nav-links" data-nav-links>
+                <a href="index.html" data-nav="home">Home</a>
+                <a href="src-dashboard.html" data-nav="src-dashboard" class="active">Dashboard</a>
+                <a href="src-feedback.html" data-nav="src-feedback">Feedback</a>
+                <a href="src-updates.html" data-nav="src-updates">Updates</a>
+                <a href="leaders.html" data-nav="leaders">Browse Offices</a>
+                <a href="about.html" data-nav="about">About</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="theme-toggle" type="button" data-theme-toggle>Theme</button>
+                <button class="mobile-toggle" type="button" data-mobile-toggle>Menu</button>
+                <div data-auth-slot></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="shell-main">
+        <div class="container">
+            <div data-config-banner></div>
+
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="eyebrow">Core Seven SRC</div>
+                <h1>Welcome, <span data-src-name>Loading...</span></h1>
+                <p>
+                    <span data-src-position>Loading...</span> 
+                    <span style="color: var(--text-muted);">|</span> 
+                    <span data-assigned-office>Loading office...</span>
+                </p>
+            </section>
+
+            <!-- Identity Toggle -->
+            <section class="identity-toggle-container">
+                <span class="identity-toggle-label">Active Identity:</span>
+                <label class="identity-toggle">
+                    <input type="checkbox" id="identityToggle" data-identity-toggle>
+                    <span class="toggle-track">
+                        <span class="toggle-thumb"></span>
+                    </span>
+                </label>
+                <span class="identity-status real" data-identity-status>Real Identity</span>
+                <span style="margin-left: auto; font-size: 0.85rem; color: var(--text-muted);">
+                    <span data-real-name>Loading...</span>
+                    <span style="margin: 0 8px;">|</span>
+                    <span data-anonymous-name>Loading...</span>
+                </span>
+            </section>
+
+            <!-- Stats Grid -->
+            <section class="src-stats-grid">
+                <article class="src-stat-card">
+                    <div class="stat-number" data-stats-office-feedback>0</div>
+                    <div class="stat-label">Office Feedback</div>
+                </article>
+                <article class="src-stat-card">
+                    <div class="stat-number" data-stats-general-feedback>0</div>
+                    <div class="stat-label">General Feedback</div>
+                </article>
+                <article class="src-stat-card">
+                    <div class="stat-number" data-stats-pending>0</div>
+                    <div class="stat-label">Pending Responses</div>
+                </article>
+                <article class="src-stat-card">
+                    <div class="stat-number" data-stats-updates>0</div>
+                    <div class="stat-label">Total Updates</div>
+                </article>
+                <article class="src-stat-card">
+                    <div class="stat-number" data-stats-responses>0</div>
+                    <div class="stat-label">Responses Given</div>
+                </article>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="section">
+                <div class="section-heading">
+                    <div>
+                        <div class="eyebrow">Quick Actions</div>
+                        <h2>What would you like to do?</h2>
+                    </div>
+                </div>
+                <div class="grid three">
+                    <a href="src-feedback.html" class="action-card">
+                        <div style="font-size:2rem; margin-bottom:0.5rem;">📝</div>
+                        <h3>Manage Feedback</h3>
+                        <p>View and respond to office-specific and general feedback.</p>
+                    </a>
+                    <a href="src-updates.html" class="action-card">
+                        <div style="font-size:2rem; margin-bottom:0.5rem;">📢</div>
+                        <h3>Post Updates</h3>
+                        <p>Share official SRC announcements and view other executives' updates.</p>
+                    </a>
+                    <a href="leaders.html" class="action-card">
+                        <div style="font-size:2rem; margin-bottom:0.5rem;">👥</div>
+                        <h3>Browse Offices</h3>
+                        <p>View office profiles, feedback, and public responses.</p>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Recent Activity -->
+            <section class="section recent-activity-grid">
+                <article class="src-card">
+                    <div class="section-heading">
+                        <div>
+                            <div class="eyebrow">Recent</div>
+                            <h2>🏢 Office-Specific Feedback</h2>
+                        </div>
+                        <a class="btn btn-ghost" href="src-feedback.html">View all</a>
+                    </div>
+                    <div class="stack" data-recent-office-feedback></div>
+                </article>
+
+                <article class="src-card">
+                    <div class="section-heading">
+                        <div>
+                            <div class="eyebrow">Recent</div>
+                            <h2>📢 General Feedback</h2>
+                        </div>
+                        <a class="btn btn-ghost" href="src-feedback.html">View all</a>
+                    </div>
+                    <div class="stack" data-recent-general-feedback></div>
+                </article>
+            </section>
+
+            <!-- Recent Updates -->
+            <section class="section">
+                <article class="src-card">
+                    <div class="section-heading">
+                        <div>
+                            <div class="eyebrow">Recent</div>
+                            <h2>📢 Core Seven Updates</h2>
+                        </div>
+                        <a class="btn btn-ghost" href="src-updates.html">View all</a>
+                    </div>
+                    <div class="stack" data-recent-updates></div>
+                </article>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-shell">
+            <div class="muted">Core Seven SRC members can toggle between real and anonymous identities.</div>
+            <div class="muted">&copy; <span data-year></span> LeaderRate</div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    <script type="module" src="assets/js/pages/src-dashboard.js"></script>
+</body>
+</html>
