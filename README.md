@@ -32,6 +32,7 @@ leaderrate/
 |   `-- js/
 |-- supabase/
 |   |-- schema.sql
+|   |-- admin-seed.sql
 |   |-- demo-seed.sql
 |   |-- launch-reset.sql
 |   |-- profile-rls-hotfix.sql
@@ -59,8 +60,9 @@ leaderrate/
 3. Copy [assets/js/config.example.js](d:\Projects\leaderrate\assets\js\config.example.js) into `assets/js/config.js`.
 4. Add your Supabase URL and anon key.
 5. Run [supabase/schema.sql](d:\Projects\leaderrate\supabase\schema.sql) in the Supabase SQL editor.
-6. Run [supabase/demo-seed.sql](d:\Projects\leaderrate\supabase\demo-seed.sql).
-7. Deploy the `log-abuse` and `create-leader-account` edge functions if you want the full admin flow.
+6. Run [supabase/admin-seed.sql](d:\Projects\leaderrate\supabase\admin-seed.sql) to create the admin login.
+7. Run [supabase/demo-seed.sql](d:\Projects\leaderrate\supabase\demo-seed.sql) if you want the demo offices and sample feedback.
+8. Deploy the `log-abuse` and `create-leader-account` edge functions if you want the full admin flow.
 
 If an older database starts throwing profile-policy recursion errors, run [supabase/profile-rls-hotfix.sql](d:\Projects\leaderrate\supabase\profile-rls-hotfix.sql) as a targeted fix.
 
@@ -80,12 +82,13 @@ http://localhost:5500/index.html
 
 ## Demo Accounts
 
-Admin:
+Admin, from [supabase/admin-seed.sql](d:\Projects\leaderrate\supabase\admin-seed.sql):
 
 - codename: `campus_admin`
 - password: `AdminDemo!2026`
 
-This is the only seeded login account.
+This is the only seeded login account, and the password is a demo default — change it in
+`admin-seed.sql` before running this anywhere public.
 Students register from the public UI. Office-linked accounts are not seeded.
 
 ## Notes
