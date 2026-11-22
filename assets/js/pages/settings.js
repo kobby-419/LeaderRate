@@ -1,8 +1,9 @@
-import { bootstrapPage } from "../app.js";
-import { logout } from "../auth.js";
+import { accountKindLabel, bootstrapPage } from "../app.js";
+import { logout, validatePassword } from "../auth.js";
 import {
   getAdminOverview,
-  getLeaderDashboard,
+  getLeaderContext,
+  getSrcWorkspace,
   getStudentDashboard,
 } from "../data.js";
 import { formatDate, renderStackState, showToast } from "../ui.js";
@@ -13,6 +14,10 @@ const SETTINGS_STORAGE_KEY = "leaderrate-settings";
 function dashboardRoute(role) {
   if (role === "admin") {
     return "admin-dashboard.html";
+  }
+
+  if (role === "leader") {
+    return "src-dashboard.html";
   }
 
   return "dashboard.html";
@@ -57,19 +62,19 @@ function renderStats(profile, stats) {
   if (profile.role === "leader") {
     slot.innerHTML = `
       <article class="settings-stat">
-        <strong>${stats.feedback.length}</strong>
-        <span>Feedback items</span>
+        <strong>${stats.officeFeedback.length}</strong>
+        <span>Office feedback</span>
       </article>
       <article class="settings-stat">
-        <strong>${stats.feedback.filter((item) => item.moderation_status !== "rejected").length}</strong>
-        <span>Visible feedback</span>
+        <strong>${stats.pendingCount}</strong>
+        <span>Awaiting a reply</span>
       </article>
       <article class="settings-stat">
         <strong>${stats.projects.length}</strong>
-        <span>Projects posted</span>
+        <span>Updates posted</span>
       </article>
       <article class="settings-stat">
-        <strong>${stats.responses.length}</strong>
+        <strong>${stats.myResponses.length}</strong>
         <span>Responses posted</span>
       </article>
     `;
@@ -106,7 +111,13 @@ async function loadContributionStats(profile) {
   }
 
   if (profile.role === "leader") {
-    renderStats(profile, await getLeaderDashboard(profile));
+    const context = await getLeaderContext(profile);
+    if (!context) {
+      renderStackState(slot, "This leader account is not linked to an office yet.");
+      return;
+    }
+
+    renderStats(profile, await getSrcWorkspace(context));
     return;
   }
 
@@ -134,20 +145,45 @@ function wirePreferenceToggles() {
   });
 }
 
-async function changePassword() {
-  const newPassword = window.prompt("Enter a new password.");
+/*
+ * Changes the password of whichever account is signed in right now. A leader
+ * holds two accounts, so this deliberately says which one is about to change:
+ * running it from the office account and expecting the anonymous one to change
+ * would be an easy and silent mistake.
+ */
+async function changePassword(profile) {
+  const newPassword = window.prompt(
+    `Enter a new password for ${profile.codename} (${accountKindLabel(profile.role)}).`
+  );
   if (!newPassword) {
-    return;
+    return false;
+  }
+
+  const errors = validatePassword(newPassword);
+  if (errors.length) {
+    throw new Error(errors[0]);
+  }
+
+  /*
+   * Typos are unrecoverable here: there is no email on these accounts, so a
+   * mistyped password can only be undone by an admin re-running the seed.
+   */
+  const confirmation = window.prompt("Type the new password once more to confirm.");
+  if (confirmation === null) {
+    return false;
+  }
+
+  if (confirmation !== newPassword) {
+    throw new Error("Those passwords do not match. Nothing was changed.");
   }
 
   const supabase = requireSupabaseClient();
-  const { error } = await supabase.auth.updateUser({
-    password: newPassword,
-  });
-
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
   if (error) {
     throw error;
   }
+
+  return true;
 }
 
 async function deleteAccountDemo() {
@@ -171,9 +207,9 @@ async function init() {
 
   try {
     document.querySelector("[data-settings-codename]").textContent = profile.codename;
-    document.querySelector("[data-settings-role]").textContent = profile.role === "admin"
-      ? "Private workspace"
-      : "Anonymous account";
+    const accountKind = accountKindLabel(profile.role);
+    document.querySelector("[data-settings-role]").textContent =
+      accountKind.charAt(0).toUpperCase() + accountKind.slice(1);
     document.querySelector("[data-settings-institution]").textContent = "Foso College of Education";
     document.querySelector("[data-settings-created]").textContent = profile.created_at ? formatDate(profile.created_at) : "Recently created";
 
@@ -187,8 +223,9 @@ async function init() {
 
     document.querySelector("[data-change-password]")?.addEventListener("click", async () => {
       try {
-        await changePassword();
-        showToast("Password updated.", "success");
+        if (await changePassword(profile)) {
+          showToast(`Password updated for ${profile.codename}.`, "success");
+        }
       } catch (error) {
         showToast(error.message, "error");
       }

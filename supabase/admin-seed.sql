@@ -35,6 +35,7 @@ with existing_admin as (
 ),
 inserted_admin as (
   insert into auth.users (
+    instance_id,
     id,
     aud,
     role,
@@ -47,6 +48,7 @@ inserted_admin as (
     updated_at
   )
   select
+    '00000000-0000-0000-0000-000000000000'::uuid,
     'be05ff10-c87d-451e-bafb-8729ec53d091'::uuid,
     'authenticated',
     'authenticated',
@@ -82,3 +84,108 @@ set
   codename = excluded.codename,
   role = excluded.role,
   updated_at = timezone('utc', now());
+
+/*
+ * Every password login needs a matching auth.identities row.
+ *
+ * GoTrue resolves an email sign-in through identities, not through auth.users,
+ * so an account created only by the insert above exists but can never sign in:
+ * it returns "Invalid login credentials" even though the row, the password
+ * hash, and the profile are all correct. An admin created in the Supabase
+ * dashboard first will already have one and never hit this, which is exactly
+ * what makes the gap easy to miss.
+ */
+do $$
+declare
+  admin_email constant text := 'campus_admin@admin.foso-college-of-education.leaderrate.local';
+  admin_id uuid;
+  token_column text;
+begin
+  select id into admin_id from auth.users where email = admin_email;
+  if admin_id is null then
+    return;
+  end if;
+
+  /*
+   * GoTrue filters its user lookup on instance_id, so a null one is never
+   * found, and it scans the token columns into plain Go strings, so a null one
+   * aborts the query before any password check. Either way the sign-in fails
+   * with "Invalid login credentials" and nothing about the row looks wrong.
+   */
+  update auth.users
+  set instance_id = coalesce(instance_id, '00000000-0000-0000-0000-000000000000'::uuid)
+  where id = admin_id;
+
+  foreach token_column in array array[
+    'confirmation_token',
+    'recovery_token',
+    'email_change',
+    'email_change_token_new',
+    'email_change_token_current',
+    'phone_change',
+    'phone_change_token',
+    'reauthentication_token'
+  ]
+  loop
+    if exists (
+      select 1 from information_schema.columns
+      where table_schema = 'auth'
+        and table_name = 'users'
+        and column_name = token_column
+    ) then
+      execute format(
+        'update auth.users set %I = %L where id = %L and %I is null',
+        token_column, '', admin_id, token_column
+      );
+    end if;
+  end loop;
+
+  if exists (
+    select 1 from information_schema.columns
+    where table_schema = 'auth'
+      and table_name = 'identities'
+      and column_name = 'provider_id'
+  ) then
+    insert into auth.identities (
+      id, provider_id, user_id, identity_data, provider,
+      last_sign_in_at, created_at, updated_at
+    )
+    values (
+      gen_random_uuid(),
+      admin_id::text,
+      admin_id,
+      jsonb_build_object(
+        'sub', admin_id::text,
+        'email', admin_email,
+        'email_verified', true,
+        'phone_verified', false
+      ),
+      'email',
+      timezone('utc', now()),
+      timezone('utc', now()),
+      timezone('utc', now())
+    )
+    on conflict do nothing;
+  else
+    /* Older GoTrue: identities.id is the provider id and is a text column. */
+    insert into auth.identities (
+      id, user_id, identity_data, provider,
+      last_sign_in_at, created_at, updated_at
+    )
+    values (
+      admin_id::text,
+      admin_id,
+      jsonb_build_object(
+        'sub', admin_id::text,
+        'email', admin_email,
+        'email_verified', true,
+        'phone_verified', false
+      ),
+      'email',
+      timezone('utc', now()),
+      timezone('utc', now()),
+      timezone('utc', now())
+    )
+    on conflict do nothing;
+  end if;
+end $$;

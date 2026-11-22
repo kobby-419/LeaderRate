@@ -173,7 +173,11 @@ export async function submitFeedback(payload, profile) {
   const supabase = requireSupabaseClient();
   const insertPayload = {
     institution_slug: profile.institution_slug,
-    leader_id: payload.leader_id,
+    /*
+     * A null office means the student is addressing the whole SRC rather than
+     * one leader. The Core Seven dashboard reads those as general feedback.
+     */
+    leader_id: payload.leader_id || null,
     student_profile_id: profile.id,
     student_codename_snapshot: profile.codename,
     category: payload.category,
@@ -296,32 +300,103 @@ export async function getDashboardData(profile) {
   };
 }
 
-export async function getLeaderDashboard(profile) {
+/*
+ * Everything the SRC pages need to know about who is signed in: which office
+ * they run, and whether that office sits in the Seven Core. Returns null when
+ * the profile has no linked office, so callers can say so plainly instead of
+ * failing with a database error.
+ */
+export async function getLeaderContext(profile) {
   const supabase = requireSupabaseClient();
-  const { data: account, error: accountError } = await supabase
+  const { data: account, error } = await supabase
     .from("leader_accounts")
-    .select("leader_id, leaders(*)")
+    .select("leader_id, login_codename, leaders(*)")
     .eq("profile_id", profile.id)
-    .single();
+    .maybeSingle();
 
-  if (accountError) throw accountError;
+  if (error) throw error;
+  if (!account?.leaders) {
+    return null;
+  }
 
-  const [feedbackResult, responsesResult, projectsResult] = await Promise.all([
-    supabase.from("feedback").select("*").eq("leader_id", account.leader_id).order("created_at", { ascending: false }),
-    supabase.from("leader_responses").select("*").eq("leader_id", account.leader_id),
-    supabase.from("projects").select("*").eq("leader_id", account.leader_id).order("created_at", { ascending: false }),
+  return {
+    leaderId: account.leader_id,
+    loginCodename: account.login_codename,
+    leader: account.leaders,
+    isSevenCore: account.leaders.department_slug === "seven-core",
+  };
+}
+
+/*
+ * One round trip behind both the SRC dashboard and the SRC feedback page. The
+ * two pages show the same underlying material at different levels of detail,
+ * so they share a loader rather than drifting apart.
+ */
+export async function getSrcWorkspace(context) {
+  const supabase = requireSupabaseClient();
+  const [officeFeedbackResult, generalFeedbackResult, responsesResult, projectsResult] = await Promise.all([
+    supabase
+      .from("feedback")
+      .select("*, leaders(office_title, display_name)")
+      .eq("leader_id", context.leaderId)
+      .order("created_at", { ascending: false }),
+    /*
+     * General feedback is addressed to the SRC as a body, so only Core Seven
+     * members are asked to work through it.
+     */
+    context.isSevenCore
+      ? supabase
+          .from("feedback")
+          .select("*")
+          .is("leader_id", null)
+          .order("created_at", { ascending: false })
+      : Promise.resolve({ data: [], error: null }),
+    supabase.from("leader_responses").select("*"),
+    supabase
+      .from("projects")
+      .select("*")
+      .eq("leader_id", context.leaderId)
+      .order("created_at", { ascending: false }),
   ]);
 
-  if (feedbackResult.error) throw feedbackResult.error;
+  if (officeFeedbackResult.error) throw officeFeedbackResult.error;
+  if (generalFeedbackResult.error) throw generalFeedbackResult.error;
   if (responsesResult.error) throw responsesResult.error;
   if (projectsResult.error) throw projectsResult.error;
 
+  const responses = responsesResult.data || [];
+  const responsesByFeedbackId = new Map(responses.map((item) => [item.feedback_id, item]));
+  const withResponse = (items) => items
+    .filter((item) => item.moderation_status !== "rejected")
+    .map((item) => ({ ...item, response: responsesByFeedbackId.get(item.id) || null }));
+
+  const officeFeedback = withResponse(officeFeedbackResult.data || []);
+  const generalFeedback = withResponse(generalFeedbackResult.data || []);
+
   return {
-    leaderAccount: account,
-    feedback: (feedbackResult.data || []).filter((item) => item.moderation_status !== "rejected"),
-    responses: responsesResult.data || [],
+    officeFeedback,
+    generalFeedback,
     projects: projectsResult.data || [],
+    myResponses: responses.filter((item) => item.leader_id === context.leaderId),
+    pendingCount: [...officeFeedback, ...generalFeedback].filter((item) => !item.response).length,
   };
+}
+
+/*
+ * The shared Core Seven updates feed. Every executive sees the same list so
+ * announcements stay coordinated, and each card shows which office posted it.
+ */
+export async function getSevenCoreUpdates(limit = 30) {
+  const supabase = requireSupabaseClient();
+  const { data, error } = await supabase
+    .from("projects")
+    .select("*, leaders!inner(office_title, display_name, department_slug)")
+    .eq("leaders.department_slug", "seven-core")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) throw error;
+  return data || [];
 }
 
 export async function saveLeaderResponse(payload) {

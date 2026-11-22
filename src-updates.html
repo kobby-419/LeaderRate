@@ -64,6 +64,11 @@
                     </span>
                 </label>
                 <span class="identity-status real" data-identity-status>Official SRC</span>
+                <span style="margin-left: auto; font-size: 0.85rem; color: var(--text-muted);">
+                    <span data-real-name>Loading...</span>
+                    <span style="margin: 0 8px;">|</span>
+                    <span data-anonymous-name>office name only</span>
+                </span>
             </section>
 
             <!-- Create Update -->
@@ -84,14 +89,19 @@
                         <textarea class="textarea" id="updateContent" name="content" rows="4" placeholder="Describe the update in detail..." required></textarea>
                     </div>
                     <div class="field">
+                        <label for="updateStatus">Status</label>
+                        <select class="input" id="updateStatus" name="status" data-update-status></select>
+                    </div>
+                    <div class="field">
                         <label class="checkbox-label">
                             <input type="checkbox" name="isOfficial" checked>
                             Post as official SRC update
                         </label>
-                        <small class="muted">Official updates appear with the Core Seven badge.</small>
+                        <small class="muted" data-official-note>Official updates appear with the Core Seven badge.</small>
                     </div>
                     <div class="button-row">
-                        <button class="btn btn-primary" type="submit">Post Update</button>
+                        <button class="btn btn-primary" type="submit" data-update-submit>Post Update</button>
+                        <button class="btn btn-ghost hidden" type="button" data-update-cancel>Cancel edit</button>
                     </div>
                 </form>
             </section>

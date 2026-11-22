@@ -55,21 +55,36 @@
                 </p>
             </section>
 
-            <!-- Identity Toggle -->
-            <section class="identity-toggle-container">
-                <span class="identity-toggle-label">Active Identity:</span>
-                <label class="identity-toggle">
-                    <input type="checkbox" id="identityToggle" data-identity-toggle>
-                    <span class="toggle-track">
-                        <span class="toggle-thumb"></span>
-                    </span>
-                </label>
-                <span class="identity-status real" data-identity-status>Real Identity</span>
-                <span style="margin-left: auto; font-size: 0.85rem; color: var(--text-muted);">
-                    <span data-real-name>Loading...</span>
-                    <span style="margin: 0 8px;">|</span>
-                    <span data-anonymous-name>Loading...</span>
-                </span>
+            <!-- Your two accounts -->
+            <section class="section">
+                <div class="section-heading">
+                    <div>
+                        <div class="eyebrow">Your accounts</div>
+                        <h2>Office account and anonymous account</h2>
+                    </div>
+                </div>
+                <p class="muted account-switch-intro">
+                    Your office account answers feedback publicly on behalf of your office.
+                    To rate or comment on <strong>other</strong> offices, switch to your
+                    anonymous account &mdash; nothing connects the two, so what you post
+                    there cannot be traced back to your office.
+                </p>
+                <div class="account-switch-panel">
+                    <article class="account-switch-card is-active">
+                        <div class="account-switch-kind">Office account</div>
+                        <strong data-office-account-name>&mdash;</strong>
+                        <span class="account-switch-detail" data-office-account-office>&mdash;</span>
+                        <span class="account-switch-state">In use now</span>
+                    </article>
+                    <article class="account-switch-card" data-anon-card>
+                        <div class="account-switch-kind">Anonymous account</div>
+                        <strong data-anon-account-name>Not signed in on this device</strong>
+                        <span class="account-switch-detail" data-anon-account-detail>
+                            Sign in once with your anonymous codename and it becomes a one-click switch.
+                        </span>
+                        <div data-anon-action></div>
+                    </article>
+                </div>
             </section>
 
             <!-- Stats Grid -->

@@ -8,6 +8,30 @@ function adminModeIsActive() {
     return new URLSearchParams(window.location.search).get("mode") === "admin";
 }
 
+/*
+ * Reached from the account menu when someone wants to sign in to their second
+ * account. Signing in replaces the current session but leaves its stored slot
+ * behind, which is what makes the one-click switch available afterwards.
+ */
+function switchModeIsActive() {
+    return new URLSearchParams(window.location.search).get("switch") === "1";
+}
+
+function applySwitchMode() {
+    if (!switchModeIsActive()) {
+        return;
+    }
+
+    const title = document.querySelector("[data-login-title]");
+    const copy = document.querySelector("[data-login-copy]");
+
+    if (title) title.textContent = "Your other account";
+    if (copy) {
+        copy.textContent =
+            "Sign in with your other codename. The account you are already using stays available, and you can switch between them from the account menu.";
+    }
+}
+
 function applyLoginMode(adminMode) {
     const title = document.querySelector("[data-login-title]");
     const copy = document.querySelector("[data-login-copy]");
@@ -33,6 +57,7 @@ async function init() {
     initPasswordVisibilityToggles();
     let currentAdminMode = adminModeIsActive();
     applyLoginMode(currentAdminMode);
+    applySwitchMode();
 
     window.addEventListener("leaderrate-admin-mode", () => {
         currentAdminMode = true;
@@ -69,25 +94,26 @@ async function init() {
             });
 
             showToast("Login successful.", "success");
-            
-            // Redirect logic with SRC check
+
+            /*
+             * Leaders get the SRC workspace, admins the private workspace, and
+             * everyone else the student dashboard. Membership of the Seven Core
+             * is decided inside that workspace from the office record, not here.
+             */
             setTimeout(() => {
-                // Check if user is an SRC member (Core Seven)
-                if (profile.is_src_member) {
-                    window.location.href = "src-dashboard.html";
-                    return;
-                }
-                
-                // Check for admin
                 if (profile.role === "admin") {
                     window.location.href = "admin-dashboard.html";
                     return;
                 }
-                
-                // Default to dashboard for students and regular leaders
+
+                if (profile.role === "leader") {
+                    window.location.href = "src-dashboard.html";
+                    return;
+                }
+
                 window.location.href = "dashboard.html";
             }, 500);
-            
+
         } catch (error) {
             await logAbuseEvent("login_failure", {
                 mode: currentAdminMode ? "admin" : "shared",

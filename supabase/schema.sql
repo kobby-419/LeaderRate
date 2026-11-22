@@ -2,6 +2,13 @@
 -- This schema keeps the app focused on one institution for the demo, but it
 -- still includes an institution table and role-aware relationships so the
 -- design can grow later without a full rewrite.
+--
+-- Safe to re-run. Tables use "if not exists", functions use "create or
+-- replace", and triggers and policies are dropped first. Postgres has no
+-- "create policy if not exists", so each policy needs its own drop line:
+-- without it a re-run aborts on the first existing policy, and because the
+-- SQL editor runs the whole file in one transaction, the rollback takes the
+-- not-yet-created tables with it.
 
 create extension if not exists pgcrypto;
 
@@ -63,7 +70,12 @@ comment on table public.leader_accounts is 'Links a private leader login codenam
 create table if not exists public.feedback (
   id uuid primary key default gen_random_uuid(),
   institution_slug text not null references public.institutions(slug) on delete restrict,
-  leader_id uuid not null references public.leaders(id) on delete cascade,
+  /*
+   * leader_id is nullable on purpose. A null office means the feedback is
+   * addressed to the SRC as a whole ("general feedback") rather than to one
+   * office, which is what the Core Seven dashboard shows in its second column.
+   */
+  leader_id uuid references public.leaders(id) on delete cascade,
   student_profile_id uuid references public.profiles(id) on delete set null,
   student_codename_snapshot text not null,
   category text not null check (
@@ -111,6 +123,85 @@ create table if not exists public.projects (
   created_at timestamptz not null default timezone('utc', now()),
   updated_at timestamptz not null default timezone('utc', now())
 );
+
+/*
+ * Columns added after the first release. "create table if not exists" above is
+ * a no-op on an existing database, so every later change needs its own alter.
+ */
+alter table if exists public.feedback alter column leader_id drop not null;
+alter table if exists public.leader_responses add column if not exists author_display_name text;
+alter table if exists public.projects add column if not exists is_official boolean not null default false;
+alter table if exists public.projects add column if not exists author_display_name text;
+
+comment on column public.feedback.leader_id is 'Null means the feedback is addressed to the whole SRC rather than one office.';
+comment on column public.leader_responses.author_display_name is 'Set when a leader answers under their real name instead of their codename.';
+comment on column public.projects.is_official is 'True when the update is published as an official Core Seven announcement.';
+comment on column public.projects.author_display_name is 'Set when a leader publishes an update under their real name rather than the office name alone.';
+
+/*
+ * Foreign keys back to public.leaders, repaired rather than assumed.
+ *
+ * PostgREST resolves embeds like feedback.select("*, leaders(office_title)")
+ * from these constraints, not from the columns. "drop table public.leaders
+ * cascade" removes the constraints while leaving feedback, projects,
+ * leader_responses, and leader_accounts in place, and the "create table if not
+ * exists" statements above are no-ops on those surviving tables, so nothing
+ * puts the constraints back. The result is PGRST200, "could not find a
+ * relationship between feedback and leaders in the schema cache", even though
+ * both tables and the leader_id column are all present.
+ *
+ * Recreating a leaders row gives it a fresh id, so rows still pointing at a
+ * deleted leader have to be resolved before the constraint can be trusted
+ * again. Feedback keeps its message as general SRC feedback; the others carry
+ * no meaning without an office, so they go. Both are no-ops on a healthy
+ * database.
+ */
+update public.feedback
+set leader_id = null
+where leader_id is not null
+  and not exists (select 1 from public.leaders where leaders.id = feedback.leader_id);
+
+delete from public.leader_responses
+where not exists (select 1 from public.leaders where leaders.id = leader_responses.leader_id);
+
+delete from public.projects
+where not exists (select 1 from public.leaders where leaders.id = projects.leader_id);
+
+delete from public.leader_accounts
+where not exists (select 1 from public.leaders where leaders.id = leader_accounts.leader_id);
+
+/*
+ * Dropped by name this would be fragile: a constraint created under some other
+ * name would survive the drop, the add below would succeed anyway, and the
+ * column would end up with two foreign keys to the same table. PostgREST then
+ * fails the other way, refusing to guess which relationship the embed meant.
+ * So clear whatever is on leader_id first, then add exactly one.
+ */
+do $$
+declare
+  child_table text;
+  existing_constraint text;
+begin
+  foreach child_table in array array['feedback', 'leader_responses', 'projects', 'leader_accounts']
+  loop
+    for existing_constraint in
+      select conname
+      from pg_constraint
+      where contype = 'f'
+        and conrelid = format('public.%I', child_table)::regclass
+        and confrelid = 'public.leaders'::regclass
+    loop
+      execute format('alter table public.%I drop constraint %I', child_table, existing_constraint);
+    end loop;
+
+    execute format(
+      'alter table public.%I add constraint %I foreign key (leader_id) references public.leaders(id) on delete cascade',
+      child_table,
+      child_table || '_leader_id_fkey'
+    );
+  end loop;
+end
+$$;
 
 create table if not exists public.feedback_votes (
   feedback_id uuid not null references public.feedback(id) on delete cascade,
@@ -240,6 +331,42 @@ as $$
   )
 $$;
 
+/*
+ * The office the signed-in leader runs, or null for everyone else. Kept as its
+ * own function so policies and the dashboard queries agree on one definition.
+ */
+create or replace function public.current_leader_id()
+returns uuid
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select leader_id
+  from public.leader_accounts
+  where profile_id = auth.uid()
+$$;
+
+/*
+ * "Core Seven" is not a separate flag. It is simply a leader whose office sits
+ * in the seven-core department, which the offices table already records.
+ */
+create or replace function public.is_seven_core_leader()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.leader_accounts
+    join public.leaders on public.leaders.id = public.leader_accounts.leader_id
+    where public.leader_accounts.profile_id = auth.uid()
+      and public.leaders.department_slug = 'seven-core'
+  )
+$$;
+
 create or replace function public.claim_seeded_leader_account()
 returns uuid
 language plpgsql
@@ -304,39 +431,46 @@ alter table public.feedback_votes enable row level security;
 alter table public.feedback_reports enable row level security;
 alter table public.abuse_logs enable row level security;
 
+drop policy if exists "profiles_select_self_or_admin" on public.profiles;
 create policy "profiles_select_self_or_admin"
 on public.profiles
 for select
 using (id = auth.uid() or public.is_admin());
 
+drop policy if exists "profiles_update_self_or_admin" on public.profiles;
 create policy "profiles_update_self_or_admin"
 on public.profiles
 for update
 using (id = auth.uid() or public.is_admin())
 with check (id = auth.uid() or public.is_admin());
 
+drop policy if exists "leaders_public_read" on public.leaders;
 create policy "leaders_public_read"
 on public.leaders
 for select
 using (is_active = true or public.is_admin() or public.is_leader_for_office(id));
 
+drop policy if exists "leaders_admin_write" on public.leaders;
 create policy "leaders_admin_write"
 on public.leaders
 for all
 using (public.is_admin())
 with check (public.is_admin());
 
+drop policy if exists "leader_accounts_read" on public.leader_accounts;
 create policy "leader_accounts_read"
 on public.leader_accounts
 for select
 using (profile_id = auth.uid() or public.is_admin());
 
+drop policy if exists "leader_accounts_admin_write" on public.leader_accounts;
 create policy "leader_accounts_admin_write"
 on public.leader_accounts
 for all
 using (public.is_admin())
 with check (public.is_admin());
 
+drop policy if exists "feedback_public_student_admin_leader_read" on public.feedback;
 create policy "feedback_public_student_admin_leader_read"
 on public.feedback
 for select
@@ -345,8 +479,14 @@ using (
   or student_profile_id = auth.uid()
   or public.is_admin()
   or public.is_leader_for_office(leader_id)
+  /*
+   * General feedback has no office to match on, so Core Seven members are the
+   * ones who get to see it before it is approved.
+   */
+  or (leader_id is null and public.is_seven_core_leader())
 );
 
+drop policy if exists "feedback_student_insert" on public.feedback;
 create policy "feedback_student_insert"
 on public.feedback
 for insert
@@ -359,12 +499,14 @@ with check (
   and moderation_status = 'approved'
 );
 
+drop policy if exists "feedback_admin_update" on public.feedback;
 create policy "feedback_admin_update"
 on public.feedback
 for update
 using (public.is_admin())
 with check (public.is_admin());
 
+drop policy if exists "leader_responses_public_and_admin_read" on public.leader_responses;
 create policy "leader_responses_public_and_admin_read"
 on public.leader_responses
 for select
@@ -378,6 +520,7 @@ using (
   or leader_profile_id = auth.uid()
 );
 
+drop policy if exists "leader_responses_leader_write" on public.leader_responses;
 create policy "leader_responses_leader_write"
 on public.leader_responses
 for all
@@ -388,11 +531,13 @@ with check (
   and author_codename_snapshot = public.current_profile_codename()
 );
 
+drop policy if exists "projects_public_read" on public.projects;
 create policy "projects_public_read"
 on public.projects
 for select
 using (true);
 
+drop policy if exists "projects_leader_or_admin_write" on public.projects;
 create policy "projects_leader_or_admin_write"
 on public.projects
 for all
@@ -402,14 +547,21 @@ with check (
   or (
     public.is_leader_for_office(leader_id)
     and leader_profile_id = auth.uid()
+    /*
+     * Any leader can post an update for their own office, but only Core Seven
+     * members can badge one as an official SRC announcement.
+     */
+    and (is_official = false or public.is_seven_core_leader())
   )
 );
 
+drop policy if exists "votes_student_insert_read_own" on public.feedback_votes;
 create policy "votes_student_insert_read_own"
 on public.feedback_votes
 for select
 using (profile_id = auth.uid() or public.is_admin());
 
+drop policy if exists "votes_student_insert" on public.feedback_votes;
 create policy "votes_student_insert"
 on public.feedback_votes
 for insert
@@ -419,11 +571,13 @@ with check (
   and profile_id = auth.uid()
 );
 
+drop policy if exists "reports_student_insert_read_own" on public.feedback_reports;
 create policy "reports_student_insert_read_own"
 on public.feedback_reports
 for select
 using (profile_id = auth.uid() or public.is_admin());
 
+drop policy if exists "reports_student_insert" on public.feedback_reports;
 create policy "reports_student_insert"
 on public.feedback_reports
 for insert
@@ -433,13 +587,22 @@ with check (
   and profile_id = auth.uid()
 );
 
+drop policy if exists "reports_student_update_own" on public.feedback_reports;
 create policy "reports_student_update_own"
 on public.feedback_reports
 for update
 using (profile_id = auth.uid())
 with check (profile_id = auth.uid());
 
+drop policy if exists "abuse_logs_admin_read" on public.abuse_logs;
 create policy "abuse_logs_admin_read"
 on public.abuse_logs
 for select
 using (public.is_admin());
+
+/*
+ * PostgREST answers from a cached copy of the schema. Supabase usually reloads
+ * it on its own after DDL, but the reload is what makes new foreign keys
+ * embeddable, so ask for it explicitly rather than waiting on a race.
+ */
+notify pgrst, 'reload schema';

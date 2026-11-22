@@ -1,0 +1,337 @@
+/* ============================================
+   SRC FEEDBACK PAGE
+   Two working columns (office-specific and general)
+   plus the response composer that sits over them.
+   ============================================ */
+
+/* --- Column layout --- */
+
+.feedback-section-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    margin-bottom: 2rem;
+}
+
+.feedback-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+    min-width: 0;
+}
+
+.feedback-section .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.feedback-section .section-header h2 {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.feedback-section .badge.office-specific {
+    background: var(--src-primary);
+    color: #fff;
+}
+
+.feedback-section .badge.general {
+    background: var(--src-accent);
+    color: #fff;
+}
+
+.feedback-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* --- Feedback cards --- */
+
+.src-feedback-card {
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    background: var(--bg-page);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.src-feedback-card.is-open {
+    border-left-color: var(--warning);
+}
+
+.src-feedback-card.is-answered {
+    border-left-color: var(--success);
+}
+
+.src-feedback-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.src-feedback-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.6rem;
+}
+
+.src-feedback-card-kicker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.35rem;
+}
+
+.src-feedback-card-kicker .pill.subtle {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+}
+
+.src-feedback-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.src-feedback-card-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-shrink: 0;
+    line-height: 1.2;
+}
+
+.src-feedback-card-rating strong {
+    font-size: 1.35rem;
+    color: var(--src-primary);
+}
+
+.src-feedback-card-rating .stars {
+    font-size: 0.75rem;
+    color: var(--warning);
+}
+
+.src-feedback-card-message {
+    margin: 0 0 0.75rem;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+}
+
+.src-feedback-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.src-feedback-card .response-box {
+    margin-bottom: 0.75rem;
+}
+
+/* --- Empty states inside the columns --- */
+
+.feedback-list .empty-state {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--text-muted);
+}
+
+.feedback-list .empty-state .empty-icon {
+    font-size: 2.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.feedback-list .empty-state h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.feedback-list .empty-state p {
+    margin: 0;
+    font-size: 0.88rem;
+}
+
+/* --- Response composer --- */
+
+body.modal-open {
+    overflow: hidden;
+}
+
+.feedback-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.feedback-modal.hidden {
+    display: none;
+}
+
+.feedback-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    padding: 0;
+    background: rgba(15, 23, 42, 0.55);
+    cursor: pointer;
+}
+
+.feedback-modal-dialog {
+    position: relative;
+    width: min(560px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+    padding: 1.5rem;
+}
+
+.feedback-modal-close {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.75rem;
+    background: transparent;
+    border: 0;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.feedback-modal-close:hover {
+    color: var(--text-primary);
+}
+
+.feedback-modal-header {
+    margin-bottom: 1.25rem;
+}
+
+.feedback-modal-kicker {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--src-accent);
+}
+
+.feedback-modal-header h2 {
+    margin: 0.25rem 0 0.6rem;
+    font-size: 1.25rem;
+}
+
+.feedback-modal-office-line {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+.feedback-modal-summary {
+    margin: 0;
+    padding: 0.75rem;
+    border-left: 3px solid var(--src-accent);
+    border-radius: 0 6px 6px 0;
+    background: var(--bg-page);
+    font-size: 0.88rem;
+    font-style: italic;
+    color: var(--text-secondary);
+    overflow-wrap: anywhere;
+}
+
+.feedback-field-card .feedback-message-box {
+    width: 100%;
+    min-height: 150px;
+    resize: vertical;
+}
+
+.feedback-field-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.35rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.feedback-counter {
+    font-variant-numeric: tabular-nums;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.checkbox-label input {
+    width: auto;
+    margin: 0;
+}
+
+.feedback-submit-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.25rem;
+}
+
+/* --- Responsive --- */
+
+@media (max-width: 900px) {
+    .feedback-section-container {
+        grid-template-columns: 1fr;
+    }
+
+    .feedback-list {
+        max-height: none;
+    }
+}
+
+@media (max-width: 560px) {
+    .feedback-modal {
+        padding: 0;
+    }
+
+    .feedback-modal-dialog {
+        max-height: 100vh;
+        border-radius: 0;
+        width: 100%;
+    }
+
+    .src-feedback-card-head {
+        flex-direction: column;
+    }
+
+    .src-feedback-card-rating {
+        flex-direction: row;
+        align-items: baseline;
+        gap: 0.5rem;
+    }
+}

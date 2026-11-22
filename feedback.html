@@ -59,6 +59,46 @@
       <h1 class="page-title">Feedback</h1>
       <p class="subtitle">A public stream of anonymous feedback across FOSCO offices.</p>
 
+      <section class="card hidden" data-general-feedback-panel>
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">General feedback</div>
+            <h2>Say something to the whole SRC</h2>
+          </div>
+        </div>
+        <p class="muted">
+          Use this when your point is not about one office. It goes to the Seven Core
+          executives. To rate a single office, open that office instead.
+        </p>
+        <form data-general-feedback-form>
+          <div class="field">
+            <label for="generalCategory">Category</label>
+            <select class="select" id="generalCategory" name="category" data-general-category required></select>
+          </div>
+          <div class="field">
+            <label for="generalRating">Rating</label>
+            <select class="select" id="generalRating" name="rating" required>
+              <option value="5">5 - Excellent</option>
+              <option value="4">4 - Good</option>
+              <option value="3" selected>3 - Fair</option>
+              <option value="2">2 - Poor</option>
+              <option value="1">1 - Very poor</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="generalMessage">Your feedback</label>
+            <textarea class="textarea" id="generalMessage" name="message" rows="4" maxlength="1000" placeholder="Describe what the SRC as a whole should know." required></textarea>
+            <div class="feedback-field-meta">
+              <small class="muted">Posted under your codename, never your real name.</small>
+              <span class="feedback-counter" data-general-counter>0 / 1000</span>
+            </div>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-primary" type="submit" data-general-submit>Send to the SRC</button>
+          </div>
+        </form>
+      </section>
+
       <section class="stack" data-feedback-feed></section>
     </div>
   </main>

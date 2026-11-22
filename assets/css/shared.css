@@ -358,6 +358,33 @@ textarea {
   font-weight: 600;
 }
 
+/*
+ * Switching accounts is an ordinary action, so it does not borrow the red
+ * treatment the logout button uses.
+ */
+.account-menu-switch {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.account-menu-switch small {
+  display: block;
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.account-menu-switch:hover,
+.account-menu-switch:focus-visible {
+  background: rgba(37, 99, 235, 0.12);
+}
+
+.account-menu-switch:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
 .account-menu-button:hover,
 .account-menu-button:focus-visible {
   background: rgba(239, 68, 68, 0.12);

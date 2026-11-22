@@ -7,6 +7,20 @@
     --src-secondary: #2c7da0;
     --src-accent: #4a90d9;
     --src-bg: #f0f4f8;
+
+    /*
+     * shared.css names its palette --card-bg, --border, --text, --muted, --bg.
+     * The SRC styles below were written against a longer set of names, so map
+     * them here rather than renaming every rule. Because these alias the shared
+     * tokens instead of hard-coding colours, dark mode keeps working for free.
+     */
+    --bg-card: var(--card-bg);
+    --bg-page: var(--bg);
+    --bg-muted: var(--light);
+    --border-color: var(--border);
+    --text-primary: var(--text);
+    --text-secondary: var(--text);
+    --text-muted: var(--muted);
 }
 
 /* Header branding */
@@ -328,6 +342,121 @@
 .status-pill-mini.pending {
     background: #f59e0b;
     color: white;
+}
+
+/* The office / anonymous account pair */
+.account-switch-intro {
+    margin: 0 0 1rem;
+    max-width: 70ch;
+    font-size: 0.92rem;
+    line-height: 1.55;
+}
+
+.account-switch-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.account-switch-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--bg-card);
+}
+
+.account-switch-card.is-active {
+    border-left-color: var(--src-primary);
+}
+
+.account-switch-card[data-anon-card] {
+    border-left-color: var(--src-accent);
+}
+
+.account-switch-kind {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.account-switch-card strong {
+    font-size: 1.15rem;
+    overflow-wrap: anywhere;
+}
+
+.account-switch-detail {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.account-switch-state {
+    align-self: flex-start;
+    margin-top: 0.25rem;
+    padding: 2px 10px;
+    border-radius: 12px;
+    background: var(--src-primary);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.account-switch-card [data-anon-action] {
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .account-switch-panel {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Full update cards (updates feed) */
+.src-update-card {
+    margin-bottom: 1rem;
+}
+
+.src-update-card.is-mine {
+    border-left: 3px solid var(--src-accent);
+}
+
+.src-update-head {
+    margin-bottom: 0.6rem;
+}
+
+.src-update-head h3 {
+    margin: 0.35rem 0 0.25rem;
+    font-size: 1.1rem;
+}
+
+.src-update-kicker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.src-update-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.src-update-body {
+    margin: 0 0 0.75rem;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    overflow-wrap: anywhere;
 }
 
 /* Responsive */

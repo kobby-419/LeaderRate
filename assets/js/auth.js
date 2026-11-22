@@ -1,3 +1,4 @@
+import { clearAccountSlots } from "./account-switch.js";
 import {
   BLOCKED_WORDS,
   CODENAME_WORDS,
@@ -234,6 +235,11 @@ export async function loginWithCodename({ codename, password, adminMode = false 
 
 export async function logout() {
   const supabase = requireSupabaseClient();
+  /*
+   * Logging out is the one action that should end both accounts on this
+   * browser, so the stored sessions go with it.
+   */
+  clearAccountSlots();
   const { error } = await supabase.auth.signOut();
   if (error) {
     throw error;

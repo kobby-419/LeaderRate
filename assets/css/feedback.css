@@ -136,3 +136,17 @@ body.theme-dark .feedback-item-card .response-box {
 [data-feedback-feed]::-webkit-scrollbar-thumb:hover {
     background: var(--primary-dark, #1a5a7a);
 }
+/* General feedback composer (feedback addressed to the whole SRC) */
+.feedback-field-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.55rem;
+}
+
+.feedback-counter {
+  color: var(--muted);
+  font-size: 0.88rem;
+  white-space: nowrap;
+}

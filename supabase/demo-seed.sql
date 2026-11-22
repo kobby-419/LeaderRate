@@ -346,19 +346,13 @@ set
   demo_performance = excluded.demo_performance,
   office_order = excluded.office_order;
 
-insert into public.leader_accounts (leader_id, login_codename)
-select leaders.id, seeded.login_codename
-from (
-  values
-    ('src-president', 'steady_lantern'),
-    ('src-secretary', 'quiet_bridge'),
-    ('src-financial-secretary', 'civic_oak'),
-    ('obiri-hall-presidents', 'hall_echo'),
-    ('academic-affairs-officer', 'bright_compass')
-) as seeded(office_slug, login_codename)
-join public.leaders on leaders.office_slug = seeded.office_slug
-on conflict (leader_id) do update
-set login_codename = excluded.login_codename;
+/*
+ * Leader logins are not seeded here. leader-seed.sql owns the codename for each
+ * office and creates the matching Auth user in the same pass, so keeping a
+ * second list here would let the two drift: this file would reassign a codename
+ * without touching the account it points at, leaving a link that resolves to
+ * the wrong login.
+ */
 
 insert into public.feedback (
   institution_slug,
@@ -456,7 +450,7 @@ insert into public.leader_responses (
 select
   feedback.id,
   feedback.leader_id,
-  'steady_lantern',
+  'srcp',
   'We have started using class representatives and notice boards earlier during service disruptions, and we are working on a faster fallback alert process.',
   timezone('utc', now()) - interval '6 days'
 from public.feedback

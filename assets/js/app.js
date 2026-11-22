@@ -1,3 +1,8 @@
+import {
+  getAlternateAccount,
+  rememberAccountSlot,
+  switchToAccount,
+} from "./account-switch.js";
 import { getCurrentProfile, getCurrentSession, logout } from "./auth.js";
 import { hasSupabaseConfig } from "./supabase-client.js";
 import {
@@ -30,6 +35,12 @@ export async function bootstrapPage({ activeNav, requiredRole = null } = {}) {
     const session = await getCurrentSession();
     const profile = session?.user ? await getCurrentProfile() : null;
     cacheProfile(profile);
+    /*
+     * Re-park the session on every load, not just at login. Supabase rotates
+     * refresh tokens in the background, so a slot written once would go stale
+     * and the switch would fail the next time it was used.
+     */
+    rememberAccountSlot(profile, session);
     renderShell(profile, activeNav);
 
     if (requiredRole && profile?.role !== requiredRole) {
@@ -118,6 +129,28 @@ function setupSecretAdminEntry() {
   });
 }
 
+/*
+ * Admins have one account and no anonymous counterpart. Students and leaders
+ * are the pair that can be switched between.
+ */
+function canHaveSecondAccount(role) {
+  return role === "leader" || role === "student";
+}
+
+/*
+ * A leader's account speaks for their office and is not anonymous. Saying so
+ * matters wherever it appears, because the same screens offer the anonymous
+ * account as a separate thing to switch to. Exported so the settings page uses
+ * one wording rather than keeping its own copy.
+ */
+export function accountKindLabel(role) {
+  if (role === "admin") {
+    return "private workspace";
+  }
+
+  return role === "leader" ? "office account" : "anonymous account";
+}
+
 function renderAuthSlot(profile) {
   const slot = document.querySelector("[data-auth-slot]");
   const navActions = document.querySelector(".nav-actions");
@@ -146,6 +179,13 @@ function renderAuthSlot(profile) {
 
   slot.classList.add("profile-auth-slot");
   navActions?.classList.add("has-profile-auth");
+
+  /*
+   * Only offered once this browser has signed into both accounts. There is no
+   * database link between them to look up, by design.
+   */
+  const alternate = getAlternateAccount(profile);
+
   slot.innerHTML = `
     <div class="account-menu-shell">
       <button
@@ -167,14 +207,51 @@ function renderAuthSlot(profile) {
       <div class="account-menu hidden" data-account-menu>
         <div class="account-menu-header">
           <strong>${profile.codename}</strong>
-          <small>${profile.role === "admin" ? "private workspace" : "anonymous account"}</small>
+          <small>${accountKindLabel(profile.role)}</small>
         </div>
         <a class="account-menu-link" href="settings.html">Settings</a>
         ${profile.role === "admin" ? '<a class="account-menu-link" href="moderation.html">Review queue</a>' : ""}
+        ${alternate ? `
+          <button class="account-menu-link account-menu-switch" type="button" data-switch-account="${alternate.role}">
+            Switch to ${alternate.role === "student" ? "anonymous" : "leader"} account
+            <small>${alternate.codename}</small>
+          </button>
+        ` : canHaveSecondAccount(profile.role) ? `
+          <a class="account-menu-link account-menu-switch" href="login.html?switch=1">
+            Sign in to your other account
+            <small>keeps this one ready to switch back to</small>
+          </a>
+        ` : ""}
         <button class="account-menu-link account-menu-button" type="button" data-logout-button>Logout</button>
       </div>
     </div>
   `;
+
+  slot.querySelector("[data-switch-account]")?.addEventListener("click", async (event) => {
+    const button = event.currentTarget;
+    const targetRole = button.dataset.switchAccount;
+    button.disabled = true;
+
+    try {
+      const result = await switchToAccount(targetRole);
+
+      if (!result.ok) {
+        /*
+         * The stored session is gone or expired. Sending them to a normal
+         * login is the honest fallback, and the slot has already been dropped.
+         */
+        showToast("That session has expired. Please sign in again.", "error");
+        window.location.href = "login.html";
+        return;
+      }
+
+      cacheProfile(null);
+      window.location.href = result.route;
+    } catch (error) {
+      button.disabled = false;
+      showToast(error.message, "error");
+    }
+  });
 
   const menuShell = slot.querySelector(".account-menu-shell");
   const toggle = slot.querySelector("[data-account-toggle]");
@@ -245,6 +322,10 @@ function getDashboardRoute(role) {
     return "admin-dashboard.html";
   }
 
+  if (role === "leader") {
+    return "src-dashboard.html";
+  }
+
   return "dashboard.html";
 }
 
@@ -256,6 +337,21 @@ function getPrimaryNavItems(profile, activeKey) {
       { key: "leaderboard", href: "leaderboard.html", label: "Leaderboard", active: activeKey === "leaderboard" },
       { key: "feedback", href: "feedback.html", label: "Feedback", active: activeKey === "feedback" },
       { key: "updates", href: "updates.html", label: "Updates", active: activeKey === "updates" },
+      { key: "about", href: "about.html", label: "About", active: activeKey === "about" },
+    ];
+  }
+
+  /*
+   * Leaders work inside the SRC pages, so their Feedback and Updates links
+   * point at the workspace versions rather than the public read-only feeds.
+   */
+  if (profile.role === "leader") {
+    return [
+      { key: "src-dashboard", href: "src-dashboard.html", label: "Dashboard", active: activeKey === "src-dashboard" || activeKey === "home" || activeKey === "dashboard" },
+      { key: "src-feedback", href: "src-feedback.html", label: "Feedback", active: activeKey === "src-feedback" },
+      { key: "src-updates", href: "src-updates.html", label: "Updates", active: activeKey === "src-updates" },
+      { key: "leaders", href: "leaders.html", label: "Browse Offices", active: activeKey === "leaders" },
+      { key: "leaderboard", href: "leaderboard.html", label: "Leaderboard", active: activeKey === "leaderboard" },
       { key: "about", href: "about.html", label: "About", active: activeKey === "about" },
     ];
   }
